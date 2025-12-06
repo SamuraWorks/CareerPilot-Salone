@@ -1,0 +1,455 @@
+[00:00:02.869] Server  LOG      ✓ Ready in 1848ms
+[00:01:11.362] Server  LOG      ○ Compiling /guidance ...
+[00:01:16.478] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:16.482] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:01:17.692] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:18.022] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/guidance" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/Desktop/F...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <head>
+                          <body
++                           className="font-sans antialiased"
+-                           className="font-sans antialiased antigravity-scroll-lock"
+                          >
+                  ...
+
+[00:01:18.278] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:18.278] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/guidance","route":"/guidance"}
+[00:01:18.278] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/guidance color: rgb(120, 120, 120) color: inherit {"dp":"/guidance","o":"http://localhost:3000/guidance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765030356531}
+[00:02:43.237] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:02:43.245] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:02:44.236] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:44.926] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:02:44.926] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/roadmap","route":"/roadmap"}
+[00:02:44.926] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/roadmap color: rgb(120, 120, 120) color: inherit {"dp":"/roadmap","o":"http://localhost:3000/roadmap","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765030443177}
+[00:05:10.151] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:05:10.185] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:05:10.836] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:11.305] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:05:11.305] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/roadmap","route":"/roadmap"}
+[00:05:11.305] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/roadmap color: rgb(120, 120, 120) color: inherit {"dp":"/roadmap","o":"http://localhost:3000/roadmap","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765030589555}
+[00:06:43.633] Server  LOG     Using local roadmap generation...
+[00:07:42.137] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:07:42.189] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:07:42.986] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:43.642] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:07:43.642] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/aptitude-test","route":"/aptitude-test"}
+[00:07:43.642] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/aptitude-test color: rgb(120, 120, 120) color: inherit {"dp":"/aptitude-test","o":"http://localhost:3000/aptitude-test","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765030741889}
+[00:09:06.220] Server  LOG     Using local career matching...
+[00:09:06.281] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\.next\dev\server\chunks\[root-of-the-server]__f40b4734._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:06.321] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\.next\dev\server\chunks\[root-of-the-server]__c4fb6638._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:06.552] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:06.754] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\.next\dev\server\chunks\f47b0_next_dist_0295caea._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:06.986] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.185] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.390] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.451] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.567] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.605] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:09:07.651] Server  ERROR   Career matching error: TypeError: answers.map is not a function
+[00:14:00.977] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers color: rgb(120, 120, 120) color: inherit {"dp":"/careers","o":"http://localhost:3000/careers","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031119215}
+[00:14:01.753] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:01.758] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:14:01.770] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:01.772] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:14:13.003] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:13.014] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:14:13.041] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:13.042] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:14:13.088] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/universities color: rgb(120, 120, 120) color: inherit {"dp":"/universities","o":"http://localhost:3000/universities","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031131116}
+[00:14:27.602] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/jobs color: rgb(120, 120, 120) color: inherit {"dp":"/jobs","o":"http://localhost:3000/jobs","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031145856}
+[00:14:28.004] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:28.005] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:14:28.071] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:14:28.140] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:25:44.409] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:25:44.411] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:25:45.079] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:25:45.637] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:25:45.637] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/jobs","route":"/jobs"}
+[00:25:45.637] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/jobs color: rgb(120, 120, 120) color: inherit {"dp":"/jobs","o":"http://localhost:3000/jobs","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031823822}
+[00:25:45.637] Browser WARN    Image with src "/jobs-opportunities-freetown.jpg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading
+[00:25:49.797] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers color: rgb(120, 120, 120) color: inherit {"dp":"/careers","o":"http://localhost:3000/careers","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031828049}
+[00:25:49.850] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:25:49.854] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:25:49.858] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:25:49.861] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:26:05.853] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:26:05.855] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:26:05.858] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:26:05.859] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:26:05.898] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/whatsapp color: rgb(120, 120, 120) color: inherit {"dp":"/whatsapp","o":"http://localhost:3000/whatsapp","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765031844082}
+[00:43:56.305] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:43:56.310] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:43:56.337] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:43:56.343] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:43:56.390] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers color: rgb(120, 120, 120) color: inherit {"dp":"/careers","o":"http://localhost:3000/careers","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765032914591}
+[00:44:13.842] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:44:13.939] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:44:14.097] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:44:14.235] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:44:14.311] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers/f55c75c6-ca95-4d62-8b53-3755ec8671a1 color: rgb(120, 120, 120) color: inherit {"dp":"/careers/[id]","o":"http://localhost:3000/careers/f55c75c6-ca95-4d62-8b53-3755ec8671a1","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765032932057}
+[00:44:32.326] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:44:32.328] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:44:32.330] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:44:32.332] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:44:32.384] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/whatsapp color: rgb(120, 120, 120) color: inherit {"dp":"/whatsapp","o":"http://localhost:3000/whatsapp","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765032950607}
+[00:51:29.538] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033367792}
+[00:51:29.681] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:29.683] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:29.685] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:29.687] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:55.117] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033393357}
+[00:51:55.199] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:55.202] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:55.205] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:55.207] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:59.386] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:59.389] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:59.392] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:51:59.397] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:51:59.445] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/signup color: rgb(120, 120, 120) color: inherit {"dp":"/signup","o":"http://localhost:3000/signup","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033397539}
+[00:52:05.147] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:52:05.149] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:52:05.153] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:52:05.155] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:52:05.216] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033403405}
+[00:52:53.419] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/signup color: rgb(120, 120, 120) color: inherit {"dp":"/signup","o":"http://localhost:3000/signup","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033451647}
+[00:52:53.657] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:52:53.662] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:52:53.671] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:52:53.675] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:14.157] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:14.168] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:15.409] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033473648}
+[00:53:15.638] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:15.654] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:15.664] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:15.669] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:25.983] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:25.989] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:25.996] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:26.003] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:30.825] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:30.835] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:30.839] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:30.842] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:30.889] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033489095}
+[00:53:36.455] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:36.497] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:36.500] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:36.502] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:36.552] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers color: rgb(120, 120, 120) color: inherit {"dp":"/careers","o":"http://localhost:3000/careers","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033494623}
+[00:53:55.159] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers/8f5a0c84-d05f-4257-a5a9-145c8944d773 color: rgb(120, 120, 120) color: inherit {"dp":"/careers/[id]","o":"http://localhost:3000/careers/8f5a0c84-d05f-4257-a5a9-145c8944d773","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033513402}
+[00:53:55.358] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:55.362] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:53:55.365] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:53:55.367] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:16.362] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/roadmap color: rgb(120, 120, 120) color: inherit {"dp":"/roadmap","o":"http://localhost:3000/roadmap","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033534553}
+[00:54:16.453] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:16.455] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:16.459] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:16.465] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:22.585] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:22.607] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:22.625] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:22.631] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:22.667] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/universities color: rgb(120, 120, 120) color: inherit {"dp":"/universities","o":"http://localhost:3000/universities","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033540813}
+[00:54:41.424] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:41.442] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:41.451] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:54:41.454] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:54:41.531] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/jobs color: rgb(120, 120, 120) color: inherit {"dp":"/jobs","o":"http://localhost:3000/jobs","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033559546}
+[00:55:07.504] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/scholarships color: rgb(120, 120, 120) color: inherit {"dp":"/scholarships","o":"http://localhost:3000/scholarships","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033585698}
+[00:55:07.701] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:07.703] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:07.705] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:07.706] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:24.071] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/mentorship color: rgb(120, 120, 120) color: inherit {"dp":"/mentorship","o":"http://localhost:3000/mentorship","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033602314}
+[00:55:24.251] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:24.291] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:24.297] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:24.302] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:51.392] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:51.487] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:51.525] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:51.563] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:51.606] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/roadmap color: rgb(120, 120, 120) color: inherit {"dp":"/roadmap","o":"http://localhost:3000/roadmap","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033629649}
+[00:55:59.897] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:59.898] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:59.901] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:55:59.903] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:55:59.945] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/cv-builder color: rgb(120, 120, 120) color: inherit {"dp":"/cv-builder","o":"http://localhost:3000/cv-builder","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033638104}
+[00:57:15.638] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:15.709] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:15.744] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:15.754] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:15.795] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/jobs color: rgb(120, 120, 120) color: inherit {"dp":"/jobs","o":"http://localhost:3000/jobs","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033713879}
+[00:57:18.049] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:18.050] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:18.053] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:18.054] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:18.096] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/careers color: rgb(120, 120, 120) color: inherit {"dp":"/careers","o":"http://localhost:3000/careers","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033716339}
+[00:57:25.359] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:25.366] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:25.376] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:25.382] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:25.432] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/aptitude-test color: rgb(120, 120, 120) color: inherit {"dp":"/aptitude-test","o":"http://localhost:3000/aptitude-test","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033723613}
+[00:57:34.957] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:34.958] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:34.966] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:34.969] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:35.008] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/whatsapp color: rgb(120, 120, 120) color: inherit {"dp":"/whatsapp","o":"http://localhost:3000/whatsapp","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033733240}
+[00:57:51.095] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/dashboard","o":"http://localhost:3000/dashboard","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033749336}
+[00:57:51.293] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:51.297] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:51.301] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:51.303] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:54.475] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/guidance color: rgb(120, 120, 120) color: inherit {"dp":"/guidance","o":"http://localhost:3000/guidance","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033752677}
+[00:57:54.552] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:54.553] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:57:54.556] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:57:54.558] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:58:19.740] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/login color: rgb(120, 120, 120) color: inherit {"dp":"/login","o":"http://localhost:3000/login","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1765033777896}
+[00:58:19.897] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:58:19.898] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[00:58:19.900] Server  ERROR   C:\Users\User\Desktop\FloodGuard_AI\frontend\html\pages\career-pilot-salone\node_modules\next\dist\compiled\next-server\app-page-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:58:19.901] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button data-slot="button" className=... onClick={function onClick} children=...>
+                                                   ^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.

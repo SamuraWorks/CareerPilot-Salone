@@ -1,0 +1,20 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/generate-roadmap/route": "app/api/generate-roadmap/route.js",
+  "/api/match-careers/route": "app/api/match-careers/route.js",
+  "/aptitude-test/page": "app/aptitude-test/page.js",
+  "/careers/[id]/page": "app/careers/[id]/page.js",
+  "/careers/page": "app/careers/page.js",
+  "/cv-builder/page": "app/cv-builder/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/guidance/page": "app/guidance/page.js",
+  "/jobs/page": "app/jobs/page.js",
+  "/login/page": "app/login/page.js",
+  "/mentorship/page": "app/mentorship/page.js",
+  "/page": "app/page.js",
+  "/roadmap/page": "app/roadmap/page.js",
+  "/scholarships/page": "app/scholarships/page.js",
+  "/signup/page": "app/signup/page.js",
+  "/universities/page": "app/universities/page.js",
+  "/whatsapp/page": "app/whatsapp/page.js"
+}

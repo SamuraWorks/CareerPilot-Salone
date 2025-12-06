@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/generate-roadmap": {
+      "maxDuration": 60
+    },
+    "/api/match-careers": {
+      "maxDuration": 60
+    },
+    "/api/chat": {
+      "maxDuration": 30
+    }
+  }
+}

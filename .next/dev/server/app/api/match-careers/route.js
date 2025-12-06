@@ -1,0 +1,12 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/match-careers/route.js")
+R.c("server/chunks/f47b0_@vercel_oidc_dist_3ef03283._.js")
+R.c("server/chunks/f47b0_next_dist_0295caea._.js")
+R.c("server/chunks/f47b0_@opentelemetry_api_build_esm_3484ec8c._.js")
+R.c("server/chunks/f47b0_zod_a3e3c3f9._.js")
+R.c("server/chunks/f47b0_@ai-sdk_openai_dist_index_mjs_b0ca2e84._.js")
+R.c("server/chunks/f47b0_ai_dist_index_mjs_8e6d7453._.js")
+R.c("server/chunks/f47b0_a2b73fba._.js")
+R.c("server/chunks/[root-of-the-server]__c4fb6638._.js")
+R.c("server/chunks/17ee0__next-internal_server_app_api_match-careers_route_actions_bcaf598a.js")
+R.m("[project]/Desktop/FloodGuard_AI/frontend/html/pages/career-pilot-salone/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/Desktop/FloodGuard_AI/frontend/html/pages/career-pilot-salone/app/api/match-careers/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)")
+module.exports=R.m("[project]/Desktop/FloodGuard_AI/frontend/html/pages/career-pilot-salone/node_modules/next/dist/esm/build/templates/app-route.js { INNER_APP_ROUTE => \"[project]/Desktop/FloodGuard_AI/frontend/html/pages/career-pilot-salone/app/api/match-careers/route.ts [app-route] (ecmascript)\" } [app-route] (ecmascript)").exports
