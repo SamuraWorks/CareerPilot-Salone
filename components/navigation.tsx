@@ -36,6 +36,9 @@ export function Navigation() {
           <div className="hidden lg:flex items-center gap-6">
             {isAuthenticated && (
               <>
+                <Link href="/guidance" className="text-muted-foreground hover:text-foreground transition-colors">
+                  AI Guidance
+                </Link>
                 <Link href="/careers" className="text-muted-foreground hover:text-foreground transition-colors">
                   Careers
                 </Link>
@@ -107,6 +110,9 @@ export function Navigation() {
             <div className="flex flex-col gap-3">
               {isAuthenticated && (
                 <>
+                  <Link href="/guidance" className="text-muted-foreground hover:text-foreground transition-colors px-2 py-2 rounded-md hover:bg-muted touch-target" onClick={closeMobileMenu}>
+                    AI Guidance
+                  </Link>
                   <Link href="/careers" className="text-muted-foreground hover:text-foreground transition-colors px-2 py-2 rounded-md hover:bg-muted touch-target" onClick={closeMobileMenu}>
                     Careers
                   </Link>

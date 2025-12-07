@@ -89,7 +89,7 @@ export default function JobsPage() {
     <DashboardLayout>
       <div className="p-4 md:p-6 space-y-6">
         {/* Hero Image Section */}
-        <div className="relative w-full h-48 rounded-xl overflow-hidden -mt-2 -mx-2 md:-mx-4 mb-4">
+        <div className="relative w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden -mt-2 -mx-2 md:-mx-4 mb-4">
           <Image
             src="/jobs-opportunities-freetown.jpg"
             alt="Job Opportunities in Sierra Leone"
@@ -97,9 +97,9 @@ export default function JobsPage() {
             className="object-cover brightness-75"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-          <div className="absolute bottom-6 left-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-white">Job & Opportunity Matching</h1>
-            <p className="text-white/90 mt-1">Find jobs, internships, and training programs that match your skills</p>
+          <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-3 sm:left-4 md:left-6">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Job & Opportunity Matching</h1>
+            <p className="text-white/90 mt-1 text-sm sm:text-base">Find jobs, internships, and training programs that match your skills</p>
           </div>
         </div>
 
@@ -111,19 +111,19 @@ export default function JobsPage() {
               placeholder="Search by title, company, or skills..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9"
+              className="pl-9 h-12 touch-target"
             />
           </div>
         </div>
 
         <Tabs value={selectedType} onValueChange={(v) => setSelectedType(v as any)} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">All ({opportunities.length})</TabsTrigger>
-            <TabsTrigger value="job">Jobs ({opportunities.filter((o) => o.type === "job").length})</TabsTrigger>
-            <TabsTrigger value="internship">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+            <TabsTrigger value="all" className="text-xs sm:text-sm">All ({opportunities.length})</TabsTrigger>
+            <TabsTrigger value="job" className="text-xs sm:text-sm">Jobs ({opportunities.filter((o) => o.type === "job").length})</TabsTrigger>
+            <TabsTrigger value="internship" className="text-xs sm:text-sm">
               Internships ({opportunities.filter((o) => o.type === "internship").length})
             </TabsTrigger>
-            <TabsTrigger value="training">
+            <TabsTrigger value="training" className="text-xs sm:text-sm">
               Training ({opportunities.filter((o) => o.type === "training").length})
             </TabsTrigger>
           </TabsList>
@@ -151,35 +151,35 @@ export default function JobsPage() {
                       <div className="flex items-start gap-3 mb-2">
                         <div
                           className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${opp.type === "job"
-                              ? "bg-primary/10"
-                              : opp.type === "internship"
-                                ? "bg-secondary/10"
-                                : "bg-accent/10"
+                            ? "bg-primary/10"
+                            : opp.type === "internship"
+                              ? "bg-secondary/10"
+                              : "bg-accent/10"
                             }`}
                         >
                           {opp.type === "training" ? (
                             <BookOpen
                               className={`w-5 h-5 ${opp.type === "job"
-                                  ? "text-primary"
-                                  : opp.type === "internship"
-                                    ? "text-secondary"
-                                    : "text-accent"
+                                ? "text-primary"
+                                : opp.type === "internship"
+                                  ? "text-secondary"
+                                  : "text-accent"
                                 }`}
                             />
                           ) : (
                             <Briefcase
                               className={`w-5 h-5 ${opp.type === "job"
-                                  ? "text-primary"
-                                  : opp.type === "internship"
-                                    ? "text-secondary"
-                                    : "text-accent"
+                                ? "text-primary"
+                                : opp.type === "internship"
+                                  ? "text-secondary"
+                                  : "text-accent"
                                 }`}
                             />
                           )}
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-semibold mb-1">{opp.title}</h3>
-                          <p className="text-muted-foreground">{opp.company}</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg sm:text-xl font-semibold mb-1 line-clamp-2">{opp.title}</h3>
+                          <p className="text-sm sm:text-base text-muted-foreground truncate">{opp.company}</p>
                         </div>
                         <Badge
                           variant={opp.type === "job" ? "default" : opp.type === "internship" ? "secondary" : "outline"}
@@ -248,12 +248,12 @@ export default function JobsPage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t">
-                    <Button className="flex-1 gap-2" onClick={() => opp.applicationLink && window.open(opp.applicationLink, '_blank')}>
+                  <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
+                    <Button className="flex-1 gap-2 touch-target" onClick={() => opp.applicationLink && window.open(opp.applicationLink, '_blank')}>
                       Apply Now
                       <ExternalLink className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" className="flex-1 bg-transparent">
+                    <Button variant="outline" className="flex-1 bg-transparent touch-target">
                       Save for Later
                     </Button>
                   </div>
