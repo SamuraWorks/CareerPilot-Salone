@@ -239,3 +239,32 @@ values
 ('Dr. David Moinina Sengeh', 'Chief Minister (Sierra Leone)', 'Award-winning innovation leader, former Minister of Basic and Senior Secondary Education. Passionate about youth empowerment and technology.', '/images/mentors/david_sengeh.jpg', 'https://calendly.com/david-sengeh-public', 'office@chiefminister.gov.sl'),
 ('Salima Monorma Bah', 'Minister of Communication, Technology & Innovation', 'Driving digital transformation in Sierra Leone. Advocate for women in tech and digital literacy.', '/images/mentors/salima_bah.jpg', 'https://calendly.com/salima-bah-mentorship', 'minister@moci.gov.sl'),
 ('Dr. Yakama Manty Jones', 'Economist & Delivery Team Lead', 'Expert in development economics, data systems, and human capital development.', '/images/mentors/yakama_jones.jpg', 'https://calendly.com/yakama-jones', 'info@yakamajones.com');
+
+
+-- 6. ROADMAPS TABLE
+create table if not exists public.roadmaps (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  career text not null,
+  title text not null,
+  overview text,
+  phases jsonb not null,
+  created_at timestamptz default now()
+);
+
+alter table public.roadmaps enable row level security;
+
+-- Policy: Users can insert their own roadmaps
+create policy "Users can insert their own roadmaps"
+  on public.roadmaps for insert
+  with check (auth.uid() = user_id);
+
+-- Policy: Users can view their own roadmaps
+create policy "Users can view their own roadmaps"
+  on public.roadmaps for select
+  using (auth.uid() = user_id);
+
+-- Policy: Users can delete their own roadmaps
+create policy "Users can delete their own roadmaps"
+  on public.roadmaps for delete
+  using (auth.uid() = user_id);

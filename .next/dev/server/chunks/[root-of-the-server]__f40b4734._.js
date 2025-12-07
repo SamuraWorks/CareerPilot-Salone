@@ -49,8 +49,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Software Developer",
         industry: "Technology",
         description: "Design, develop, and maintain software applications and systems",
-        salaryRange: "Le 3,000,000 - Le 8,000,000/month",
-        salaryUSD: "$150 - $400/month",
+        salaryRange: "$150 - $400/month",
+        salaryUSD: "Le 3,000,000 - Le 8,000,000/month",
         demand: "High",
         requiredEducation: [
             "Computer Science degree",
@@ -85,8 +85,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Nurse/Healthcare Worker",
         industry: "Healthcare",
         description: "Provide patient care, administer medications, and support medical teams",
-        salaryRange: "Le 2,500,000 - Le 6,000,000/month",
-        salaryUSD: "$125 - $300/month",
+        salaryRange: "$125 - $300/month",
+        salaryUSD: "Le 2,500,000 - Le 6,000,000/month",
         demand: "High",
         requiredEducation: [
             "Nursing diploma/degree",
@@ -119,8 +119,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Agricultural Officer",
         industry: "Agriculture",
         description: "Manage farming operations, improve crop yields, and advise farmers",
-        salaryRange: "Le 2,000,000 - Le 5,000,000/month",
-        salaryUSD: "$100 - $250/month",
+        salaryRange: "$100 - $250/month",
+        salaryUSD: "Le 2,000,000 - Le 5,000,000/month",
         demand: "High",
         requiredEducation: [
             "Agriculture degree",
@@ -152,8 +152,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Teacher/Educator",
         industry: "Education",
         description: "Educate students, develop curriculum, and foster learning environments",
-        salaryRange: "Le 1,800,000 - Le 4,500,000/month",
-        salaryUSD: "$90 - $225/month",
+        salaryRange: "$90 - $225/month",
+        salaryUSD: "Le 1,800,000 - Le 4,500,000/month",
         demand: "High",
         requiredEducation: [
             "Teaching certificate",
@@ -186,8 +186,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Mining Engineer",
         industry: "Mining",
         description: "Plan and oversee mining operations, ensure safety and efficiency",
-        salaryRange: "Le 5,000,000 - Le 12,000,000/month",
-        salaryUSD: "$250 - $600/month",
+        salaryRange: "$250 - $600/month",
+        salaryUSD: "Le 5,000,000 - Le 12,000,000/month",
         demand: "High",
         requiredEducation: [
             "Mining engineering degree",
@@ -219,8 +219,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Accountant",
         industry: "Finance",
         description: "Manage financial records, prepare reports, and ensure compliance",
-        salaryRange: "Le 3,000,000 - Le 7,000,000/month",
-        salaryUSD: "$150 - $350/month",
+        salaryRange: "$150 - $350/month",
+        salaryUSD: "Le 3,000,000 - Le 7,000,000/month",
         demand: "Medium",
         requiredEducation: [
             "Accounting degree",
@@ -253,8 +253,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Civil Engineer",
         industry: "Engineering",
         description: "Design and supervise construction of infrastructure projects",
-        salaryRange: "Le 4,000,000 - Le 10,000,000/month",
-        salaryUSD: "$200 - $500/month",
+        salaryRange: "$200 - $500/month",
+        salaryUSD: "Le 4,000,000 - Le 10,000,000/month",
         demand: "High",
         requiredEducation: [
             "Civil engineering degree"
@@ -285,8 +285,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Marketing Manager",
         industry: "Business",
         description: "Develop marketing strategies, manage campaigns, and drive sales",
-        salaryRange: "Le 3,500,000 - Le 8,000,000/month",
-        salaryUSD: "$175 - $400/month",
+        salaryRange: "$175 - $400/month",
+        salaryUSD: "Le 3,500,000 - Le 8,000,000/month",
         demand: "Medium",
         requiredEducation: [
             "Marketing degree",
@@ -319,8 +319,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Telecommunications Technician",
         industry: "Technology",
         description: "Install, maintain, and repair telecommunications equipment",
-        salaryRange: "Le 2,500,000 - Le 6,000,000/month",
-        salaryUSD: "$125 - $300/month",
+        salaryRange: "$125 - $300/month",
+        salaryUSD: "Le 2,500,000 - Le 6,000,000/month",
         demand: "High",
         requiredEducation: [
             "Technical diploma",
@@ -352,8 +352,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "NGO Program Officer",
         industry: "Non-Profit",
         description: "Manage development programs, coordinate projects, and support communities",
-        salaryRange: "Le 3,000,000 - Le 7,500,000/month",
-        salaryUSD: "$150 - $375/month",
+        salaryRange: "$150 - $375/month",
+        salaryUSD: "Le 3,000,000 - Le 7,500,000/month",
         demand: "Medium",
         requiredEducation: [
             "Development studies",
@@ -386,8 +386,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Electrician",
         industry: "Skilled Trade",
         description: "Install and maintain electrical systems in buildings and facilities",
-        salaryRange: "Le 2,000,000 - Le 5,500,000/month",
-        salaryUSD: "$100 - $275/month",
+        salaryRange: "$100 - $275/month",
+        salaryUSD: "Le 2,000,000 - Le 5,500,000/month",
         demand: "High",
         requiredEducation: [
             "Technical training",
@@ -420,8 +420,8 @@ const SIERRA_LEONE_CAREERS = [
         title: "Journalist/Media Professional",
         industry: "Media",
         description: "Report news, create content, and inform the public",
-        salaryRange: "Le 2,000,000 - Le 5,000,000/month",
-        salaryUSD: "$100 - $250/month",
+        salaryRange: "$100 - $250/month",
+        salaryUSD: "Le 2,000,000 - Le 5,000,000/month",
         demand: "Medium",
         requiredEducation: [
             "Journalism degree",
@@ -535,7 +535,7 @@ async function generateChatResponse(messages, siteContext) {
 
 • Explore career paths and opportunities
 • Find suitable universities and courses
-• Get salary information in SLE
+• Get salary information in USD
 • Discover scholarships and funding
 • Plan your career roadmap
 
@@ -605,7 +605,6 @@ function generateSalaryResponse(query) {
         return `💰 **${career.title} Salary in Sierra Leone**
 
 **Monthly Range**: ${career.salaryRange}
-**USD Equivalent**: ${career.salaryUSD}
 **Demand Level**: ${career.demand}
 
 **Industry**: ${career.industry}
@@ -621,21 +620,21 @@ Would you like to know about career requirements or how to get started in this f
 Here are typical monthly salaries across sectors:
 
 **High-Paying Careers**:
-• Mining Engineer: Le 5M - 12M ($250-$600)
-• Civil Engineer: Le 4M - 10M ($200-$500)
-• Software Developer: Le 3M - 8M ($150-$400)
+• Mining Engineer: $250 - $600
+• Civil Engineer: $200 - $500
+• Software Developer: $150 - $400
 
 **Healthcare**:
-• Nurse: Le 2.5M - 6M ($125-$300)
-• Medical Doctor: Le 5M - 15M ($250-$750)
+• Nurse: $125 - $300
+• Medical Doctor: $250 - $750
 
 **Education**:
-• Teacher: Le 1.8M - 4.5M ($90-$225)
-• University Lecturer: Le 3M - 7M ($150-$350)
+• Teacher: $90 - $225
+• University Lecturer: $150 - $350
 
 **Business & Finance**:
-• Accountant: Le 3M - 7M ($150-$350)
-• Marketing Manager: Le 3.5M - 8M ($175-$400)
+• Accountant: $150 - $350
+• Marketing Manager: $175 - $400
 
 💡 Salaries are higher in Freetown and for those with international certifications. Which career interests you most?`;
 }
@@ -668,7 +667,7 @@ function generateCareerResponse(query, siteContext) {
 
 ${career.description}
 
-**💰 Salary**: ${career.salaryRange} (${career.salaryUSD})
+**💰 Salary**: ${career.salaryRange}
 **📊 Demand**: ${career.demand}
 **📈 Growth**: ${career.growthPotential}
 

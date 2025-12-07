@@ -1,7 +1,9 @@
 // Local AI Service for Career Pilot Salone
-// Provides intelligent responses without external API dependencies
+// Enhanced with comprehensive FAQ database for complete career guidance
 
-import { SIERRA_LEONE_CAREERS, UNIVERSITIES, ONLINE_RESOURCES, type CareerInfo } from './career-data';
+import { SIERRA_LEONE_CAREERS, UNIVERSITIES, type CareerInfo } from './career-data';
+import { findBestAnswer, COMPREHENSIVE_FAQ } from './faq-database';
+import { findCareerRoadmap } from './roadmap-database';
 
 // ============================================================================
 // CHAT AI - Career Guidance Responses
@@ -16,237 +18,55 @@ export async function generateChatResponse(
     messages: ChatMessage[],
     siteContext: string
 ): Promise<string> {
-    const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content.toLowerCase() || '';
+    const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
 
-    // Detect intent
-    if (containsKeywords(lastUserMessage, ['hello', 'hi', 'hey', 'greetings'])) {
-        return `Hello! 👋 I'm CareerPilot, your AI career counselor for Sierra Leone. I can help you:
+    // Use comprehensive FAQ database for intelligent matching
+    const faqAnswer = findBestAnswer(lastUserMessage);
 
-• Explore career paths and opportunities
-• Find suitable universities and courses
-• Get salary information in USD
-• Discover scholarships and funding
-• Plan your career roadmap
+    // If FAQ found a good match, use it
+    if (faqAnswer && !faqAnswer.includes("I'd be happy to help!")) {
+        return faqAnswer;
+    }
+
+    // Fallback to original logic for edge cases
+    const lowerMessage = lastUserMessage.toLowerCase();
+
+    // 2. Broad Topic Matching (If no exact FAQ match)
+    if (lowerMessage.includes("civil leg") || lowerMessage.includes("civil eng")) return findBestAnswer("What engineering careers are available?");
+    if (lowerMessage.includes("data") || lowerMessage.includes("analyst")) return findBestAnswer("Why is Data Analysis a good career?");
+    if (lowerMessage.includes("money") || lowerMessage.includes("pay") || lowerMessage.includes("salary") || lowerMessage.includes("earn")) return findBestAnswer("What are typical salaries in Sierra Leone?");
+    if (lowerMessage.includes("university") || lowerMessage.includes("college") || lowerMessage.includes("study") || lowerMessage.includes("degree")) return findBestAnswer("What universities are in Sierra Leone?");
+    if (lowerMessage.includes("job") || lowerMessage.includes("work") || lowerMessage.includes("hire")) return findBestAnswer("How do I find jobs in Sierra Leone?");
+    if (lowerMessage.includes("nurse") || lowerMessage.includes("nursing") || lowerMessage.includes("doctor") || lowerMessage.includes("health")) return findBestAnswer("How do I become a nurse?");
+    if (lowerMessage.includes("tech") || lowerMessage.includes("computer") || lowerMessage.includes("code") || lowerMessage.includes("software")) return findBestAnswer("How do I become a software developer?");
+    if (lowerMessage.includes("teach") || lowerMessage.includes("teacher") || lowerMessage.includes("school")) return findBestAnswer("How do I become a teacher?");
+    if (lowerMessage.includes("farm") || lowerMessage.includes("agric")) return findBestAnswer("What careers are available in agriculture?");
+    if (lowerMessage.includes("bank") || lowerMessage.includes("accounting") || lowerMessage.includes("finance")) return findBestAnswer("How do I become an accountant?");
+
+    // Greetings
+    if (containsKeywords(lowerMessage, ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon'])) {
+        return `Hello! 👋 I'm CareerPilot, your AI career counselor for Sierra Leone.
+
+**I can help you with:**
+
+📚 **Careers** - Explore software development, nursing, teaching, engineering, business, agriculture, and more
+💰 **Salaries** - Learn what different careers pay in Sierra Leone  
+🎓 **Education** - Find universities, admission requirements, and online courses
+💼 **Job Search** - Discover how to find jobs and what skills employers want
+🗺️ **Career Planning** - Get guidance on choosing or changing careers
+🎯 **Our Platform** - Learn how to use our aptitude test, roadmap generator, CV builder, and more
+
+**Try asking:**
+• "How do I become a software developer?"
+• "What are typical salaries in Sierra Leone?"
+• "How do I use the aptitude test?"
+• "What universities offer engineering programs?"
 
 What would you like to know about your career journey?`;
     }
 
-    if (containsKeywords(lastUserMessage, ['salary', 'pay', 'earn', 'income', 'money'])) {
-        return generateSalaryResponse(lastUserMessage);
-    }
-
-    if (containsKeywords(lastUserMessage, ['university', 'college', 'school', 'institution', 'study', 'education'])) {
-        return generateUniversityResponse(lastUserMessage, siteContext);
-    }
-
-    if (containsKeywords(lastUserMessage, ['career', 'job', 'work', 'profession', 'field'])) {
-        return generateCareerResponse(lastUserMessage, siteContext);
-    }
-
-    if (containsKeywords(lastUserMessage, ['scholarship', 'funding', 'financial aid', 'grant'])) {
-        return generateScholarshipResponse(siteContext);
-    }
-
-    if (containsKeywords(lastUserMessage, ['how to', 'become', 'start', 'get into'])) {
-        return generateHowToResponse(lastUserMessage);
-    }
-
-    // Default helpful response
-    return `I'd be happy to help you with career guidance! I can assist with:
-
-📚 **Education**: Universities, courses, and requirements
-💼 **Careers**: Job opportunities and salary ranges in Sierra Leone
-💰 **Scholarships**: Available funding opportunities
-🗺️ **Career Planning**: Steps to achieve your goals
-
-Could you tell me more about what you're interested in? For example:
-- "What careers are available in technology?"
-- "Which universities offer nursing programs?"
-- "How much do teachers earn in Sierra Leone?"`;
-}
-
-function generateSalaryResponse(query: string): string {
-    const matchedCareers = SIERRA_LEONE_CAREERS.filter(career =>
-        career.keywords.some(keyword => query.includes(keyword))
-    );
-
-    if (matchedCareers.length > 0) {
-        const career = matchedCareers[0];
-        return `💰 **${career.title} Salary in Sierra Leone**
-
-**Monthly Range**: ${career.salaryRange}
-**Demand Level**: ${career.demand}
-
-**Industry**: ${career.industry}
-**Growth Potential**: ${career.growthPotential}
-
-💡 **Tip**: Salaries vary based on experience, location (Freetown vs. provinces), and employer type (government, private, NGO). Entry-level positions typically start at the lower end of the range.
-
-Would you like to know about career requirements or how to get started in this field?`;
-    }
-
-    // General salary overview
-    return `💰 **Salary Ranges in Sierra Leone (2024)**
-
-Here are typical monthly salaries across sectors:
-
-**High-Paying Careers**:
-• Mining Engineer: $250 - $600
-• Civil Engineer: $200 - $500
-• Software Developer: $150 - $400
-
-**Healthcare**:
-• Nurse: $125 - $300
-• Medical Doctor: $250 - $750
-
-**Education**:
-• Teacher: $90 - $225
-• University Lecturer: $150 - $350
-
-**Business & Finance**:
-• Accountant: $150 - $350
-• Marketing Manager: $175 - $400
-
-💡 Salaries are higher in Freetown and for those with international certifications. Which career interests you most?`;
-}
-
-function generateUniversityResponse(query: string, siteContext: string): string {
-    let response = `🎓 **Universities in Sierra Leone**\n\n`;
-
-    if (siteContext.includes('UNIVERSITIES:')) {
-        response += `${siteContext.split('UNIVERSITIES:')[1].split('\n\n')[0]}\n\n`;
-    } else {
-        response += `**Top Institutions**:\n`;
-        UNIVERSITIES.forEach(uni => {
-            response += `• ${uni}\n`;
-        });
-        response += '\n';
-    }
-
-    response += `**Choosing the Right University**:\n`;
-    response += `• **FBC**: Best for law, humanities, social sciences\n`;
-    response += `• **Njala**: Strong in agriculture, engineering\n`;
-    response += `• **IPAM**: Business, management, accounting\n`;
-    response += `• **COMAHS**: Medicine, nursing, health sciences\n`;
-    response += `• **UNIMAK**: Growing programs in various fields\n\n`;
-    response += `💡 **Tip**: Consider location, program strength, and affordability. Many students also use online courses to supplement their education.\n\n`;
-    response += `What field are you interested in studying?`;
-
-    return response;
-}
-
-function generateCareerResponse(query: string, siteContext: string): string {
-    const matchedCareers = SIERRA_LEONE_CAREERS.filter(career =>
-        career.keywords.some(keyword => query.includes(keyword))
-    );
-
-    if (matchedCareers.length > 0) {
-        const career = matchedCareers[0];
-        return `💼 **${career.title}**
-
-${career.description}
-
-**💰 Salary**: ${career.salaryRange}
-**📊 Demand**: ${career.demand}
-**📈 Growth**: ${career.growthPotential}
-
-**Required Education**:
-${career.requiredEducation.map(edu => `• ${edu}`).join('\n')}
-
-**Key Skills**:
-${career.requiredSkills.slice(0, 5).map(skill => `• ${skill}`).join('\n')}
-
-**Where to Study**:
-${career.localInstitutions.slice(0, 3).map(inst => `• ${inst}`).join('\n')}
-
-Would you like a detailed 3-month roadmap to start this career?`;
-    }
-
-    // General career overview
-    let response = `💼 **Career Opportunities in Sierra Leone**\n\n`;
-
-    if (siteContext.includes('POPULAR CAREERS:')) {
-        response += `${siteContext.split('POPULAR CAREERS:')[1].split('\n\n')[0]}\n\n`;
-    }
-
-    response += `**High-Demand Sectors**:\n`;
-    response += `🏥 **Healthcare**: Nurses, doctors, lab technicians\n`;
-    response += `💻 **Technology**: Software developers, IT support\n`;
-    response += `🌾 **Agriculture**: Agricultural officers, agribusiness\n`;
-    response += `⛏️ **Mining**: Engineers, geologists, technicians\n`;
-    response += `🏗️ **Construction**: Civil engineers, electricians\n`;
-    response += `📚 **Education**: Teachers, lecturers, trainers\n\n`;
-    response += `Which sector interests you most? I can provide detailed information!`;
-
-    return response;
-}
-
-function generateScholarshipResponse(siteContext: string): string {
-    let response = `🎓 **Scholarship Opportunities**\n\n`;
-
-    if (siteContext.includes('ACTIVE SCHOLARSHIPS:')) {
-        response += `**Currently Available**:\n`;
-        response += `${siteContext.split('ACTIVE SCHOLARSHIPS:')[1]}\n\n`;
-    }
-
-    response += `**Types of Scholarships**:\n`;
-    response += `• **Government**: TVET scholarships, teaching bursaries\n`;
-    response += `• **International**: Chevening, Commonwealth, MasterCard Foundation\n`;
-    response += `• **University**: Merit-based awards at FBC, Njala, UNIMAK\n`;
-    response += `• **NGO**: Various organizations offer education support\n\n`;
-    response += `**Application Tips**:\n`;
-    response += `✓ Maintain strong academic performance\n`;
-    response += `✓ Get involved in community service\n`;
-    response += `✓ Apply early - deadlines are strict\n`;
-    response += `✓ Prepare strong personal statements\n\n`;
-    response += `Visit our Opportunities page to see current scholarships!`;
-
-    return response;
-}
-
-function generateHowToResponse(query: string): string {
-    const matchedCareers = SIERRA_LEONE_CAREERS.filter(career =>
-        career.keywords.some(keyword => query.includes(keyword))
-    );
-
-    if (matchedCareers.length > 0) {
-        const career = matchedCareers[0];
-        return `🚀 **How to Become a ${career.title}**
-
-**Step 1: Education** 📚
-${career.requiredEducation[0]}
-→ Study at: ${career.localInstitutions[0]}
-
-**Step 2: Build Skills** 💪
-Focus on: ${career.requiredSkills.slice(0, 3).join(', ')}
-
-**Step 3: Gain Experience** 🎯
-• Internships during studies
-• Volunteer work in the field
-• Personal projects (for tech/creative fields)
-
-**Step 4: Network** 🤝
-• Join professional associations
-• Attend industry events in Freetown
-• Connect with professionals on LinkedIn
-
-**Step 5: Job Search** 💼
-• Check local job boards
-• Apply to companies in ${career.industry}
-• Consider starting with entry-level positions
-
-**Timeline**: 2-4 years depending on education path
-
-💡 Would you like a detailed 3-month roadmap to get started?`;
-    }
-
-    return `I'd be happy to help you plan your career path! Could you specify which career you're interested in? For example:
-
-• "How to become a software developer"
-• "How to become a nurse"
-• "How to become a teacher"
-
-I'll provide a step-by-step guide tailored to Sierra Leone!`;
+    // If no specific match, return the FAQ's default helpful response
+    return faqAnswer;
 }
 
 function containsKeywords(text: string, keywords: string[]): boolean {
@@ -398,6 +218,19 @@ export interface CareerRoadmap {
 }
 
 export async function generateRoadmap(careerName: string): Promise<CareerRoadmap> {
+    // First, try to find in comprehensive roadmap database
+    const roadmapTemplate = findCareerRoadmap(careerName);
+
+    if (roadmapTemplate) {
+        // Use pre-built detailed roadmap
+        return {
+            title: `Your Roadmap to ${roadmapTemplate.title} in Sierra Leone`,
+            overview: roadmapTemplate.overview,
+            phases: roadmapTemplate.phases
+        };
+    }
+
+    // Fallback: Check career-data.ts
     const career = SIERRA_LEONE_CAREERS.find(c =>
         c.title.toLowerCase().includes(careerName.toLowerCase()) ||
         c.keywords.some(k => careerName.toLowerCase().includes(k))
@@ -407,7 +240,7 @@ export async function generateRoadmap(careerName: string): Promise<CareerRoadmap
         return generateDetailedRoadmap(career);
     }
 
-    // Generic roadmap for unknown careers
+    // Last resort: Generic roadmap
     return generateGenericRoadmap(careerName);
 }
 
@@ -440,7 +273,7 @@ function generateDetailedRoadmap(career: CareerInfo): CareerRoadmap {
                 name: "Month 2: Skill Development & Practice",
                 goal: `Develop practical skills and start building your portfolio/experience`,
                 steps: [
-                    `Practice ${career.requiredSkills[1]} daily - aim for 2 hours/day`,
+                    `Practice ${career.requiredSkills[1] || career.requiredSkills[0]} daily - aim for 2 hours/day`,
                     `Work on a small project related to ${career.title}`,
                     `Reach out to 3 professionals in this field for informational interviews`,
                     `Attend industry meetups or events in Freetown/Bo`,

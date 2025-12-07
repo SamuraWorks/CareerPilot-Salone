@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X, User, LogOut } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
 import { useState } from "react"
+import Image from "next/image"
 
 export function Navigation() {
   const { user, logout, isAuthenticated } = useAuth()
@@ -17,8 +18,14 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">CP</span>
+            <div className="relative w-10 h-10 rounded-lg overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="CareerPilot Salone Logo"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
             <span className="font-bold text-xl text-foreground">CareerPilot Salone</span>
           </Link>
@@ -63,12 +70,12 @@ export function Navigation() {
           <div className="hidden lg:flex items-center gap-4">
             {isAuthenticated ? (
               <>
-                <Link href="/dashboard">
-                  <Button variant="ghost" className="gap-2">
+                <Button asChild variant="ghost" className="gap-2">
+                  <Link href="/dashboard">
                     <User className="w-4 h-4" />
                     {user?.name}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
                 <Button variant="outline" onClick={logout} className="gap-2 bg-transparent">
                   <LogOut className="w-4 h-4" />
                   Logout
@@ -76,12 +83,12 @@ export function Navigation() {
               </>
             ) : (
               <>
-                <Link href="/login">
-                  <Button variant="ghost">Login</Button>
-                </Link>
-                <Link href="/signup">
-                  <Button>Get Started</Button>
-                </Link>
+                <Button asChild variant="ghost">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/signup">Get Started</Link>
+                </Button>
               </>
             )}
           </div>
@@ -131,12 +138,12 @@ export function Navigation() {
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
                 {isAuthenticated ? (
                   <>
-                    <Link href="/dashboard">
-                      <Button variant="outline" className="w-full gap-2 bg-transparent">
+                    <Button asChild variant="outline" className="w-full gap-2 bg-transparent">
+                      <Link href="/dashboard">
                         <User className="w-4 h-4" />
                         {user?.name}
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                     <Button variant="outline" onClick={logout} className="w-full gap-2 bg-transparent">
                       <LogOut className="w-4 h-4" />
                       Logout
@@ -144,14 +151,12 @@ export function Navigation() {
                   </>
                 ) : (
                   <>
-                    <Link href="/login">
-                      <Button variant="outline" className="w-full bg-transparent">
-                        Login
-                      </Button>
-                    </Link>
-                    <Link href="/signup">
-                      <Button className="w-full">Get Started</Button>
-                    </Link>
+                    <Button asChild variant="outline" className="w-full bg-transparent">
+                      <Link href="/login">Login</Link>
+                    </Button>
+                    <Button asChild className="w-full">
+                      <Link href="/signup">Get Started</Link>
+                    </Button>
                   </>
                 )}
               </div>

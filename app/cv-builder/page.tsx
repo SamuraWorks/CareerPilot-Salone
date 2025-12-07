@@ -772,201 +772,204 @@ export default function CVBuilderPage() {
           {/* CV Preview Section */}
           {showPreview && (
             <div className="lg:sticky lg:top-6 h-fit">
-              <Card className="overflow-hidden">
-                <CardHeader className="bg-muted/30">
-                  <CardTitle className="text-sm">CV Preview</CardTitle>
-                  <CardDescription className="text-xs">Real-time preview of your CV</CardDescription>
+              <Card className="overflow-hidden border-2 border-primary/20 shadow-lg">
+                <CardHeader className="bg-muted/30 border-b">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-sm font-semibold">Live Preview</CardTitle>
+                      <CardDescription className="text-xs">Updates automatically as you type</CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <div className="w-3 h-3 rounded-full bg-green-400" />
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent className="p-8 bg-white text-[#000000] min-h-[600px]" ref={cvPreviewRef}>
-                  <div className="space-y-6 text-sm">
-                    <div className="border-b-2 border-[#1f2937] pb-4">
-                      <div className="flex items-start gap-6">
-                        {/* Photo section */}
-                        {profilePhoto && (
-                          <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#d1d5db] flex-shrink-0">
-                            <img
-                              src={profilePhoto || "/placeholder.svg"}
-                              alt="Profile"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
+                <CardContent className="p-0 min-h-[800px] flex flex-row" ref={cvPreviewRef} style={{ backgroundColor: '#ffffff' }}>
 
-                        {/* Name and contact info */}
-                        <div className="flex-1">
-                          <h1 className="text-3xl font-bold mb-1">{personalInfo.fullName || "Your Full Name"}</h1>
-                          {personalInfo.title && <p className="text-lg text-[#4b5563] mb-2">{personalInfo.title}</p>}
+                  {/* LEFT SIDEBAR - Dark Navy */}
+                  <div className="w-[33%] p-6 flex flex-col gap-6 shrink-0" style={{ backgroundColor: '#1e3a8a', color: '#ffffff' }}>
 
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#4b5563]">
-                            {personalInfo.email && <span>{personalInfo.email}</span>}
-                            {personalInfo.phone && <span>• {personalInfo.phone}</span>}
-                            {personalInfo.location && <span>• {personalInfo.location}</span>}
-                          </div>
-
-                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#2563eb] mt-1">
-                            {personalInfo.linkedin && <span>{personalInfo.linkedin}</span>}
-                            {personalInfo.portfolio && <span>• {personalInfo.portfolio}</span>}
-                            {personalInfo.github && <span>• {personalInfo.github}</span>}
-                          </div>
+                    {/* Profile Photo */}
+                    <div className="flex justify-center mb-2">
+                      {profilePhoto ? (
+                        <div className="w-32 h-32 rounded-full overflow-hidden" style={{ border: '4px solid rgba(255,255,255,0.2)', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' }}>
+                          <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover object-top" />
                         </div>
-                      </div>
+                      ) : (
+                        <div className="w-32 h-32 rounded-full flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.1)', border: '4px solid rgba(255,255,255,0.2)' }}>
+                          <User className="w-16 h-16" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                        </div>
+                      )}
                     </div>
 
-                    {/* Professional Summary */}
-                    {personalInfo.summary && (
-                      <div>
-                        <h2 className="text-lg font-bold mb-2 text-[#1f2937]">PROFESSIONAL SUMMARY</h2>
-                        <p className="text-[#374151] leading-relaxed">{personalInfo.summary}</p>
+                    {/* Contact Info */}
+                    <div className="space-y-4 text-sm">
+                      <h3 className="font-bold uppercase tracking-widest text-xs mb-3" style={{ color: '#93c5fd', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '8px' }}>Contact</h3>
+
+                      {personalInfo.email && (
+                        <div className="break-all">
+                          <div className="text-[10px] uppercase mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>Email</div>
+                          <div className="font-medium">{personalInfo.email}</div>
+                        </div>
+                      )}
+                      {personalInfo.phone && (
+                        <div>
+                          <div className="text-[10px] uppercase mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>Phone</div>
+                          <div className="font-medium">{personalInfo.phone}</div>
+                        </div>
+                      )}
+                      {personalInfo.location && (
+                        <div>
+                          <div className="text-[10px] uppercase mb-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>Location</div>
+                          <div className="font-medium">{personalInfo.location}</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Skills */}
+                    {(skills || languages) && (
+                      <div className="space-y-4">
+                        <h3 className="font-bold uppercase tracking-widest text-xs mb-3" style={{ color: '#93c5fd', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '8px' }}>Skills</h3>
+                        {skills && (
+                          <div className="mb-4">
+                            <div className="text-[10px] uppercase mb-2" style={{ color: 'rgba(255,255,255,0.6)' }}>Technical</div>
+                            <div className="flex flex-wrap gap-2">
+                              {skills.split(',').map((skill, i) => (
+                                <span key={i} className="inline-block px-2 py-1 rounded text-xs" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                  {skill.trim()}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {languages && (
+                          <div>
+                            <div className="text-[10px] uppercase mb-1" style={{ color: 'rgba(255,255,255,0.6)' }}>Languages</div>
+                            <p className="text-sm whitespace-pre-line" style={{ color: 'rgba(255,255,255,0.9)' }}>{languages}</p>
+                          </div>
+                        )}
                       </div>
                     )}
 
-                    {/* Work Experience */}
-                    {experience.some((exp) => exp.position || exp.company) && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">WORK EXPERIENCE</h2>
-                        <div className="space-y-4">
-                          {experience.map(
-                            (exp) =>
-                              (exp.position || exp.company) && (
-                                <div key={exp.id}>
-                                  <div className="flex justify-between items-start mb-1">
-                                    <div>
-                                      <h3 className="font-bold">{exp.position || "Position Title"}</h3>
-                                      <p className="text-[#4b5563]">{exp.company || "Company Name"}</p>
-                                    </div>
-                                    <p className="text-xs text-[#6b7280] text-right">
-                                      {exp.startDate || "Start"} - {exp.current ? "Present" : exp.endDate || "End"}
-                                    </p>
-                                  </div>
-                                  {exp.description && (
-                                    <div className="text-[#374151] whitespace-pre-line mt-1">{exp.description}</div>
-                                  )}
-                                </div>
-                              ),
-                          )}
+                    {/* Certifications - Now in Sidebar */}
+                    {certifications.length > 0 && certifications[0].name && (
+                      <div className="space-y-3">
+                        <h3 className="font-bold uppercase tracking-widest text-xs mb-3" style={{ color: '#93c5fd', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '8px' }}>Certifications</h3>
+                        {certifications.map(cert => (
+                          cert.name && (
+                            <div key={cert.id} className="text-sm">
+                              <div className="font-bold leading-tight" style={{ color: '#ffffff' }}>{cert.name}</div>
+                              <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>{cert.issuer}</div>
+                              <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>{cert.date}</div>
+                            </div>
+                          )
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* RIGHT CONTENT - White - Main Body */}
+                  <div className="flex-1 p-8" style={{ color: '#1e293b' }}>
+
+                    {/* Header Name & Title */}
+                    <div className="mb-8 pb-6" style={{ borderBottom: '2px solid #f1f5f9' }}>
+                      <h1 className="text-4xl font-extrabold uppercase tracking-tight mb-2" style={{ color: '#111827' }}>
+                        {personalInfo.fullName || "Your Name"}
+                      </h1>
+                      <p className="text-xl font-medium tracking-wide uppercase" style={{ color: '#2563eb' }}>
+                        {personalInfo.title || "Target Job Title"}
+                      </p>
+                    </div>
+
+                    {/* Summary */}
+                    {personalInfo.summary && (
+                      <div className="mb-8">
+                        <h3 className="font-bold uppercase tracking-widest text-sm mb-3 pb-1" style={{ color: '#1e3a8a', borderBottom: '1px solid #e2e8f0' }}>Professional Summary</h3>
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap text-justify" style={{ color: '#475569' }}>
+                          {personalInfo.summary}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Experience */}
+                    {experience.length > 0 && experience[0].position && (
+                      <div className="mb-8">
+                        <h3 className="font-bold uppercase tracking-widest text-sm mb-4 pb-1" style={{ color: '#1e3a8a', borderBottom: '1px solid #e2e8f0' }}>Experience</h3>
+                        <div className="space-y-5">
+                          {experience.map(exp => (
+                            <div key={exp.id}>
+                              <div className="flex justify-between items-baseline mb-1">
+                                <h4 className="font-bold text-base" style={{ color: '#1f2937' }}>{exp.position}</h4>
+                                <span className="text-xs font-medium px-2 py-0.5 rounded" style={{ color: '#64748b', backgroundColor: '#f1f5f9' }}>
+                                  {exp.startDate ? new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}
+                                  {' - '}
+                                  {exp.current ? 'Present' : (exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '')}
+                                </span>
+                              </div>
+                              <div className="text-sm font-semibold mb-2" style={{ color: '#4b5563' }}>{exp.company}</div>
+                              <p className="text-sm whitespace-pre-line pl-2" style={{ color: '#475569', borderLeft: '2px solid #e2e8f0' }}>
+                                {exp.description}
+                              </p>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
 
                     {/* Education */}
-                    {education.some((edu) => edu.school || edu.degree) && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">EDUCATION</h2>
-                        <div className="space-y-3">
-                          {education.map(
-                            (edu) =>
-                              (edu.school || edu.degree) && (
-                                <div key={edu.id}>
-                                  <div className="flex justify-between items-start">
-                                    <div>
-                                      <h3 className="font-bold">
-                                        {edu.degree || "Degree"} {edu.field && `in ${edu.field}`}
-                                      </h3>
-                                      <p className="text-[#4b5563]">{edu.school || "Institution Name"}</p>
-                                      {edu.gpa && <p className="text-xs text-[#6b7280]">GPA: {edu.gpa}</p>}
-                                    </div>
-                                    <p className="text-xs text-[#6b7280]">
-                                      {edu.startYear || "Start"} - {edu.endYear || "End"}
-                                    </p>
-                                  </div>
-                                </div>
-                              ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Skills */}
-                    {skills && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">SKILLS</h2>
-                        <div className="flex flex-wrap gap-1.5">
-                          {skills.split(",").map((skill, index) => (
-                            <span
-                              key={index}
-                              className="text-xs px-2 py-1 bg-[#f3f4f6] text-[#1f2937] rounded border border-[#d1d5db]"
-                            >
-                              {skill.trim()}
-                            </span>
+                    {education.length > 0 && education[0].school && (
+                      <div className="mb-8">
+                        <h3 className="font-bold uppercase tracking-widest text-sm mb-4 pb-1" style={{ color: '#1e3a8a', borderBottom: '1px solid #e2e8f0' }}>Education</h3>
+                        <div className="space-y-4">
+                          {education.map(edu => (
+                            <div key={edu.id}>
+                              <div className="flex justify-between items-baseline">
+                                <h4 className="font-bold" style={{ color: '#1f2937' }}>{edu.school}</h4>
+                                <span className="text-xs" style={{ color: '#64748b' }}>{edu.startYear} - {edu.endYear}</span>
+                              </div>
+                              <div className="text-sm" style={{ color: '#4b5563' }}>
+                                {edu.degree} in {edu.field}
+                              </div>
+                              {edu.gpa && <div className="text-xs mt-1" style={{ color: '#94a3b8' }}>GPA: {edu.gpa}</div>}
+                            </div>
                           ))}
                         </div>
                       </div>
                     )}
 
                     {/* Projects */}
-                    {projects.some((p) => p.name || p.description) && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">PROJECTS</h2>
-                        <div className="space-y-2">
-                          {projects.map(
-                            (project) =>
-                              project.name && (
-                                <div key={project.id}>
-                                  <div className="flex justify-between items-start mb-0.5">
-                                    <p className="font-bold">{project.name}</p>
-                                    {project.url && (
-                                      <a href={project.url} className="text-xs text-[#2563eb] hover:underline ml-2">
-                                        🔗 Link
-                                      </a>
-                                    )}
-                                  </div>
-                                  {project.description && (
-                                    <p className="text-[#374151] leading-relaxed mb-1">{project.description}</p>
-                                  )}
-                                  {project.technologies && (
-                                    <p className="text-xs text-[#4b5563]">
-                                      <span className="font-semibold">Tech:</span> {project.technologies}
-                                    </p>
-                                  )}
-                                </div>
-                              ),
-                          )}
+                    {projects.length > 0 && projects[0].name && (
+                      <div>
+                        <h3 className="font-bold uppercase tracking-widest text-sm mb-4 pb-1" style={{ color: '#1e3a8a', borderBottom: '1px solid #e2e8f0' }}>Key Projects</h3>
+                        <div className="grid grid-cols-1 gap-4">
+                          {projects.map(proj => (
+                            <div key={proj.id} className="p-3 rounded" style={{ backgroundColor: '#f8fafc', border: '1px solid #f1f5f9' }}>
+                              <div className="flex justify-between items-start mb-1">
+                                <h4 className="font-bold text-sm" style={{ color: '#1f2937' }}>{proj.name}</h4>
+                                {proj.url && (
+                                  <a href={proj.url} target="_blank" rel="noreferrer" className="text-xs hover:underline" style={{ color: '#3b82f6' }}>Link</a>
+                                )}
+                              </div>
+                              <p className="text-xs mb-2" style={{ color: '#475569' }}>{proj.description}</p>
+                              <div className="text-[10px] uppercase tracking-wider font-medium" style={{ color: '#94a3b8' }}>
+                                {proj.technologies}
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
 
-                    {/* Certifications */}
-                    {certifications.some((c) => c.name || c.issuer) && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">CERTIFICATIONS</h2>
-                        <div className="space-y-1.5">
-                          {certifications.map(
-                            (cert) =>
-                              cert.name && (
-                                <div key={cert.id} className="flex justify-between items-start">
-                                  <div>
-                                    <p className="font-bold">{cert.name}</p>
-                                    <p className="text-[#374151]">{cert.issuer || "Issuing Organization"}</p>
-                                  </div>
-                                  <p className="text-xs text-[#6b7280] ml-2">
-                                    {cert.date
-                                      ? new Date(cert.date).toLocaleDateString("en-US", {
-                                        month: "short",
-                                        year: "numeric",
-                                      })
-                                      : "Date"}
-                                  </p>
-                                </div>
-                              ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Languages */}
-                    {languages && (
-                      <div className="mt-6">
-                        <h2 className="text-lg font-bold mb-3 text-[#1f2937]">LANGUAGES</h2>
-                        <p className="text-[#374151]">{languages}</p>
-                      </div>
-                    )}
                   </div>
                 </CardContent>
-              </Card>
-            </div>
-          )}
-        </div>
-      </div>
-    </DashboardLayout>
+              </Card >
+            </div >
+          )
+          }
+        </div >
+      </div >
+    </DashboardLayout >
   )
 }

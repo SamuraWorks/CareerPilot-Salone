@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/aptitude-test/layout,_N_T_/aptitude-test/page,_N_T_/aptitude-test"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/aptitude-test/__PAGE__",
+    "/aptitude-test",
+    "/_index",
+    "/_head"
+  ]
+}

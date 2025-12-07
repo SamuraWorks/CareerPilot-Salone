@@ -1,15 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { experimental_useObject as useObject } from "@ai-sdk/react"
+import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Map, Loader2, CheckCircle2, BookOpen, RefreshCw, AlertCircle, Download, Sparkles, Target, TrendingUp } from "lucide-react"
+import { Map, Loader2, CheckCircle2, BookOpen, RefreshCw, AlertCircle, Download, Sparkles, Target, TrendingUp, Save, LayoutList } from "lucide-react"
 import { z } from "zod"
 import { toast } from "sonner"
+import { useAuth } from "@/lib/auth-context"
+import { RoadmapHistory } from "@/components/roadmap-history"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Define the schema type for TypeScript intellisense (matching the API)
 const roadmapSchema = z.object({
@@ -22,6 +24,8 @@ const roadmapSchema = z.object({
     resources: z.array(z.string()),
   })),
 })
+
+type RoadmapData = z.infer<typeof roadmapSchema>
 
 // Skeleton loader component
 function RoadmapSkeleton() {
@@ -51,75 +55,243 @@ function RoadmapSkeleton() {
 }
 
 export default function RoadmapPage() {
+  const { user, session } = useAuth()
   const [career, setCareer] = useState("")
   const [hasError, setHasError] = useState(false)
   const [lastCareer, setLastCareer] = useState("")
+  const [activeTab, setActiveTab] = useState("generator")
+  const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([])
+  const [loadingHistory, setLoadingHistory] = useState(false)
+  const [displayedRoadmap, setDisplayedRoadmap] = useState<RoadmapData | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
-  const { object, submit, isLoading, error } = useObject({
-    api: "/api/generate-roadmap",
-    schema: roadmapSchema,
-    onFinish: ({ object: result, error }) => {
-      if (error) {
-        setHasError(true)
-        toast.error("Failed to generate roadmap", {
-          description: error.message.includes("quota")
-            ? "OpenAI API quota exceeded. Please check your API key credits."
-            : "An error occurred while generating your roadmap. Please try again.",
-          action: {
-            label: "Retry",
-            onClick: () => handleRetry(),
-          },
-        })
-      } else if (result) {
-        setHasError(false)
-        toast.success("Roadmap generated successfully!", {
-          description: `Your personalized ${lastCareer} roadmap is ready.`,
-          icon: <Sparkles className="w-4 h-4" />,
-        })
-      }
-    },
-  })
+  // Manual fetch state
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
 
-  const handleGenerate = (e: React.FormEvent) => {
+  // Fetch history on mount
+  useEffect(() => {
+    if (session?.access_token) {
+      setLoadingHistory(true)
+      fetch('/api/roadmaps', {
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setSavedRoadmaps(data)
+        })
+        .catch(err => console.error("Failed to load history", err))
+        .finally(() => setLoadingHistory(false))
+    }
+  }, [session])
+
+  const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!career.trim()) {
-      toast.error("Please enter a career", {
-        description: "Tell us what career you're interested in pursuing.",
-      })
+      toast.error("Please enter a career")
       return
     }
+
     setHasError(false)
+    setError(null)
     setLastCareer(career)
-    submit({ career })
+    setDisplayedRoadmap(null)
+    setActiveTab("generator")
+    setIsLoading(true)
+
+    try {
+      console.log("Sending request for:", career);
+      const res = await fetch("/api/generate-roadmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ career })
+      })
+
+      // Read as text first to avoid crashing on empty/invalid JSON
+      const text = await res.text();
+      console.log("Raw Server Response:", text.substring(0, 500));
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error("JSON PARSE ERROR:", e);
+        throw new Error(`Server returned invalid response: ${text.substring(0, 100)}...`);
+      }
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to generate roadmap")
+      }
+
+      // Basic validation
+      if (!data.phases || !Array.isArray(data.phases)) {
+        throw new Error("Invalid roadmap format received")
+      }
+
+      setDisplayedRoadmap(data as RoadmapData)
+      toast.success("Roadmap generated successfully!", {
+        description: `Your personalized ${career} roadmap is ready.`,
+        icon: <Sparkles className="w-4 h-4" />,
+      })
+
+    } catch (err: any) {
+      console.error("Generation error:", err)
+      setHasError(true)
+      setError(err)
+      toast.error("Failed to generate roadmap", {
+        description: err.message || "An error occurred. Please try again.",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRetry = () => {
     if (lastCareer) {
+      setCareer(lastCareer)
       setHasError(false)
-      submit({ career: lastCareer })
-      toast.info("Retrying...", {
-        description: "Generating your roadmap again.",
+      setError(null)
+      setDisplayedRoadmap(null)
+      setIsLoading(true)
+
+      fetch("/api/generate-roadmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ career: lastCareer })
       })
+        .then(async res => {
+          const text = await res.text();
+          try {
+            const data = JSON.parse(text);
+            if (!res.ok) throw new Error(data.message);
+            return data;
+          } catch (e) {
+            throw new Error(`Server error: ${text.substring(0, 100)}`);
+          }
+        })
+        .then(data => {
+          setDisplayedRoadmap(data)
+          toast.success("Roadmap generated!")
+        })
+        .catch(err => {
+          setHasError(true)
+          setError(err)
+          toast.error("Retry failed")
+        })
+        .finally(() => setIsLoading(false))
     }
   }
 
   const handleRegenerate = () => {
     if (career.trim()) {
       setHasError(false)
+      setError(null)
+      setDisplayedRoadmap(null)
       setLastCareer(career)
-      submit({ career })
-      toast.info("Regenerating roadmap...", {
-        description: "Creating a fresh roadmap for you.",
+      setIsLoading(true)
+      toast.info("Regenerating roadmap...")
+
+      fetch("/api/generate-roadmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ career })
       })
+        .then(async res => {
+          const text = await res.text();
+          try {
+            const data = JSON.parse(text);
+            if (!res.ok) throw new Error(data.message);
+            return data;
+          } catch (e) {
+            throw new Error(`Server error: ${text.substring(0, 100)}`);
+          }
+        })
+        .then(data => {
+          setDisplayedRoadmap(data)
+          toast.success("New roadmap ready!")
+        })
+        .catch(err => {
+          setHasError(true)
+          setError(err)
+          toast.error("Regeneration failed")
+        })
+        .finally(() => setIsLoading(false))
     }
   }
+
+  const handleSave = async () => {
+    if (!session) {
+      toast.error("Please sign in to save roadmaps")
+      return
+    }
+    if (!displayedRoadmap) return
+
+    setIsSaving(true)
+    try {
+      const res = await fetch('/api/roadmaps', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          career: lastCareer || displayedRoadmap.title.split('for ')[1] || "Career",
+          title: displayedRoadmap.title,
+          overview: displayedRoadmap.overview,
+          phases: displayedRoadmap.phases
+        })
+      })
+
+      if (!res.ok) throw new Error('Failed to save')
+
+      const savedMap = await res.json()
+      setSavedRoadmaps([savedMap, ...savedRoadmaps])
+      toast.success("Roadmap saved!")
+    } catch (err) {
+      toast.error("Failed to save roadmap")
+      console.error(err)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleLoad = (map: any) => {
+    setDisplayedRoadmap({
+      title: map.title,
+      overview: map.overview,
+      phases: map.phases
+    })
+    setCareer(map.career)
+    setLastCareer(map.career)
+    setActiveTab("generator")
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    toast.success("Roadmap loaded from history")
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this roadmap?")) return
+    try {
+      const res = await fetch(`/api/roadmaps?id=${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      })
+      if (!res.ok) throw new Error('Failed to delete')
+
+      setSavedRoadmaps(savedRoadmaps.filter(m => m.id !== id))
+      toast.success("Roadmap deleted")
+    } catch (err) {
+      toast.error("Failed to delete roadmap")
+    }
+  }
+
+  // Determine what to show
+  const roadmapToShow = displayedRoadmap
 
   return (
     <DashboardLayout>
       <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-        {/* Header with gradient background */}
+        {/* Header */}
         <div className="relative p-8 border-b overflow-hidden">
-          {/* Animated gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/15 to-accent/20 animate-gradient" />
           <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,transparent,black)]" />
 
@@ -139,186 +311,164 @@ export default function RoadmapPage() {
         </div>
 
         <div className="flex-1 p-6 max-w-5xl mx-auto w-full space-y-8">
-          {/* Input Section with enhanced design */}
-          <Card className="p-8 shadow-xl border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
-            <form onSubmit={handleGenerate} className="space-y-4">
-              <div className="flex flex-col md:flex-row gap-4 items-end">
-                <div className="flex-1 w-full relative">
-                  <label className="text-sm font-semibold mb-2 block flex items-center gap-2">
-                    <Target className="w-4 h-4 text-primary" />
-                    What is your Dream Career?
-                  </label>
-                  <Input
-                    placeholder="e.g. Software Engineer, Civil Engineer, Accountant, Nurse..."
-                    className="text-lg py-6 border-primary/20 focus:border-primary transition-all"
-                    value={career}
-                    onChange={(e) => setCareer(e.target.value)}
-                    disabled={isLoading}
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full md:w-auto h-14 text-lg gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all"
-                  disabled={isLoading || !career}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="animate-spin" />
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5" />
-                      Generate Plan
-                    </>
-                  )}
-                </Button>
-              </div>
 
-              {/* Tips section */}
-              <div className="flex items-start gap-2 p-4 rounded-lg bg-primary/5 border border-primary/10">
-                <TrendingUp className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <div className="text-sm">
-                  <p className="font-medium text-foreground mb-1">Pro Tip</p>
-                  <p className="text-muted-foreground">
-                    Be specific with your career choice for the most relevant roadmap. Include specializations if applicable (e.g., "Frontend Developer" instead of just "Developer").
-                  </p>
-                </div>
-              </div>
-            </form>
-          </Card>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="generator" className="gap-2"><Sparkles className="w-4 h-4" /> Generator</TabsTrigger>
+              <TabsTrigger value="history" className="gap-2"><LayoutList className="w-4 h-4" /> History ({savedRoadmaps.length})</TabsTrigger>
+            </TabsList>
 
-          {/* Loading State */}
-          {isLoading && <RoadmapSkeleton />}
-
-          {/* Error State */}
-          {hasError && error && !isLoading && (
-            <Card className="p-8 border-destructive/50 bg-destructive/5">
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="p-3 rounded-full bg-destructive/10">
-                  <AlertCircle className="w-8 h-8 text-destructive" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">Oops! Something went wrong</h3>
-                  <p className="text-muted-foreground max-w-md">
-                    {error.message.includes("quota")
-                      ? "We've hit our API quota limit. Please try again later or contact support."
-                      : "We couldn't generate your roadmap. This might be a temporary issue."}
-                  </p>
-                </div>
-                <Button onClick={handleRetry} size="lg" variant="outline" className="gap-2">
-                  <RefreshCw className="w-4 h-4" />
-                  Try Again
-                </Button>
-              </div>
-            </Card>
-          )}
-
-          {/* Results Section with enhanced design */}
-          {object?.phases && !isLoading && !hasError && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
-              {/* Title section with gradient */}
-              <div className="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border border-primary/20 shadow-lg">
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  {object.title}
-                </h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  {object.overview}
-                </p>
-              </div>
-
-              {/* Phase cards with enhanced styling */}
-              <div className="grid md:grid-cols-3 gap-6 relative">
-                {/* Connecting Line (Desktop) with gradient */}
-                <div className="hidden md:block absolute top-10 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent -z-10" />
-
-                {object.phases.map((phase, idx) => {
-                  // Assign distinct colors to each phase
-                  const phaseColors = [
-                    { border: 'border-t-primary', bg: 'from-primary to-primary/70', icon: 'bg-primary/10 border-primary/20', text: 'text-primary' },
-                    { border: 'border-t-chart-4', bg: 'from-chart-4 to-chart-4/70', icon: 'bg-chart-4/10 border-chart-4/20', text: 'text-chart-4' },
-                    { border: 'border-t-accent', bg: 'from-accent to-accent/70', icon: 'bg-accent/10 border-accent/20', text: 'text-accent' },
-                  ]
-                  const colors = phaseColors[idx] || phaseColors[0]
-
-                  return (
-                    <Card
-                      key={idx}
-                      className={`group p-6 border-t-4 ${colors.border} shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm hover:scale-[1.02]`}
+            <TabsContent value="generator" className="space-y-8">
+              {/* Input Section */}
+              <Card className="p-8 shadow-xl border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
+                <form onSubmit={handleGenerate} className="space-y-4">
+                  <div className="flex flex-col md:flex-row gap-4 items-end">
+                    <div className="flex-1 w-full relative">
+                      <label className="text-sm font-semibold mb-2 block flex items-center gap-2">
+                        <Target className="w-4 h-4 text-primary" />
+                        What is your Dream Career?
+                      </label>
+                      <Input
+                        placeholder="e.g. Software Engineer, Civil Engineer..."
+                        className="text-lg py-6 border-primary/20 focus:border-primary transition-all"
+                        value={career}
+                        onChange={(e) => setCareer(e.target.value)}
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full md:w-auto h-14 text-lg gap-2"
+                      disabled={isLoading || !career}
                     >
-                      {/* Phase number badge */}
-                      <div className={`w-20 h-20 rounded-full bg-gradient-to-br ${colors.bg} flex items-center justify-center mb-4 mx-auto md:mx-0 shadow-lg relative z-10 group-hover:scale-110 transition-transform`}>
-                        <span className="text-3xl font-bold text-primary-foreground">{idx + 1}</span>
-                      </div>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" />
+                          Generate Plan
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </Card>
 
-                      <h3 className="text-xl font-bold mb-3 text-center md:text-left group-hover:text-primary transition-colors">
-                        {phase?.name}
-                      </h3>
-                      <Badge variant="secondary" className="mb-4 w-full justify-center md:justify-start py-2 text-sm font-medium">
-                        🎯 {phase?.goal}
-                      </Badge>
+              {/* Loading State */}
+              {isLoading && <RoadmapSkeleton />}
 
-                      <div className="space-y-4">
-                        {/* Steps section */}
-                        <div className={`${colors.icon} rounded-lg p-4 border`}>
-                          <h4 className={`font-semibold text-sm ${colors.text} mb-3 uppercase tracking-wider flex items-center gap-2`}>
-                            <CheckCircle2 className="w-4 h-4" /> Action Steps
-                          </h4>
-                          <ul className="space-y-2.5 text-sm">
-                            {phase?.steps?.map((step, sIdx) => (
-                              <li key={sIdx} className="flex gap-2 items-start group/item">
-                                <span className={`w-2 h-2 rounded-full ${colors.text.replace('text-', 'bg-')} mt-1.5 flex-shrink-0 group-hover/item:scale-125 transition-transform`} />
-                                <span className="leading-snug text-foreground/90">{step}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+              {/* Error State */}
+              {hasError && error && !isLoading && (
+                <Card className="p-8 border-destructive/50 bg-destructive/5">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <AlertCircle className="w-8 h-8 text-destructive" />
+                    <div>
+                      <h3 className="text-xl font-bold mb-2">Oops! Something went wrong</h3>
+                      <p className="text-muted-foreground max-w-md">
+                        {error.message || "Failed to generate roadmap."}
+                      </p>
+                    </div>
+                    <Button onClick={handleRetry} size="lg" variant="outline" className="gap-2">
+                      <RefreshCw className="w-4 h-4" /> Try Again
+                    </Button>
+                  </div>
+                </Card>
+              )}
 
-                        {/* Resources section */}
-                        {phase?.resources && phase.resources.length > 0 && (
-                          <div className="bg-secondary/10 rounded-lg p-4 border border-secondary/20">
-                            <h4 className="font-semibold text-sm text-secondary-foreground mb-3 flex items-center gap-2">
-                              <BookOpen className="w-4 h-4" /> Resources
-                            </h4>
-                            <ul className="space-y-1.5 text-xs text-muted-foreground">
-                              {phase.resources.map((res, rIdx) => (
-                                <li key={rIdx} className="flex gap-1.5 items-start">
-                                  <span className="text-secondary">•</span>
-                                  <span>{res}</span>
+              {/* Results Section */}
+              {roadmapToShow?.phases && (
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
+                  <div className="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 border border-primary/20 shadow-lg">
+                    <h2 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                      {roadmapToShow.title}
+                    </h2>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                      {roadmapToShow.overview}
+                    </p>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-6 relative">
+                    <div className="hidden md:block absolute top-10 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent -z-10" />
+                    {roadmapToShow.phases.map((phase: any, idx: number) => {
+                      const colors = [
+                        { border: 'border-t-primary', bg: 'from-primary/10 to-primary/5', text: 'text-primary' },
+                        { border: 'border-t-chart-4', bg: 'from-chart-4/10 to-chart-4/5', text: 'text-chart-4' },
+                        { border: 'border-t-accent', bg: 'from-accent/10 to-accent/5', text: 'text-accent' },
+                      ][idx] || { border: 'border-t-primary', bg: 'bg-primary/5', text: 'text-primary' }
+
+                      return (
+                        <Card key={idx} className={`p-6 border-t-4 ${colors.border} shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br ${colors.bg}`}>
+                          <div className={`w-12 h-12 rounded-full ${colors.text.replace('text-', 'bg-')}/20 flex items-center justify-center mb-4`}>
+                            <span className={`text-xl font-bold ${colors.text}`}>{idx + 1}</span>
+                          </div>
+                          <h3 className="text-xl font-bold mb-3">{phase?.name}</h3>
+                          <Badge variant="outline" className="mb-4">{phase?.goal}</Badge>
+                          <div className="space-y-4">
+                            <ul className="space-y-2 text-sm">
+                              {phase?.steps?.map((step: string, sIdx: number) => (
+                                <li key={sIdx} className="flex gap-2 items-start">
+                                  <CheckCircle2 className={`w-4 h-4 mt-0.5 ${colors.text}`} />
+                                  <span>{step}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
-                        )}
-                      </div>
-                    </Card>
-                  )
-                })}
-              </div>
+                        </Card>
+                      )
+                    })}
+                  </div>
 
-              {/* Action buttons */}
-              <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => window.print()}
-                  className="gap-2 hover:bg-primary/5 hover:border-primary transition-all"
-                >
-                  <Download className="w-5 h-5" />
-                  Download as PDF
-                </Button>
-                <Button
-                  size="lg"
-                  onClick={handleRegenerate}
-                  className="gap-2 bg-gradient-to-r from-secondary to-secondary/80 hover:from-secondary/90 hover:to-secondary/70"
-                >
-                  <RefreshCw className="w-5 h-5" />
-                  Generate New Roadmap
-                </Button>
-              </div>
-            </div>
-          )}
+                  {/* Action buttons */}
+                  <div className="flex flex-wrap justify-center gap-4 pt-8">
+                    <Button variant="outline" size="lg" onClick={() => window.print()} className="gap-2">
+                      <Download className="w-5 h-5" /> Download PDF
+                    </Button>
+
+                    {!isLoading && user && (
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="gap-2"
+                      >
+                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-5 h-5" />}
+                        Save to History
+                      </Button>
+                    )}
+
+                    <Button size="lg" onClick={handleRegenerate} className="gap-2">
+                      <RefreshCw className="w-5 h-5" /> New Roadmap
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="history">
+              {user ? (
+                <RoadmapHistory
+                  roadmaps={savedRoadmaps}
+                  isLoading={loadingHistory}
+                  onLoad={handleLoad}
+                  onDelete={handleDelete}
+                />
+              ) : (
+                <div className="text-center p-12 border rounded-lg bg-muted/20">
+                  <h3 className="font-semibold text-lg mb-2">Sign in to save roadmaps</h3>
+                  <p className="text-muted-foreground mb-4">Create an account to track your career journey.</p>
+                  <Button asChild>
+                    <a href="/login">Sign In / Sign Up</a>
+                  </Button>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+
         </div>
       </div>
     </DashboardLayout>
