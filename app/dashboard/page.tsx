@@ -123,36 +123,63 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <CheckCircle2 className="w-6 h-6 text-primary" />
+              {/* Achievement 1 */}
+              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer border-2 border-primary/20">
+                <div className="relative mx-auto mb-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <CheckCircle2 className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    ✓
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-primary">3</div>
-                <div className="text-xs text-muted-foreground">Tasks Done</div>
+                <div className="text-xs font-semibold text-primary mb-1">Account Created</div>
+                <div className="text-xs text-muted-foreground">Welcome aboard!</div>
               </div>
 
-              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer">
-                <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Target className="w-6 h-6 text-secondary" />
+              {/* Achievement 2 */}
+              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer border-2 border-secondary/20">
+                <div className="relative mx-auto mb-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-secondary to-secondary/70 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    5
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-secondary">5</div>
-                <div className="text-xs text-muted-foreground">Careers Explored</div>
+                <div className="text-xs font-semibold text-secondary mb-1">Career Explorer</div>
+                <div className="text-xs text-muted-foreground">5 careers viewed</div>
               </div>
 
-              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer">
-                <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Clock className="w-6 h-6 text-accent" />
+              {/* Achievement 3 */}
+              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer border-2 border-accent/20">
+                <div className="relative mx-auto mb-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-accent to-accent/70 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    🔥
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-accent">12</div>
-                <div className="text-xs text-muted-foreground">Days Active</div>
+                <div className="text-xs font-semibold text-accent mb-1">First Steps</div>
+                <div className="text-xs text-muted-foreground">12 days active</div>
               </div>
 
-              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                  <Users className="w-6 h-6 text-primary" />
+              {/* Achievement 4 */}
+              <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer border-2 border-primary/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded-bl-lg">
+                  TOP 20%
                 </div>
-                <div className="text-2xl font-bold text-primary">Top 20%</div>
-                <div className="text-xs text-muted-foreground">Among Users</div>
+                <div className="relative mx-auto mb-3 mt-2">
+                  <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white text-xs">
+                    ⭐
+                  </div>
+                </div>
+                <div className="text-xs font-semibold text-amber-600 mb-1">Rising Star</div>
+                <div className="text-xs text-muted-foreground">Top active user</div>
               </div>
             </div>
           </CardContent>

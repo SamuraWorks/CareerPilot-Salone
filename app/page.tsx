@@ -55,10 +55,17 @@ export default function HomePage() {
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
             <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance mb-4 sm:mb-6 animate-fade-in text-white">
-                Navigate Your Career Path in <span className="text-secondary-foreground bg-secondary/90 px-2 sm:px-3 rounded-lg">Sierra Leone</span>
+              {/* Krio Welcome */}
+              <div className="mb-4 animate-fade-in">
+                <span className="inline-block px-4 py-2 bg-secondary/20 text-secondary-foreground rounded-full text-sm sm:text-base font-medium border border-secondary/30">
+                  🇸🇱 Welkom to CareerPilot Salone - Wi de ya fo elp yu!
+                </span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance mb-6 animate-fade-in text-white">
+                Navigate Your Career Path in <span className="text-secondary-foreground bg-secondary/90 px-3 rounded-lg">Sierra Leone</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-white/90 text-balance mb-6 sm:mb-8 leading-relaxed animate-fade-in-delay">
+              <p className="text-lg sm:text-xl text-white/90 text-balance mb-8 leading-relaxed animate-fade-in-delay">
                 Discover personalized career recommendations, build professional CVs, and follow structured roadmaps to
                 achieve your career goals.
               </p>

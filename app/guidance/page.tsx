@@ -120,7 +120,7 @@ export default function GuidancePage() {
                 CareerPilot Chat
                 <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
               </h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">AI Career Advisor for Sierra Leone</p>
+              <p className="text-xs text-muted-foreground hidden sm:block">🇸🇱 Wi de ya fo elp yu wit una career</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={clearChat} title="Clear History" className="hover:bg-destructive/10 hover:text-destructive">
