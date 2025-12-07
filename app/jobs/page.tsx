@@ -87,15 +87,14 @@ export default function JobsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-6 space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Hero Image Section */}
-        <div className="relative w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden -mt-2 -mx-2 md:-mx-4 mb-4">
-          <Image
-            src="/jobs-opportunities-freetown.jpg"
-            alt="Job Opportunities in Sierra Leone"
-            fill
-            className="object-cover brightness-75"
-          />
+        <div className="relative w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden -mx-4 sm:-mx-6 md:-mx-8 mb-4">\n          <Image
+          src="/jobs-opportunities-freetown.jpg"
+          alt="Job Opportunities in Sierra Leone"
+          fill
+          className="object-cover brightness-75"
+        />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
           <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-3 sm:left-4 md:left-6">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Job & Opportunity Matching</h1>
