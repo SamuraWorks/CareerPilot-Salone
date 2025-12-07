@@ -65,72 +65,83 @@ export default function LoginPage() {
 
       <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
         <Card className="w-full max-w-md shadow-xl border-border/40 rounded-2xl overflow-hidden bg-card">
-          <CardHeader className="space-y-1 text-center pb-8 pt-8">
-            <CardTitle className="text-2xl font-bold tracking-tight">Welcome Back</CardTitle>
-            <CardDescription className="text-base text-muted-foreground">
-              Sign in to continue your career journey
-            </CardDescription>
+          <CardHeader className="space-y-4 text-center pb-8 pt-8">
+            {/* Logo */}
+            <div className="flex justify-center">
+              <div className="relative w-20 h-20 rounded-xl overflow-hidden shadow-lg border-2 border-primary/20">
+                <Image
+                  src="/logo.png"
+                  alt="CareerPilot Salone"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div>
+              <CardTitle className="text-2xl font-bold tracking-tight">Welcome Back</CardTitle>
+              <CardDescription className="text-base text-muted-foreground">
+                Sign in to continue your career journey
+              </CardDescription>
+            </div>
           </CardHeader>
-          <CardContent className="px-8 pb-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <Alert variant="destructive" className="animate-fade-in text-sm py-2">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+          <CardContent className="px-8 pb-8">\n            <form onSubmit={handleSubmit} className="space-y-6">\n              {error && (
+            <Alert variant="destructive" className="animate-fade-in text-sm py-2">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={loading}
-                    className="h-12 bg-muted/30 touch-target"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
-                    <Link
-                      href="#"
-                      className="text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={loading}
-                    className="h-12 bg-muted/30 touch-target"
-                    required
-                  />
-                </div>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                  className="h-12 bg-muted/30 touch-target"
+                  required
+                />
               </div>
 
-              <Button type="submit" className="w-full h-12 text-base shadow-sm hover:shadow-md transition-all touch-target" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  <>
-                    Sign In
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </form>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <Link
+                    href="#"
+                    className="text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={loading}
+                  className="h-12 bg-muted/30 touch-target"
+                  required
+                />
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full h-12 text-base shadow-sm hover:shadow-md transition-all touch-target" disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </form>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-muted-foreground">
@@ -145,6 +156,6 @@ export default function LoginPage() {
       </main>
 
       <Footer />
-    </div>
+    </div >
   )
 }

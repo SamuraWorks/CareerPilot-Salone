@@ -85,9 +85,22 @@ export default function SignupPage() {
           />
         </div>
         <Card className="w-full max-w-md relative z-10 bg-card/95 backdrop-blur-sm">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Create Your Account</CardTitle>
-            <CardDescription className="text-center">Start your career journey with CareerPilot Salone</CardDescription>
+          <CardHeader className="space-y-4">
+            {/* Logo */}
+            <div className="flex justify-center">
+              <div className="relative w-20 h-20 rounded-xl overflow-hidden shadow-lg border-2 border-primary/20">
+                <Image
+                  src="/logo.png"
+                  alt="CareerPilot Salone"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <div className="text-center">
+              <CardTitle className="text-2xl font-bold">Create Your Account</CardTitle>
+              <CardDescription>Start your career journey with CareerPilot Salone</CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
