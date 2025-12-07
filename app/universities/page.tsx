@@ -62,23 +62,23 @@ export default function UniversitiesPage() {
         <div className="flex flex-col min-h-screen">
             <Navigation />
 
-            <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-muted/10">
+            <main className="flex-1 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8 bg-muted/10">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-12">
-                        <h1 className="text-4xl font-bold mb-4">Sierra Leone Universities</h1>
-                        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    <div className="text-center mb-8 sm:mb-10 md:mb-12">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Sierra Leone Universities</h1>
+                        <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
                             Find the best institution for your higher education journey.
                         </p>
                     </div>
 
-                    <div className="mb-8 max-w-xl mx-auto relative">
+                    <div className="mb-6 sm:mb-8 max-w-xl mx-auto relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                         <Input
                             type="search"
                             placeholder="Search by name, location, or course..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
+                            className="pl-10 h-12 touch-target"
                         />
                     </div>
 
@@ -95,9 +95,9 @@ export default function UniversitiesPage() {
                     {!loading && !error && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredUniversities.map((uni) => (
-                                <Card key={uni.id} className="p-6 flex flex-col hover:shadow-lg transition-all hover:-translate-y-1">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg p-2 border overflow-hidden">
+                                <Card key={uni.id} className="p-4 sm:p-5 md:p-6 flex flex-col hover:shadow-lg transition-all hover:-translate-y-1">
+                                    <div className="flex items-start sm:items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                                        <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 bg-white rounded-lg p-1.5 sm:p-2 border overflow-hidden">
                                             <Image
                                                 src={uni.logo_url || '/placeholder-logo.png'}
                                                 alt={`${uni.name} Logo`}
@@ -108,10 +108,10 @@ export default function UniversitiesPage() {
                                                 }}
                                             />
                                         </div>
-                                        <div>
-                                            <h3 className="font-semibold text-lg leading-tight">{uni.name}</h3>
-                                            <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
-                                                <MapPin className="w-3 h-3" />
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-semibold text-base sm:text-lg leading-tight line-clamp-2">{uni.name}</h3>
+                                            <div className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground mt-1">
+                                                <MapPin className="w-3 h-3 flex-shrink-0" />
                                                 {uni.location}
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@ export default function UniversitiesPage() {
                                         </div>
                                     </div>
 
-                                    <Button className="w-full gap-2 mt-auto" onClick={() => window.open(uni.website_url, '_blank')}>
+                                    <Button className="w-full gap-2 mt-auto touch-target" onClick={() => window.open(uni.website_url, '_blank')}>
                                         Visit Website
                                         <ExternalLink className="w-4 h-4" />
                                     </Button>

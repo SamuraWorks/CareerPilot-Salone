@@ -106,6 +106,7 @@ export default function SignupPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={loading}
+                  className="h-12 touch-target"
                   required
                 />
               </div>
@@ -119,6 +120,7 @@ export default function SignupPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
+                  className="h-12 touch-target"
                   required
                 />
               </div>
@@ -132,6 +134,7 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
+                  className="h-12 touch-target"
                   required
                 />
                 <p className="text-xs text-muted-foreground">Must be at least 6 characters long</p>
@@ -146,11 +149,12 @@ export default function SignupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading}
+                  className="h-12 touch-target"
                   required
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full h-12 touch-target" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

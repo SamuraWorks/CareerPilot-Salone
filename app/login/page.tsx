@@ -89,7 +89,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="h-11 bg-muted/30"
+                    className="h-12 bg-muted/30 touch-target"
                     required
                   />
                 </div>
@@ -111,13 +111,13 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="h-11 bg-muted/30"
+                    className="h-12 bg-muted/30 touch-target"
                     required
                   />
                 </div>
               </div>
 
-              <Button type="submit" className="w-full h-11 text-base shadow-sm hover:shadow-md transition-all" disabled={loading}>
+              <Button type="submit" className="w-full h-12 text-base shadow-sm hover:shadow-md transition-all touch-target" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -77,25 +77,25 @@ export default function CareersPage() {
     <div className="flex flex-col min-h-screen">
       <Navigation />
 
-      <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 py-8 sm:py-10 md:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-block mb-4 px-4 py-2 bg-primary/10 rounded-full">
-              <span className="text-primary font-semibold text-sm">Discover Your Future</span>
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <div className="inline-block mb-3 sm:mb-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/10 rounded-full">
+              <span className="text-primary font-semibold text-xs sm:text-sm">Discover Your Future</span>
             </div>
-            <h1 className="text-4xl font-bold mb-4">Explore Career Opportunities</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Explore Career Opportunities</h1>
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
               Discover careers that match your skills, interests, and aspirations in Sierra Leone
             </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-3xl mx-auto">
-              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 hover:from-primary/15 hover:to-primary/10 transition-all border border-primary/20 shadow-md hover:shadow-lg">
-                <div className="flex items-center justify-center gap-3 mb-2">
-                  <Briefcase className="w-6 h-6 text-primary" />
-                  <span className="text-3xl font-bold text-primary">{careers.length > 0 ? `${careers.length}+` : "..."}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 sm:mt-8 max-w-3xl mx-auto">
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 sm:p-5 md:p-6 hover:from-primary/15 hover:to-primary/10 transition-all border border-primary/20 shadow-md hover:shadow-lg">
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                  <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                  <span className="text-2xl sm:text-3xl font-bold text-primary">{careers.length > 0 ? `${careers.length}+` : "..."}</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Career Paths</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Career Paths</p>
               </div>
               <div className="bg-gradient-to-br from-secondary/10 to-secondary/5 rounded-lg p-6 hover:from-secondary/15 hover:to-secondary/10 transition-all border border-secondary/20 shadow-md hover:shadow-lg">
                 <div className="flex items-center justify-center gap-3 mb-2">
@@ -115,7 +115,7 @@ export default function CareersPage() {
           </div>
 
           {/* Search and Filter */}
-          <div className="mb-8 space-y-4">
+          <div className="mb-6 sm:mb-8 space-y-4">
             <div className="relative max-w-xl mx-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
@@ -123,7 +123,7 @@ export default function CareersPage() {
                 placeholder="Search careers, skills, or categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12 touch-target"
               />
             </div>
 
@@ -132,6 +132,7 @@ export default function CareersPage() {
                 variant={selectedCategory === null ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(null)}
+                className="touch-target"
               >
                 All Careers
               </Button>
@@ -141,6 +142,7 @@ export default function CareersPage() {
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategory(category)}
+                  className="touch-target"
                 >
                   {category}
                 </Button>

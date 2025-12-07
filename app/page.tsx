@@ -24,7 +24,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 overflow-hidden">
+        <section className="relative py-12 md:py-20 lg:py-32 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <Image
               src="/hero-career-guidance.jpg"
@@ -41,30 +41,30 @@ export default function HomePage() {
             <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
             <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse delay-500" />
 
-            {/* Floating icons */}
-            <div className="absolute top-32 right-1/4 animate-bounce delay-300 opacity-30">
+            {/* Floating icons - hidden on mobile */}
+            <div className="hidden md:block absolute top-32 right-1/4 animate-bounce delay-300 opacity-30">
               <Target className="w-12 h-12 text-white" />
             </div>
-            <div className="absolute bottom-32 left-1/4 animate-bounce delay-700 opacity-30">
+            <div className="hidden md:block absolute bottom-32 left-1/4 animate-bounce delay-700 opacity-30">
               <Award className="w-12 h-12 text-white" />
             </div>
-            <div className="absolute top-1/3 right-1/3 animate-bounce delay-1000 opacity-30">
+            <div className="hidden md:block absolute top-1/3 right-1/3 animate-bounce delay-1000 opacity-30">
               <TrendingUp className="w-12 h-12 text-white" />
             </div>
           </div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
             <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold text-balance mb-6 animate-fade-in text-white">
-                Navigate Your Career Path in <span className="text-secondary-foreground bg-secondary/90 px-3 rounded-lg">Sierra Leone</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance mb-4 sm:mb-6 animate-fade-in text-white">
+                Navigate Your Career Path in <span className="text-secondary-foreground bg-secondary/90 px-2 sm:px-3 rounded-lg">Sierra Leone</span>
               </h1>
-              <p className="text-xl text-white/90 text-balance mb-8 leading-relaxed animate-fade-in-delay">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 text-balance mb-6 sm:mb-8 leading-relaxed animate-fade-in-delay">
                 Discover personalized career recommendations, build professional CVs, and follow structured roadmaps to
                 achieve your career goals.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-delay-2">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-delay-2">
                 <Link href="/onboarding">
-                  <Button size="lg" className="w-full sm:w-auto gap-2 shadow-lg hover:shadow-xl transition-shadow bg-white text-primary hover:bg-white/90">
+                  <Button size="lg" className="w-full sm:w-auto gap-2 shadow-lg hover:shadow-xl transition-shadow bg-white text-primary hover:bg-white/90 touch-target">
                     Get Started Free
                     <ArrowRight className="w-4 h-4" />
                   </Button>
@@ -73,7 +73,7 @@ export default function HomePage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white border-white/30"
+                    className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white border-white/30 touch-target"
                   >
                     Explore Careers
                   </Button>
@@ -84,7 +84,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 bg-muted/50 relative overflow-hidden">
+        <section className="py-12 sm:py-16 md:py-20 bg-muted/50 relative overflow-hidden">
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-10 left-10 grid grid-cols-12 gap-4 rotate-12">
               {[...Array(48)].map((_, i) => (
@@ -94,9 +94,9 @@ export default function HomePage() {
           </div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Build Your Career</h2>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-balance">
+            <div className="text-center mb-10 sm:mb-12 md:mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Everything You Need to Build Your Career</h2>
+              <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto text-balance">
                 CareerPilot Salone provides comprehensive tools to help you discover, plan, and pursue your ideal career
                 path.
               </p>
@@ -167,27 +167,27 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20 relative overflow-hidden">
+        <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 animate-gradient" />
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Join Thousands of Successful Users</h2>
-              <p className="text-muted-foreground text-lg">Making an impact across Sierra Leone</p>
+            <div className="text-center mb-8 sm:mb-10 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Join Thousands of Successful Users</h2>
+              <p className="text-muted-foreground text-sm sm:text-base md:text-lg">Making an impact across Sierra Leone</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div className="group p-8 rounded-xl hover:bg-primary/10 transition-all duration-300 hover:shadow-lg cursor-pointer border border-transparent hover:border-primary/20">
-                <div className="mb-4 flex justify-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Target className="w-8 h-8 text-primary" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
+              <div className="group p-6 sm:p-8 rounded-xl hover:bg-primary/10 transition-all duration-300 hover:shadow-lg cursor-pointer border border-transparent hover:border-primary/20">
+                <div className="mb-3 sm:mb-4 flex justify-center">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Target className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                   </div>
                 </div>
-                <div className="text-5xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">
+                <div className="text-4xl sm:text-5xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">
                   50+
                 </div>
-                <div className="text-muted-foreground font-medium">Career Paths Available</div>
-                <p className="text-sm text-muted-foreground/60 mt-2">From tech to education</p>
+                <div className="text-sm sm:text-base text-muted-foreground font-medium">Career Paths Available</div>
+                <p className="text-xs sm:text-sm text-muted-foreground/60 mt-1 sm:mt-2">From tech to education</p>
               </div>
 
               <div className="group p-8 rounded-xl hover:bg-secondary/10 transition-all duration-300 hover:shadow-lg cursor-pointer border border-transparent hover:border-secondary/20">
@@ -219,10 +219,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-20 bg-muted/30">
+        <section className="py-12 sm:py-16 md:py-20 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose CareerPilot Salone?</h2>
+            <div className="text-center mb-8 sm:mb-10 md:mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Why Choose CareerPilot Salone?</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -270,22 +270,22 @@ export default function HomePage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
+        <section className="py-12 sm:py-16 md:py-20 bg-primary text-primary-foreground relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse delay-1000" />
           </div>
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Ready to Start Your Career Journey?</h2>
-            <p className="text-xl mb-8 opacity-90 text-balance">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-balance">Ready to Start Your Career Journey?</h2>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 text-balance">
               Join thousands of Sierra Leoneans who are building successful careers with CareerPilot Salone.
             </p>
             <Link href="/signup">
               <Button
                 size="lg"
                 variant="secondary"
-                className="gap-2 shadow-2xl hover:shadow-3xl transition-shadow hover:scale-105"
+                className="gap-2 shadow-2xl hover:shadow-3xl transition-shadow hover:scale-105 touch-target w-full sm:w-auto"
               >
                 Create Free Account
                 <ArrowRight className="w-4 h-4" />
