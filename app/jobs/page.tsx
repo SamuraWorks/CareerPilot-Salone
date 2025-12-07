@@ -89,12 +89,13 @@ export default function JobsPage() {
     <DashboardLayout>
       <div className="space-y-4 sm:space-y-6">
         {/* Hero Image Section */}
-        <div className="relative w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden -mx-4 sm:-mx-6 md:-mx-8 mb-4">\n          <Image
-          src="/jobs-opportunities-freetown.jpg"
-          alt="Job Opportunities in Sierra Leone"
-          fill
-          className="object-cover brightness-75"
-        />
+        <div className="relative w-full h-32 sm:h-40 md:h-48 rounded-xl overflow-hidden -mx-4 sm:-mx-6 md:-mx-8 mb-4">
+          <Image
+            src="/jobs-opportunities-freetown.jpg"
+            alt="Job Opportunities in Sierra Leone"
+            fill
+            className="object-cover brightness-75"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
           <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 left-3 sm:left-4 md:left-6">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Job & Opportunity Matching</h1>
@@ -144,10 +145,10 @@ export default function JobsPage() {
               </Card>
             ) : (
               !loading && !error && filteredOpportunities.map((opp) => (
-                <Card key={opp.id} className="p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <Card key={opp.id} className="p-4 sm:p-5 md:p-6 hover:shadow-lg transition-shadow">
+                  <div className="flex flex-col gap-3 sm:gap-4">
                     <div className="flex-1">
-                      <div className="flex items-start gap-3 mb-2">
+                      <div className="flex items-start gap-2 sm:gap-3 mb-2">
                         <div
                           className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${opp.type === "job"
                             ? "bg-primary/10"
@@ -177,10 +178,11 @@ export default function JobsPage() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-lg sm:text-xl font-semibold mb-1 line-clamp-2">{opp.title}</h3>
-                          <p className="text-sm sm:text-base text-muted-foreground truncate">{opp.company}</p>
+                          <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-1 line-clamp-2">{opp.title}</h3>
+                          <p className="text-sm text-muted-foreground truncate">{opp.company}</p>
                         </div>
                         <Badge
+                          className="shrink-0"
                           variant={opp.type === "job" ? "default" : opp.type === "internship" ? "secondary" : "outline"}
                         >
                           {opp.type.charAt(0).toUpperCase() + opp.type.slice(1)}
@@ -206,7 +208,7 @@ export default function JobsPage() {
                         )}
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-2 sm:space-y-3">
                         <div>
                           <p className="text-sm font-medium mb-2">Required Skills:</p>
                           <div className="flex flex-wrap gap-2">
