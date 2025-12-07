@@ -61,11 +61,11 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 p-6 md:p-8 bg-muted/10 relative">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 bg-muted/10 relative">
           {/* Subtle Background Pattern for 'Vibrant' feel */}
           <div className="absolute inset-0 z-0 opacity-40 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background" />
 
-          <div className="relative z-10 max-w-6xl mx-auto animate-fade-in">
+          <div className="relative z-10 max-w-7xl mx-auto animate-fade-in">
             {children}
           </div>
         </main>

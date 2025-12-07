@@ -29,42 +29,42 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-8">
         {/* Welcome Section */}
-        <div className="relative overflow-hidden rounded-lg shadow-lg h-48 md:h-56">
+        <div className="relative overflow-hidden rounded-lg shadow-lg h-40 sm:h-48 md:h-56">
           <div className="absolute inset-0 z-0">
             <Image src="/dashboard-success.jpg" alt="Dashboard success" fill className="object-cover brightness-50" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-secondary/70" />
           </div>
 
-          <div className="absolute top-4 right-4 animate-bounce z-10">
+          <div className="hidden sm:block absolute top-4 right-4 animate-bounce z-10">
             <Sparkles className="w-6 h-6 text-white" />
           </div>
-          <div className="absolute bottom-4 left-4 opacity-20 z-10">
+          <div className="hidden md:block absolute bottom-4 left-4 opacity-20 z-10">
             <Award className="w-16 h-16 text-white" />
           </div>
-          <div className="absolute top-1/2 right-1/4 opacity-10 z-10">
+          <div className="hidden lg:block absolute top-1/2 right-1/4 opacity-10 z-10">
             <Target className="w-20 h-20 text-white" />
           </div>
 
-          <div className="relative z-20 h-full flex items-center justify-between p-6 md:p-8">
-            <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2 text-white">Welcome back, {user?.name || "User"}!</h1>
-              <p className="text-white/90">Continue building your career with CareerPilot Salone</p>
+          <div className="relative z-20 h-full flex items-center justify-between p-4 sm:p-6 md:p-8 gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 sm:mb-2 text-white truncate">Welcome back, {user?.name || "User"}!</h1>
+              <p className="text-sm sm:text-base text-white/90">Continue building your career with CareerPilot Salone</p>
             </div>
 
-            <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0">
               {profilePhoto ? (
                 <img src={profilePhoto || "/placeholder.svg"} alt="Profile" className="w-full h-full object-cover" />
               ) : (
-                <User className="w-10 h-10 text-white" />
+                <User className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               )}
             </div>
           </div>
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <Card className="hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-2 hover:border-primary/50 bg-gradient-to-br from-background to-primary/5">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2 sm:pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Career Matches</CardTitle>
                 <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
@@ -73,9 +73,9 @@ export default function DashboardPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold hover:text-primary transition-colors">12</div>
+              <div className="text-2xl sm:text-3xl font-bold hover:text-primary transition-colors">12</div>
               <p className="text-xs text-muted-foreground mt-1">Recommended for you</p>
-              <Progress value={75} className="mt-3 h-2" />
+              <Progress value={75} className="mt-2 sm:mt-3 h-2" />
             </CardContent>
           </Card>
 
@@ -122,7 +122,7 @@ export default function DashboardPage() {
             <CardDescription>Milestones you've reached on your career journey</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <div className="text-center p-4 bg-background rounded-lg shadow-sm hover:shadow-md transition-all hover:scale-105 cursor-pointer">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
                   <CheckCircle2 className="w-6 h-6 text-primary" />
@@ -165,7 +165,7 @@ export default function DashboardPage() {
             <CardDescription>Get started with your career journey</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <Link href="/careers" className="block">
                 <div className="flex items-start gap-4 p-4 border-2 border-border rounded-lg hover:bg-primary/5 hover:border-primary transition-all duration-300 group hover:shadow-lg">
                   <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-6 transition-all shadow-sm">
