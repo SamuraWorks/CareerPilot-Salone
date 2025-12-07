@@ -85,64 +85,66 @@ export default function LoginPage() {
               </CardDescription>
             </div>
           </CardHeader>
-          <CardContent className="px-8 pb-8">\n            <form onSubmit={handleSubmit} className="space-y-6">\n              {error && (
-            <Alert variant="destructive" className="animate-fade-in text-sm py-2">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
-                  className="h-12 bg-muted/30 touch-target"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/forgot-password"
-                    className="text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                  className="h-12 bg-muted/30 touch-target"
-                  required
-                />
-              </div>
-            </div>
-
-            <Button type="submit" className="w-full h-12 text-base shadow-sm hover:shadow-md transition-all touch-target" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </>
+          <CardContent className="px-8 pb-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <Alert variant="destructive" className="animate-fade-in text-sm py-2">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
-            </Button>
-          </form>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
+                    className="h-12 bg-muted/30 touch-target"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Password</Label>
+                    <Link
+                      href="/forgot-password"
+                      className="text-sm font-medium text-primary hover:text-primary/80 hover:underline transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
+                    className="h-12 bg-muted/30 touch-target"
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full h-12 text-base shadow-sm hover:shadow-md transition-all touch-target" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    Sign In
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </form>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-muted-foreground">
