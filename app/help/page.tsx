@@ -53,7 +53,7 @@ export default function HelpPage() {
               </Card>
             </Link>
 
-            <Link href="/video-tutorials">
+            <Link href="https://youtu.be/SMkLYy0U_60?si=2ADARDhfnPzcTby3" target="_blank" rel="noopener noreferrer">
               <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                 <CardContent className="pt-6">
                   <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
