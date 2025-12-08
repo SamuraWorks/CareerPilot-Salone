@@ -15,7 +15,7 @@ interface AuthContextType {
   user: User | null
   session: Session | null
   login: (email: string, password: string) => Promise<void>
-  signup: (name: string, email: string, password: string) => Promise<void>
+  signup: (name: string, email: string, password: string) => Promise<any>
   logout: () => Promise<void>
   isAuthenticated: boolean
   loading: boolean
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signup = async (name: string, email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -93,7 +93,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     })
     if (error) throw error
+    // If auto-confirm is on, session will be active immediately
+    if (data.session) {
+      setSession(data.session)
+      setUser({
+        id: data.session.user.id,
+        email: data.session.user.email!,
+        name: data.session.user.user_metadata.full_name || 'User'
+      })
+    }
     router.refresh()
+    return data
   }
 
   const logout = async () => {

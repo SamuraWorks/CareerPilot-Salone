@@ -62,8 +62,14 @@ export default function SignupPage() {
 
     setLoading(true)
     try {
-      await signup(name, email, password)
-      setSuccess(true)
+      const data = await signup(name, email, password)
+      if (data?.session) {
+        // Auto-login successful (Email verification disabled)
+        router.push('/dashboard')
+      } else {
+        // Verification required
+        setSuccess(true)
+      }
     } catch (err) {
       setError("An error occurred during signup. Please try again.")
     } finally {
