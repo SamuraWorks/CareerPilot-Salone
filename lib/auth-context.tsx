@@ -16,6 +16,7 @@ interface AuthContextType {
   session: Session | null
   login: (email: string, password: string) => Promise<void>
   signup: (name: string, email: string, password: string) => Promise<any>
+  loginWithGoogle: () => Promise<void>
   logout: () => Promise<void>
   isAuthenticated: boolean
   loading: boolean
@@ -106,6 +107,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data
   }
 
+  const loginWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    if (error) throw error
+  }
+
   const logout = async () => {
     await supabase.auth.signOut()
     setUser(null)
@@ -114,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, login, signup, logout, isAuthenticated: !!user, loading }}>
+    <AuthContext.Provider value={{ user, session, login, signup, loginWithGoogle, logout, isAuthenticated: !!user, loading }}>
       {!loading && (user || PUBLIC_ROUTES.includes(pathname)) ? children : null}
     </AuthContext.Provider>
   )
