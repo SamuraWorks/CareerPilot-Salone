@@ -216,7 +216,7 @@ export default function WhatsAppPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Our WhatsApp bot is live! Click below to start a conversation to get career guidance or generate your CV.
                 </p>
-                <a href="https://wa.me/16812636466?text=Hi%20CareerPilot!%20I%20need%20help%20with%20my%20career." target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/17435003289?text=Hi%20CareerPilot!%20I%20need%20help%20with%20my%20career." target="_blank" rel="noopener noreferrer">
                   <Button className="w-full gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white">
                     <FaWhatsapp className="w-5 h-5" />
                     Chat on WhatsApp

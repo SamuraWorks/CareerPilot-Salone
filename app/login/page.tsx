@@ -53,8 +53,17 @@ export default function LoginPage() {
     try {
       await login(email, password)
       router.push("/dashboard")
-    } catch (err) {
-      setError("Invalid email or password. Please try again.")
+    } catch (err: any) {
+      console.error("Login error:", err)
+      if (err.message && (err.message.includes("Email not confirmed") || err.message.includes("Invalid login credentials"))) {
+        if (err.message.includes("Email not confirmed")) {
+          setError("Please verify your email address before logging in. Check your inbox.")
+        } else {
+          setError("Invalid email or password. Please try again.")
+        }
+      } else {
+        setError("An error occurred. Please try again.")
+      }
     } finally {
       setLoading(false)
     }
