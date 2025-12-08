@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS public.universities CASCADE;
 DROP TABLE IF EXISTS public.jobs CASCADE;
 DROP TABLE IF EXISTS public.scholarships CASCADE;
 DROP TABLE IF EXISTS public.mentors CASCADE;
+DROP TABLE IF EXISTS public.roadmaps CASCADE;
 
 -- 1. CAREERS TABLE
 create table if not exists public.careers (
@@ -268,3 +269,34 @@ create policy "Users can view their own roadmaps"
 create policy "Users can delete their own roadmaps"
   on public.roadmaps for delete
   using (auth.uid() = user_id);
+
+-- ADDITIONAL DATA SEEDING FOR ROBUSTNESS
+-- More Careers
+insert into public.careers (title, description, skills, salary_range, salary_range_usd, salary_min_le, salary_max_le, salary_min_usd, salary_max_usd, demand_level, category, image_url, educational_paths)
+values
+('School Teacher', 'Educate students in primary or secondary schools.', ARRAY['Lesson Planning', 'Classroom Management', 'Communication'], 'Le 2,000,000 - 5,000,000', '$90 - $225', 2000000, 5000000, 90, 225, 'High', 'Education', 'https://images.unsplash.com/photo-1509062522246-3755977927d7', 
+  '[{"name": "B.Ed Education", "institution": "Njala University", "type": "University", "cost": "Standard Tuition", "url": "https://njala.edu.sl"}]'::jsonb
+),
+('Entrepreneur', 'Start and manage your own business venture.', ARRAY['Business Planning', 'Sales', 'Risk Management', 'Finance'], 'Variable', 'Variable', 0, 100000000, 0, 4500, 'High', 'Business', 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7',
+  '[{"name": "Entrepreneurship Training", "institution": "Innovation SL", "type": "Workshop", "cost": "Variable", "url": "#"}]'::jsonb
+),
+('Pharmacist', 'Dispense medications and advise patients on their use.', ARRAY['Pharmacology', 'Patient Care', 'Attention to Detail'], 'Le 7,000,000 - 18,000,000', '$318 - $818', 7000000, 18000000, 318, 818, 'High', 'Healthcare', 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926',
+  '[{"name": "BPharm Pharmacy", "institution": "COMAHS (USL)", "type": "University", "cost": "Standard Tuition", "url": "https://usl.edu.sl"}]'::jsonb
+),
+('Solar Technician', 'Install and maintain solar energy systems.', ARRAY['Electrical Wiring', 'Solar Panel Installation', 'Safety Protocols'], 'Le 3,500,000 - 8,000,000', '$159 - $363', 3500000, 8000000, 159, 363, 'High', 'Engineering', 'https://images.unsplash.com/photo-1509391366360-2e959784a276',
+  '[{"name": "Renewable Energy Certificate", "institution": "Government Technical Institute", "type": "Vocational", "cost": "Low", "url": "#"}]'::jsonb
+);
+
+-- More Universities
+insert into public.universities (name, location, website_url, logo_url, popular_courses)
+values
+('Ernest Bai Koroma University of Science and Technology (EBKUST)', 'Makeni / Magburaka', 'https://ebkust.edu.sl', '/images/universities/ebkust.jpg', ARRAY['Agriculture', 'Education', 'Technology', 'Health Sciences']),
+('Milton Margai Technical University', 'Goderich, Freetown', 'https://mmtu.edu.sl', '/images/universities/mmtu.jpg', ARRAY['Tourism', 'Engineering', 'Business', 'Education']),
+('Eastern Technical University', 'Kenema', 'https://etu.edu.sl', '/images/universities/etu.jpg', ARRAY['Nursing', 'Education', 'Business', 'Science']);
+
+-- More Jobs
+insert into public.jobs (title, company, location, salary_range, type, application_link, requirements)
+values
+('Branch Manager', 'Ecobank Sierra Leone', 'Makeni', 'Competitive', 'Full-time', 'https://www.ecobank.com/careers', ARRAY['Banking experience', 'Management skills', 'Degree in Finance']),
+('Human Resources Manager', 'Sierra Leone Brewery Ltd', 'Freetown', 'Le 15,000,000 / month', 'Full-time', 'https://careers.heineken.com', ARRAY['HR Certification', '5+ years experience', 'Labor Law knowledge']),
+('Graduate Intern', 'UNDP Sierra Leone', 'Freetown', 'Stipend Provided', 'Internship', 'https://jobs.undp.org', ARRAY['Recent Graduate', 'Research skills', 'English proficiency']);

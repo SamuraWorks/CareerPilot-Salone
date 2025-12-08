@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { sampleRoadmap } from "@/lib/sample-data" // Keep roadmap sample for now or fetch if available
-import { ArrowLeft, BookOpen, TrendingUp, DollarSign, Users, Loader2, GraduationCap, Laptop, ExternalLink } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ArrowLeft, BookOpen, TrendingUp, DollarSign, Users, Loader2, GraduationCap, Laptop, ExternalLink, Briefcase } from "lucide-react"
 import Image from "next/image"
 import { supabase } from "@/lib/supabaseClient"
 
@@ -149,134 +150,192 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
               <p className="text-xl text-muted-foreground leading-relaxed">{career.description}</p>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <DollarSign className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Salary Range</p>
-                      <p className="font-semibold text-sm">{career.salary}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Tabs Interface */}
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 h-auto">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="skills">Skills</TabsTrigger>
+                <TabsTrigger value="salary">Salary</TabsTrigger>
+                <TabsTrigger value="pathway">Pathway</TabsTrigger>
+                <TabsTrigger value="jobs">Job Market</TabsTrigger>
+              </TabsList>
 
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
-                      <Users className="w-5 h-5 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Job Openings</p>
-                      <p className="font-semibold">Check Jobs Page</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* OVERVIEW TAB */}
+              <TabsContent value="overview" className="space-y-6 mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>About This Career</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-lg text-muted-foreground leading-relaxed">
+                      {career.description}
+                    </p>
+                  </CardContent>
+                </Card>
 
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                      <TrendingUp className="w-5 h-5 text-accent" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Category</p>
-                      <p className="font-semibold">{career.category}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Educational Pathways */}
-            {career.educational_paths && career.educational_paths.length > 0 && (
-              <Card className="border-primary/20 bg-primary/5">
-                <CardHeader>
-                  <CardTitle className="text-primary flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5" />
-                    Where to Study
-                  </CardTitle>
-                  <CardDescription>Recommended universities in Sierra Leone & trusted online courses</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {career.educational_paths.map((path, index) => (
-                      <div key={index} className="bg-background rounded-lg p-4 border flex items-start justify-between gap-3 shadow-sm">
-                        <div className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${path.type === 'Online' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
-                            {path.type === 'Online' ? <Laptop className="w-4 h-4" /> : <GraduationCap className="w-4 h-4" />}
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-sm">{path.name}</h4>
-                            <p className="text-xs text-muted-foreground">{path.institution}</p>
-                            <Badge variant="outline" className="mt-2 text-[10px] h-5">
-                              {path.cost}
-                            </Badge>
-                          </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <TrendingUp className="w-6 h-6 text-primary" />
                         </div>
-                        {path.url && (
-                          <a href={path.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
+                        <div>
+                          <p className="text-sm text-muted-foreground">Category</p>
+                          <p className="font-semibold text-lg">{career.category}</p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Required Skills */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Required Skills</CardTitle>
-                <CardDescription>Key skills you'll need to succeed in this career</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {career.skills.map((skill) => (
-                    <Badge key={skill} variant="secondary" className="text-sm px-3 py-1">
-                      {skill}
-                    </Badge>
-                  ))}
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
+                          <Users className="w-6 h-6 text-secondary" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-muted-foreground">Demand Level</p>
+                          <p className="font-semibold text-lg">{career.demand}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
-              </CardContent>
-            </Card>
+              </TabsContent>
 
-            {/* Career Path Preview */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Career Roadmap Preview</CardTitle>
-                <CardDescription>Sample learning path for {career.title}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {sampleRoadmap.slice(0, 4).map((task, index) => (
-                    <div key={task.id} className="flex items-start gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm">
-                        {index + 1}
+              {/* SKILLS TAB */}
+              <TabsContent value="skills" className="space-y-6 mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Required Skills</CardTitle>
+                    <CardDescription>Key competencies you'll need to master</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {career.skills.map((skill) => (
+                        <Badge key={skill} className="text-sm px-4 py-2" variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* SALARY TAB */}
+              <TabsContent value="salary" className="space-y-6 mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Salary Expectations</CardTitle>
+                    <CardDescription>Typical earnings in Sierra Leone</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                        <DollarSign className="w-8 h-8" />
                       </div>
                       <div>
-                        <p className="font-medium">{task.title}</p>
-                        <p className="text-sm text-muted-foreground">{task.duration}</p>
+                        <p className="text-muted-foreground">Average Salary Range</p>
+                        <p className="text-3xl font-bold">{career.salary}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-                <Link href="/roadmap">
-                  <Button className="w-full mt-6 gap-2">
-                    <BookOpen className="w-4 h-4" />
-                    View Full Roadmap
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                    <p className="text-sm text-muted-foreground">
+                      * Salaries vary based on experience, location (Freetown vs Provinces), and employer type (Government, NGO, Private Sector).
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* PATHWAY TAB */}
+              <TabsContent value="pathway" className="space-y-6 mt-6">
+                {/* Educational Pathways */}
+                {career.educational_paths && career.educational_paths.length > 0 && (
+                  <Card className="border-primary/20 bg-primary/5">
+                    <CardHeader>
+                      <CardTitle className="text-primary flex items-center gap-2">
+                        <GraduationCap className="w-5 h-5" />
+                        Where to Study
+                      </CardTitle>
+                      <CardDescription>Recommended universities in Sierra Leone & trusted online courses</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {career.educational_paths.map((path, index) => (
+                          <div key={index} className="bg-background rounded-lg p-4 border flex items-start justify-between gap-3 shadow-sm">
+                            <div className="flex items-start gap-3">
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${path.type === 'Online' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                                {path.type === 'Online' ? <Laptop className="w-4 h-4" /> : <GraduationCap className="w-4 h-4" />}
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-sm">{path.name}</h4>
+                                <p className="text-xs text-muted-foreground">{path.institution}</p>
+                                <Badge variant="outline" className="mt-2 text-[10px] h-5">
+                                  {path.cost}
+                                </Badge>
+                              </div>
+                            </div>
+                            {path.url && (
+                              <a href={path.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary">
+                                <ExternalLink className="w-4 h-4" />
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Roadmap Preview */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Career Roadmap Preview</CardTitle>
+                    <CardDescription>Sample learning path for {career.title}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {sampleRoadmap.slice(0, 4).map((task, index) => (
+                        <div key={task.id} className="flex items-start gap-3">
+                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-sm">
+                            {index + 1}
+                          </div>
+                          <div>
+                            <p className="font-medium">{task.title}</p>
+                            <p className="text-sm text-muted-foreground">{task.duration}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <Link href="/roadmap">
+                      <Button className="w-full mt-6 gap-2">
+                        <BookOpen className="w-4 h-4" />
+                        View Full Roadmap
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* JOBS TAB */}
+              <TabsContent value="jobs" className="space-y-6 mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Current Job Market</CardTitle>
+                    <CardDescription>Opportunities available now</CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center py-10">
+                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Briefcase className="w-8 h-8 text-muted-foreground" />
+                    </div>
+                    <h3 className="font-semibold text-lg mb-2">Find Jobs in {career.category}</h3>
+                    <p className="text-muted-foreground mb-6">Browse active listings tailored to this career path.</p>
+                    <Link href="/jobs">
+                      <Button>Browse Jobs</Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-4">

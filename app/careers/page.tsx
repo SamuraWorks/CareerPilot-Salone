@@ -10,13 +10,28 @@ import { supabase } from "@/lib/supabaseClient"
 import { Search, Briefcase, TrendingUp, Users, Loader2 } from "lucide-react"
 import type { Career } from "@/lib/sample-data"
 
+import { useSearchParams } from "next/navigation"
+
+// ... imports
+
 export default function CareersPage() {
-  const [searchTerm, setSearchTerm] = useState("")
+  const searchParams = useSearchParams()
+  const initialSearch = searchParams.get("search") || ""
+
+  const [searchTerm, setSearchTerm] = useState(initialSearch)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const [careers, setCareers] = useState<Career[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Update search term if URL param changes (e.g. searching again from navbar while on careers page)
+    const query = searchParams.get("search")
+    if (query !== null) {
+      setSearchTerm(query)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     async function fetchCareers() {
@@ -32,7 +47,9 @@ export default function CareersPage() {
 
         if (data) {
           // Map DB snake_case to frontend camelCase
+          // ... (rest of mapping logic same as before)
           const formattedCareers: Career[] = data.map(item => ({
+            // ... existing mapping
             id: item.id,
             title: item.title,
             description: item.description,

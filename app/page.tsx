@@ -276,6 +276,78 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Testimonials Section */}
+        <section className="py-12 sm:py-16 md:py-20 bg-background relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-10 sm:mb-16">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Success Stories</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Hear from students and professionals who have found their path with CareerPilot Salone.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Testimonial 1 */}
+              <Card className="p-6 border-none shadow-lg bg-muted/20 relative">
+                <div className="absolute top-6 right-6 text-primary/20">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
+                    SK
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Sarah Kamara</h4>
+                    <p className="text-xs text-muted-foreground">Student, FBC</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  "I was confused about which engineering field to choose. The AI guidance helped me understand my strengths and I'm now happily studying Civil Engineering!"
+                </p>
+              </Card>
+
+              {/* Testimonial 2 */}
+              <Card className="p-6 border-none shadow-lg bg-muted/20 relative">
+                <div className="absolute top-6 right-6 text-secondary/20">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold text-lg">
+                    MB
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Mohamed Bangura</h4>
+                    <p className="text-xs text-muted-foreground">Job Seeker, Freetown</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  "The CV Builder is a game changer. I used to struggle with formatting, but now I have a professional CV that actually gets me interviews."
+                </p>
+              </Card>
+
+              {/* Testimonial 3 */}
+              <Card className="p-6 border-none shadow-lg bg-muted/20 relative">
+                <div className="absolute top-6 right-6 text-accent/20">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold text-lg">
+                    AJ
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">Aminata Jalloh</h4>
+                    <p className="text-xs text-muted-foreground">Nurse, Kenema</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  "I wanted to advance my nursing career but didn't know where to start. The Career Roadmap gave me a clear step-by-step plan to follow."
+                </p>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+
         {/* CTA Section */}
         <section className="py-12 sm:py-16 md:py-20 bg-primary text-primary-foreground relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">

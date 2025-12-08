@@ -24,6 +24,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState(false)
 
   const validateForm = () => {
     if (!name) {
@@ -62,12 +63,44 @@ export default function SignupPage() {
     setLoading(true)
     try {
       await signup(name, email, password)
-      router.push("/dashboard")
+      setSuccess(true)
     } catch (err) {
       setError("An error occurred during signup. Please try again.")
     } finally {
       setLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Navigation />
+        <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
+          <Card className="w-full max-w-md shadow-xl border-border/40">
+            <CardHeader className="text-center">
+              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <div className="text-green-600 text-3xl">✉️</div>
+              </div>
+              <CardTitle className="text-2xl font-bold text-green-700">Check Your Email</CardTitle>
+              <CardDescription className="text-base mt-2">
+                We've sent a confirmation link to <strong>{email}</strong>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Alert className="bg-blue-50 border-blue-200">
+                <AlertDescription className="text-blue-800 text-center">
+                  You must click the link in your email before you can log in.
+                </AlertDescription>
+              </Alert>
+              <Button asChild className="w-full h-12 text-base">
+                <Link href="/login">Return to Login</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    )
   }
 
   return (

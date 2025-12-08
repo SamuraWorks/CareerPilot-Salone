@@ -1,57 +1,46 @@
-# 🔧 ALL Environment Variables for Vercel
+# 🔐 Environment Variables Guide
 
-## Copy-Paste This Entire List to Vercel
+## 🚀 Critical Variables (Must Add to Vercel)
 
-Go to: **Vercel → Your Project → Settings → Environment Variables**
+Go to **Vercel Dashboard** -> **Settings** -> **Environment Variables** and add:
+
+### 1. Database (Supabase)
+Required for Database, Auth, and Saving Data.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 2. AI (Google Gemini)
+Required for Chatbot and WhatsApp Intelligence.
+```env
+GEMINI_API_KEY=your_google_gemini_api_key
+```
+*(Get it from [Google AI Studio](https://aistudio.google.com/))*
+
+### 3. WhatsApp (Twilio)
+Required for WhatsApp features.
+```env
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+```
+*(The number must match your Twilio Sandbox number)*
 
 ---
 
-## ✅ **1. TWILIO (WhatsApp Bot)** - READY TO ADD
+## 🛠️ Optional Variables
 
-```
-Name: TWILIO_ACCOUNT_SID
-Value: AC0e97d469e567095cc6d29dfc398f370d
-Environment: Production, Preview, Development
-```
-
-```
-Name: TWILIO_AUTH_TOKEN
-Value: e7f98c6f1839d58d9cb2b8d3a540b93b
-Environment: Production, Preview, Development
-```
-
-```
-Name: TWILIO_WHATSAPP_NUMBER
-Value: whatsapp:+16812636466
-Environment: Production, Preview, Development
+### OpenAI (Fallback AI)
+If Gemini fails, the system will try OpenAI.
+```env
+OPENAI_API_KEY=sk-...
 ```
 
 ---
 
-## ⚠️ **2. OPENAI (AI Features)** - YOU NEED TO GET THIS
+## ⚠️ Important Notes
 
-```
-Name: OPENAI_API_KEY
-Value: sk-proj-YOUR_KEY_HERE_FROM_OPENAI
-Environment: Production, Preview, Development
-```
-
-**Get your key from**: https://platform.openai.com/api-keys
-
----
-
-## ✅ **3. SUPABASE (Database & Auth)** - SHOULD ALREADY BE SET
-
-If not set, add these (get from Supabase dashboard):
-
-```
-Name: NEXT_PUBLIC_SUPABASE_URL
-Value: https://your-project.supabase.co
-Environment: Production, Preview, Development
-```
-
-```
-Name: NEXT_PUBLIC_SUPABASE_ANON_KEY
-Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-Environment: Production, Preview, Development
-```
+1. **Redeploy Required**: After adding these variables, you MUST go to **Deployments** and **Redeploy** for them to take effect.
+2. **Do Not Commit**: Never commit `.env` files to GitHub.
+3. **Local Development**: Create a `.env.local` file in your project root with these same values for testing.
