@@ -17,18 +17,17 @@ import { Loader2 } from "lucide-react"
 
 export default function SignupPage() {
   const router = useRouter()
-  const { signup, loginWithGoogle } = useAuth()
+  const { signup, login, loginWithGoogle } = useAuth()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const [success, setSuccess] = useState(false)
 
   const validateForm = () => {
     if (!name) {
-      setError("Full name is required")
+      setError("Full Name is required")
       return false
     }
     if (!email) {
@@ -63,51 +62,28 @@ export default function SignupPage() {
     setLoading(true)
     try {
       const data = await signup(name, email, password)
+
+      // STAGE 1: Check if Supabase gave us a session immediately (Direct Signup)
       if (data?.session) {
-        // Auto-login successful (Email verification disabled)
         router.push('/dashboard')
-      } else {
-        // Verification required
-        setSuccess(true)
+        return
       }
+
+      // STAGE 2: If no session, try explicit login (Double Check)
+      try {
+        await login(email, password)
+        router.push('/dashboard')
+      } catch (loginErr) {
+        // STAGE 3: If login fails (likely Email Not Confirmed), force redirect to login
+        // This removes the "Check Email" screen and sends them to the login flow
+        router.push('/login')
+      }
+
     } catch (err: any) {
       console.error("Signup error:", err)
       setError(err.message || "An error occurred during signup. Please try again.")
-    } finally {
       setLoading(false)
     }
-  }
-
-  if (success) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <Navigation />
-        <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
-          <Card className="w-full max-w-md shadow-xl border-border/40">
-            <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <div className="text-green-600 text-3xl">✉️</div>
-              </div>
-              <CardTitle className="text-2xl font-bold text-green-700">Check Your Email</CardTitle>
-              <CardDescription className="text-base mt-2">
-                We've sent a confirmation link to <strong>{email}</strong>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <Alert className="bg-blue-50 border-blue-200">
-                <AlertDescription className="text-blue-800 text-center">
-                  You must click the link in your email before you can log in.
-                </AlertDescription>
-              </Alert>
-              <Button asChild className="w-full h-12 text-base">
-                <Link href="/login">Return to Login</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </main>
-        <Footer />
-      </div>
-    )
   }
 
   return (

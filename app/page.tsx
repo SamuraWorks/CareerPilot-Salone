@@ -70,7 +70,7 @@ export default function HomePage() {
                 achieve your career goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center animate-fade-in-delay-2">
-                <Link href="/onboarding">
+                <Link href="/careers">
                   <Button size="lg" className="w-full sm:w-auto gap-2 shadow-lg hover:shadow-xl transition-shadow bg-white text-primary hover:bg-white/90 touch-target">
                     Get Started Free
                     <ArrowRight className="w-4 h-4" />
@@ -360,13 +360,13 @@ export default function HomePage() {
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 text-balance">
               Join thousands of Sierra Leoneans who are building successful careers with CareerPilot Salone.
             </p>
-            <Link href="/signup">
+            <Link href="/careers">
               <Button
                 size="lg"
                 variant="secondary"
                 className="gap-2 shadow-2xl hover:shadow-3xl transition-shadow hover:scale-105 touch-target w-full sm:w-auto"
               >
-                Create Free Account
+                Explore Now
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

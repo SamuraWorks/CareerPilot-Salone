@@ -25,7 +25,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 // Pages that don't require authentication
-const PUBLIC_ROUTES = ["/", "/login", "/signup", "/careers", "/universities", "/jobs", "/scholarships", "/mentorship", "/roadmap", "/aptitude-test", "/whatsapp", "/privacy", "/terms"]
+const PUBLIC_ROUTES = ["/", "/login", "/signup", "/dashboard", "/guidance", "/careers", "/universities", "/jobs", "/scholarships", "/mentorship", "/roadmap", "/aptitude-test", "/whatsapp", "/privacy", "/terms"]
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
