@@ -1,7 +1,0 @@
-{
-  "build": {
-    "env": {
-      "VERCEL_ALLOW_BUILD_SCRIPT": "1"
-    }
-  }
-}
