@@ -1,88 +1,109 @@
-
-import Link from 'next/link';
-import { ArrowRight, Brain, Briefcase, FileText, GraduationCap } from 'lucide-react';
+"use client"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, MessageCircle } from "lucide-react"
+import Image from "next/image"
 
 export function HeroSection() {
     return (
-        <section className="relative overflow-hidden pt-16 pb-32 md:pt-24 lg:pt-32 bg-gradient-to-b from-indigo-50/50 to-white dark:from-slate-950 dark:to-slate-900">
-            <div className="container px-4 md:px-6 mx-auto relative z-10">
-                <div className="grid md:grid-cols-2 gap-12 items-center">
+        <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-white dark:bg-slate-950">
+            <div className="container px-4 mx-auto relative z-10">
+                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-                    {/* Left: Content */}
-                    <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-8">
-                        <div className="space-y-4">
-                            <div className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-2">
-                                For Job Seekers in Freetown
+                    {/* Left Content */}
+                    <div className="text-left animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-sm font-bold mb-6 border border-green-500/20">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            Now live on WhatsApp & Web
+                        </div>
+
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.1]">
+                            Your Personal <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-500">
+                                Career Mentor
+                            </span> <br />
+                            in Your Pocket.
+                        </h1>
+
+                        <p className="text-xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-lg">
+                            Helping Sierra Leone's youth choose the right career, the right course, and discover real opportunities.
+                            <span className="block mt-2 font-medium text-slate-900 dark:text-slate-200">
+                                Zero data required on WhatsApp.
+                            </span>
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <Link href="https://wa.me/23274000000" target="_blank">
+                                <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-[#25D366] hover:bg-[#128C7E] text-white border-none shadow-xl shadow-green-500/20 w-full sm:w-auto transition-transform hover:-translate-y-1">
+                                    <MessageCircle className="mr-2 w-5 h-5 fill-current" />
+                                    Chat on WhatsApp
+                                </Button>
+                            </Link>
+                            <Link href="/cv-builder">
+                                <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full border-2 w-full sm:w-auto hover:bg-slate-50">
+                                    Build Free CV <ArrowRight className="ml-2 w-5 h-5" />
+                                </Button>
+                            </Link>
+                        </div>
+
+                        <div className="mt-10 flex items-center gap-4 text-sm font-medium text-slate-500">
+                            <div className="flex -space-x-3">
+                                {[1, 2, 3, 4].map(i => (
+                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 bg-cover bg-center" style={{ backgroundImage: `url(https://i.pravatar.cc/100?img=${i + 10})` }} />
+                                ))}
                             </div>
-                            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                                <span className="block text-slate-900 dark:text-white">Stop Applying Blindly.</span>
-                                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600 animate-gradient">
-                                    Get Verified & Hired.
-                                </span>
-                            </h1>
-                            <p className="mx-auto md:mx-0 max-w-[700px] text-slate-600 md:text-xl dark:text-slate-300">
-                                70% of CVs in Sierra Leone are ignored. We fix yours instantly, verify your skills, and put you directly in front of top employers.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <Link
-                                href="/cv-builder"
-                                className="inline-flex h-12 items-center justify-center rounded-full bg-blue-600 px-8 text-sm font-medium text-white shadow-lg shadow-blue-600/20 transition-all hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
-                            >
-                                <FileText className="mr-2 h-4 w-4" />
-                                Build Pro CV (Free)
-                            </Link>
-                            <Link
-                                href="/career-test"
-                                className="inline-flex h-12 items-center justify-center rounded-full border border-slate-200 bg-white px-8 text-sm font-medium text-slate-900 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50 dark:hover:bg-slate-800"
-                            >
-                                <Brain className="mr-2 h-4 w-4" />
-                                Verify My Skills
-                            </Link>
-                        </div>
-
-                        <div className="pt-4 flex items-center gap-2 text-sm text-slate-500 font-medium">
-                            <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                            320+ Candidates Hired this Month
+                            <div>Trusted by 5,000+ students <br /> from FBC, IPAM & UNIMAK</div>
                         </div>
                     </div>
 
-                    {/* Right: Image */}
-                    <div className="relative rounded-2xl overflow-hidden shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500 group">
-                        <img
-                            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
-                            alt="Sierra Leonean professional in an interview"
-                            className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/40 to-transparent"></div>
+                    {/* Right Image/Visual */}
+                    <div className="relative mx-auto lg:ml-auto w-full max-w-lg lg:max-w-none">
+                        <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-white/50 bg-slate-100 rotate-1 hover:rotate-0 transition-transform duration-700">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                            <Image
+                                src="https://images.unsplash.com/photo-1576267423048-15c0040fec78?q=80&w=1000&auto=format&fit=crop"
+                                alt="Salone student using mobile phone"
+                                width={800}
+                                height={1000}
+                                className="object-cover w-full h-[600px]"
+                                priority
+                            />
 
-                        {/* Overlay Card */}
-                        <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/20">
-                            <div className="flex items-center gap-3">
-                                <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                                    <Briefcase className="h-5 w-5" />
+                            {/* Floating Card 1 */}
+                            <div className="absolute bottom-10 left-8 right-8 z-20">
+                                <div className="bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-lg border border-white/20">
+                                    <div className="flex items-center gap-4 mb-3">
+                                        <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl">🎓</div>
+                                        <div>
+                                            <h4 className="font-bold text-slate-900">Career Matched!</h4>
+                                            <p className="text-xs text-slate-500">Based on your interests</p>
+                                        </div>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 mb-2">
+                                        <div className="font-bold text-blue-700 text-sm">Recommended: Data Analyst</div>
+                                        <div className="text-xs text-slate-500 mt-1">High Demand in Freetown • NLE 3,000+</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-sm font-bold text-slate-900">New Job Offer!</p>
-                                    <p className="text-xs text-slate-500">Bank Clerk • Ecobank SL</p>
-                                </div>
-                                <div className="ml-auto">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Matched
-                                    </span>
+                            </div>
+
+                            {/* Floating Card 2 */}
+                            <div className="absolute top-12 -right-6 z-20 animate-bounce duration-[3000ms]">
+                                <div className="bg-[#25D366] text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 font-bold text-sm">
+                                    <MessageCircle className="w-5 h-5 fill-current" />
+                                    New Job Alert! 🔔
                                 </div>
                             </div>
                         </div>
+
+                        {/* Decorative Blobs */}
+                        <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-gradient-to-tr from-green-200/40 to-blue-200/40 blur-[100px] rounded-full" />
                     </div>
+
                 </div>
             </div>
-
-            {/* Background Decor */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl opacity-30 pointer-events-none">
-                <div className="absolute top-10 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl mix-blend-multiply animate-float delay-100"></div>
-                <div className="absolute bottom-10 right-10 w-72 h-72 bg-green-400/20 rounded-full blur-3xl mix-blend-multiply animate-float delay-700"></div>
-            </div>
         </section>
-    );
+    )
 }
