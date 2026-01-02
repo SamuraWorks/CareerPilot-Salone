@@ -20,8 +20,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['software developer', 'programmer', 'coder', 'software engineer', 'web developer', 'app developer'],
         title: 'Software Developer',
-        overview: 'Software developers design, develop, and maintain applications and systems. This is a high-demand field in Sierra Leone with excellent growth potential. Tech companies, NGOs, and businesses need developers. Salary: $150-400/month.',
-        salaryRange: '$150-400/month',
+        overview: 'Software developers design, develop, and maintain applications and systems. This is a high-demand field in Sierra Leone with excellent growth potential. Tech companies, NGOs, and businesses need developers. Salary: SLE 3,500 - 9,000 (approx. $150 - $400)/month.',
+        salaryRange: 'SLE 3,500 - 9,000 (approx. $150 - $400)/month',
         demand: 'High',
         phases: [
             {
@@ -90,8 +90,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['data analyst', 'data scientist', 'business analyst', 'data analysis'],
         title: 'Data Analyst',
-        overview: 'Data analysts collect, process, and analyze data to help organizations make informed decisions. Growing demand in Sierra Leone as businesses and NGOs seek data-driven insights. Salary: $180-350/month.',
-        salaryRange: '$180-350/month',
+        overview: 'Data analysts collect, process, and analyze data to help organizations make informed decisions. Growing demand in Sierra Leone as businesses and NGOs seek data-driven insights. Salary: SLE 4,000 - 8,000 (approx. $180 - $350)/month.',
+        salaryRange: 'SLE 4,000 - 8,000 (approx. $180 - $350)/month',
         demand: 'High',
         phases: [
             {
@@ -159,8 +159,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['it support', 'help desk', 'technical support', 'it technician', 'computer technician'],
         title: 'IT Support Specialist',
-        overview: 'IT support specialists help users with technical problems, maintain computer systems, and ensure technology runs smoothly. Every organization needs IT support. Salary: $120-300/month.',
-        salaryRange: '$120-300/month',
+        overview: 'IT support specialists help users with technical problems, maintain computer systems, and ensure technology runs smoothly. Every organization needs IT support. Salary: SLE 2,700 - 6,750 (approx. $120 - $300)/month.',
+        salaryRange: 'SLE 2,700 - 6,750 (approx. $120 - $300)/month',
         demand: 'High',
         phases: [
             {
@@ -231,8 +231,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['nurse', 'nursing', 'registered nurse', 'staff nurse'],
         title: 'Nurse',
-        overview: 'Nurses provide patient care, administer medications, and support doctors in healthcare settings. Critical shortage of nurses in Sierra Leone creates excellent opportunities. Salary: $125-300/month.',
-        salaryRange: '$125-300/month',
+        overview: 'Nurses provide patient care, administer medications, and support doctors in healthcare settings. Critical shortage of nurses in Sierra Leone creates excellent opportunities. Salary: SLE 2,800 - 6,800 (approx. $125 - $300)/month.',
+        salaryRange: 'SLE 2,800 - 6,800 (approx. $125 - $300)/month',
         demand: 'High',
         phases: [
             {
@@ -300,8 +300,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['doctor', 'medical doctor', 'physician', 'medicine', 'mbbs'],
         title: 'Medical Doctor',
-        overview: 'Medical doctors diagnose and treat illnesses, perform procedures, and save lives. Sierra Leone desperately needs more doctors. Long training but very rewarding career. Salary: $250-750/month.',
-        salaryRange: '$250-750/month',
+        overview: 'Medical doctors diagnose and treat illnesses, perform procedures, and save lives. Sierra Leone desperately needs more doctors. Long training but very rewarding career. Salary: SLE 5,600 - 16,800 (approx. $250 - $750)/month.',
+        salaryRange: 'SLE 5,600 - 16,800 (approx. $250 - $750)/month',
         demand: 'High',
         phases: [
             {
@@ -372,8 +372,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['accountant', 'accounting', 'bookkeeper', 'finance', 'cpa', 'acca'],
         title: 'Accountant',
-        overview: 'Accountants manage financial records, prepare reports, and ensure compliance with regulations. Every organization needs accountants. Strong career with good advancement opportunities. Salary: $150-350/month.',
-        salaryRange: '$150-350/month',
+        overview: 'Accountants manage financial records, prepare reports, and ensure compliance with regulations. Every organization needs accountants. Strong career with good advancement opportunities. Salary: SLE 3,400 - 7,900 (approx. $150 - $350)/month.',
+        salaryRange: 'SLE 3,400 - 7,900 (approx. $150 - $350)/month',
         demand: 'High',
         phases: [
             {
@@ -442,8 +442,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['marketing', 'digital marketing', 'marketing manager', 'social media manager', 'brand manager'],
         title: 'Marketing Manager',
-        overview: 'Marketing managers develop strategies to promote products and services, manage campaigns, and build brand awareness. Growing field as businesses embrace digital marketing. Salary: $175-400/month.',
-        salaryRange: '$175-400/month',
+        overview: 'Marketing managers develop strategies to promote products and services, manage campaigns, and build brand awareness. Growing field as businesses embrace digital marketing. Salary: SLE 3,900 - 9,000 (approx. $175 - $400)/month.',
+        salaryRange: 'SLE 3,900 - 9,000 (approx. $175 - $400)/month',
         demand: 'Medium',
         phases: [
             {
@@ -514,8 +514,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['civil engineer', 'civil engineering', 'construction engineer', 'structural engineer'],
         title: 'Civil Engineer',
-        overview: 'Civil engineers design and oversee construction of infrastructure like roads, bridges, and buildings. High demand due to Sierra Leone\'s infrastructure development needs. Salary: $200-500/month.',
-        salaryRange: '$200-500/month',
+        overview: 'Civil engineers design and oversee construction of infrastructure like roads, bridges, and buildings. High demand due to Sierra Leone\'s infrastructure development needs. Salary: SLE 4,500 - 11,250 (approx. $200 - $500)/month.',
+        salaryRange: 'SLE 4,500 - 11,250 (approx. $200 - $500)/month',
         demand: 'High',
         phases: [
             {
@@ -584,8 +584,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['electrical engineer', 'electrical engineering', 'power engineer', 'electronics'],
         title: 'Electrical Engineer',
-        overview: 'Electrical engineers design and maintain electrical systems, power distribution, and electronics. Critical need due to Sierra Leone\'s energy challenges. Salary: $180-450/month.',
-        salaryRange: '$180-450/month',
+        overview: 'Electrical engineers design and maintain electrical systems, power distribution, and electronics. Critical need due to Sierra Leone\'s energy challenges. Salary: SLE 4,000 - 10,000 (approx. $180 - $450)/month.',
+        salaryRange: 'SLE 4,000 - 10,000 (approx. $180 - $450)/month',
         demand: 'High',
         phases: [
             {
@@ -656,8 +656,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['teacher', 'teaching', 'primary teacher', 'secondary teacher', 'educator'],
         title: 'Teacher',
-        overview: 'Teachers educate and inspire students at primary or secondary level. Sierra Leone needs more qualified teachers. Rewarding career with stable employment. Salary: $90-250/month.',
-        salaryRange: '$90-250/month',
+        overview: 'Teachers educate and inspire students at primary or secondary level. Sierra Leone needs more qualified teachers. Rewarding career with stable employment. Salary: SLE 2,000 - 5,600 (approx. $90 - $250)/month.',
+        salaryRange: 'SLE 2,000 - 5,600 (approx. $90 - $250)/month',
         demand: 'High',
         phases: [
             {
@@ -728,8 +728,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['graphic designer', 'graphic design', 'designer', 'visual designer', 'creative designer'],
         title: 'Graphic Designer',
-        overview: 'Graphic designers create visual content for brands, marketing, and media. Growing demand as businesses invest in branding and digital presence. Salary: $120-320/month.',
-        salaryRange: '$120-320/month',
+        overview: 'Graphic designers create visual content for brands, marketing, and media. Growing demand as businesses invest in branding and digital presence. Salary: SLE 2,700 - 7,200 (approx. $120 - $320)/month.',
+        salaryRange: 'SLE 2,700 - 7,200 (approx. $120 - $320)/month',
         demand: 'Medium',
         phases: [
             {
@@ -799,7 +799,7 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
         keywords: ['entrepreneur', 'business owner', 'start business', 'small business', 'startup'],
         title: 'Entrepreneur / Business Owner',
         overview: 'Entrepreneurs start and run their own businesses, creating jobs and solving problems. Many opportunities in Sierra Leone for innovative business ideas. Income varies widely.',
-        salaryRange: 'Varies ($100-1000+/month)',
+        salaryRange: 'Varies (SLE 2,000 - 20,000+ / approx. $100 - $1,000+ per month)',
         demand: 'High',
         phases: [
             {
@@ -870,8 +870,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['project manager', 'program manager', 'project management', 'pmp'],
         title: 'Project Manager',
-        overview: 'Project managers plan, execute, and oversee projects to ensure they\'re completed on time and within budget. High demand in NGOs, construction, and businesses. Salary: $200-450/month.',
-        salaryRange: '$200-450/month',
+        overview: 'Project managers plan, execute, and oversee projects to ensure they\'re completed on time and within budget. High demand in NGOs, construction, and businesses. Salary: SLE 4,500 - 10,000 (approx. $200 - $450)/month.',
+        salaryRange: 'SLE 4,500 - 10,000 (approx. $200 - $450)/month',
         demand: 'High',
         phases: [
             {
@@ -940,8 +940,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['lawyer', 'attorney', 'legal', 'law', 'barrister', 'solicitor'],
         title: 'Lawyer',
-        overview: 'Lawyers provide legal advice, represent clients in court, and draft legal documents. Respected profession with good earning potential. Requires dedication and long education. Salary: $200-600/month.',
-        salaryRange: '$200-600/month',
+        overview: 'Lawyers provide legal advice, represent clients in court, and draft legal documents. Respected profession with good earning potential. Requires dedication and long education. Salary: SLE 4,500 - 13,500 (approx. $200 - $600)/month.',
+        salaryRange: 'SLE 4,500 - 13,500 (approx. $200 - $600)/month',
         demand: 'Medium',
         phases: [
             {
@@ -1010,8 +1010,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['journalist', 'reporter', 'media', 'news', 'broadcasting', 'journalism'],
         title: 'Journalist',
-        overview: 'Journalists research, write, and report news stories for newspapers, radio, TV, or online media. Important role in democracy and information sharing. Salary: $100-280/month.',
-        salaryRange: '$100-280/month',
+        overview: 'Journalists research, write, and report news stories for newspapers, radio, TV, or online media. Important role in democracy and information sharing. Salary: SLE 2,250 - 6,300 (approx. $100 - $280)/month.',
+        salaryRange: 'SLE 2,250 - 6,300 (approx. $100 - $280)/month',
         demand: 'Medium',
         phases: [
             {
@@ -1080,8 +1080,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['pharmacist', 'pharmacy', 'pharmaceutical', 'drug', 'medication'],
         title: 'Pharmacist',
-        overview: 'Pharmacists dispense medications, advise on drug use, and ensure patient safety. Growing healthcare sector creates opportunities. Requires specialized education. Salary: $180-400/month.',
-        salaryRange: '$180-400/month',
+        overview: 'Pharmacists dispense medications, advise on drug use, and ensure patient safety. Growing healthcare sector creates opportunities. Requires specialized education. Salary: SLE 4,000 - 9,000 (approx. $180 - $400)/month.',
+        salaryRange: 'SLE 4,000 - 9,000 (approx. $180 - $400)/month',
         demand: 'High',
         phases: [
             {
@@ -1150,8 +1150,8 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
     {
         keywords: ['human resources', 'hr', 'hr manager', 'recruitment', 'personnel'],
         title: 'Human Resources Manager',
-        overview: 'HR managers recruit, train, and manage employees, handle workplace issues, and ensure compliance with labor laws. Every organization needs HR. Salary: $160-380/month.',
-        salaryRange: '$160-380/month',
+        overview: 'HR managers recruit, train, and manage employees, handle workplace issues, and ensure compliance with labor laws. Every organization needs HR. Salary: SLE 3,600 - 8,500 (approx. $160 - $380)/month.',
+        salaryRange: 'SLE 3,600 - 8,500 (approx. $160 - $380)/month',
         demand: 'Medium',
         phases: [
             {

@@ -292,6 +292,8 @@ export interface CareerRoadmap {
     title: string;
     overview: string;
     phases: RoadmapPhase[];
+    salaryRange?: string;
+    demand?: 'High' | 'Medium' | 'Low';
 }
 
 export async function generateRoadmap(careerName: string): Promise<CareerRoadmap> {
@@ -300,7 +302,9 @@ export async function generateRoadmap(careerName: string): Promise<CareerRoadmap
         return {
             title: `Your Roadmap to ${roadmapTemplate.title} in Sierra Leone`,
             overview: roadmapTemplate.overview,
-            phases: roadmapTemplate.phases
+            phases: roadmapTemplate.phases,
+            salaryRange: roadmapTemplate.salaryRange,
+            demand: roadmapTemplate.demand
         };
     }
 
@@ -313,6 +317,8 @@ export async function generateRoadmap(careerName: string): Promise<CareerRoadmap
     return {
         title: `Roadmap to ${career.title}`,
         overview: `A structured plan to become a ${career.title} in Sierra Leone.`,
+        salaryRange: career.salaryRange,
+        demand: career.demand,
         phases: [
             {
                 name: "Month 1: Basics",

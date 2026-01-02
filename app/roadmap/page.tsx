@@ -13,6 +13,7 @@ import { z } from "zod"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
+import { useExchangeRate } from "@/hooks/use-exchange-rate"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SIERRA_LEONE_OPPORTUNITIES } from "@/lib/sierra-leone-opportunities";
 
@@ -20,6 +21,8 @@ import { SIERRA_LEONE_OPPORTUNITIES } from "@/lib/sierra-leone-opportunities";
 const roadmapSchema = z.object({
   title: z.string(),
   overview: z.string(),
+  salaryRange: z.string().optional(),
+  demand: z.string().optional(),
   phases: z.array(z.object({
     name: z.string(),
     goal: z.string(),
@@ -69,6 +72,9 @@ export default function RoadmapPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
   const roadmapRef = useRef<HTMLDivElement>(null)
+
+  // Currency Data
+  const { rate, loading: rateLoading } = useExchangeRate();
 
   // Manual fetch state
   const [isLoading, setIsLoading] = useState(false)
@@ -423,6 +429,40 @@ export default function RoadmapPage() {
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                       {roadmapToShow.overview}
                     </p>
+                  </div>
+
+                  {/* Career Insights */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                    <Card className="p-4 bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-green-100 dark:bg-green-900/40 rounded-xl text-green-600 dark:text-green-400 font-bold">
+                          <span className="text-xl">$</span>
+                        </div>
+                        <div>
+                          <div className="text-xs text-green-700 dark:text-green-400 font-bold uppercase tracking-wider mb-0.5">Estimated Salary</div>
+                          <div className="font-semibold text-green-900 dark:text-green-100 text-sm md:text-base">
+                            {roadmapToShow.salaryRange || "Varies by experience"}
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-4 bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-blue-100 dark:bg-blue-900/40 rounded-xl text-blue-600 dark:text-blue-400">
+                          <TrendingUp className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-blue-700 dark:text-blue-400 font-bold uppercase tracking-wider mb-0.5">Market Demand</div>
+                          <div className="font-semibold text-blue-900 dark:text-blue-100 text-sm md:text-base flex items-center gap-2">
+                            {roadmapToShow.demand || "Medium"} Demand
+                            {!rateLoading && (
+                              <Badge variant="outline" className="text-[10px] h-5 bg-white/50">{rate} SLE/USD</Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 relative">
