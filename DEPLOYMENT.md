@@ -161,7 +161,11 @@ In Vercel Dashboard:
 
 ## 🐛 Troubleshooting
 
-### Build Fails:
+### Build Fails or Hangs:
+- **Stuck "Building" state**: If a build hangs for >15 mins, cancel it in Vercel Dashboard. A stuck build can block all future deployments.
+- **Queueing**: If new commits show as "Queued", cancel the stuck build first.
+- **Local Test**: Run `npm run build` locally to ensure it completes.
+
 ```bash
 # Test build locally first
 npm run build
