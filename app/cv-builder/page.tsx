@@ -283,13 +283,14 @@ export default function CVBuilderPage() {
     element.id = 'cv-preview-container'
 
     // Force specific dimensions for A4 PDF quality
-    element.style.width = '210mm'
-    element.style.minHeight = '297mm'
+    element.style.width = '794px' // Approx A4 width at 96 DPI
+    element.style.minHeight = '1123px' // Approx A4 height
+    element.style.height = 'auto'
     element.style.padding = '0'
     element.style.backgroundColor = 'white'
     element.style.position = 'relative'
     element.style.margin = '0'
-    element.style.overflow = 'hidden'
+    element.style.overflow = 'visible' // Allow content to expand
 
     try {
       // Wait for styles to settle
@@ -298,10 +299,10 @@ export default function CVBuilderPage() {
       // Use PNG for high quality text rendering
       const dataUrl = await toPng(element, {
         quality: 1.0,
-        pixelRatio: 4, // 4x resolution for crisp text
+        pixelRatio: 2, // Slightly lower ratio to prevent massive file sizes on long CVs
         backgroundColor: '#ffffff',
-        width: 794, // 210mm at 96 DPI approx
-        height: 1123, // 297mm at 96 DPI approx
+        width: 794,
+        // Remove fixed height to allow capturing full content length
         style: {
           transform: 'scale(1)',
           transformOrigin: 'top left'
