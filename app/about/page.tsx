@@ -13,7 +13,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto">
           {/* Hero Image Section */}
           <div className="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden mb-12">
-            <Image src="/about-team-salone.jpg" alt="CareerPilot Salone Team" fill className="object-cover" priority />
+            <Image src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80" alt="CareerPilot Salone Team" fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-background/20" />
             <div className="absolute bottom-6 left-6 right-6">
               <div className="inline-block mb-3 px-4 py-2 bg-primary/90 rounded-full">

@@ -2,30 +2,30 @@ import { Brain, FileText, GraduationCap, Briefcase, Zap, Users } from 'lucide-re
 
 const FEATURES = [
     {
-        icon: Brain,
-        title: "AI Career Guidance",
-        desc: "Not sure what to do? Our AI analyzes your skills and interests to recommend the perfect career path in Sierra Leone.",
-        color: "text-purple-600",
-        bg: "bg-purple-100 dark:bg-purple-900/20"
-    },
-    {
         icon: FileText,
-        title: "Smart CV Builder",
-        desc: "Create a professional, ATS-friendly CV in minutes. Download as PDF and share directly on WhatsApp.",
+        title: "Pro CV Builder",
+        desc: "The only CV builder designed for Sierra Leonean employers. ATS-friendly, professional, and instantly downloadable.",
         color: "text-blue-600",
         bg: "bg-blue-100 dark:bg-blue-900/20"
     },
     {
-        icon: GraduationCap,
-        title: "Local Roadmap",
-        desc: "Get a step-by-step plan: which courses to take at FBC, IPAM, or UNIMAK to reach your goals.",
+        icon: Zap,
+        title: "Verified Skills",
+        desc: "Prove you know Excel, English, or Customer Service. Take a quick test and get a verification badge employers trust.",
         color: "text-green-600",
         bg: "bg-green-100 dark:bg-green-900/20"
     },
     {
         icon: Briefcase,
-        title: "Job Matching",
-        desc: "Don't just look for jobs—let the jobs find you. We match you with opportunities based on your skills.",
+        title: "Direct Job Matches",
+        desc: "Stop searching. We match your verified profile directly with open roles at top companies in Freetown.",
+        color: "text-purple-600",
+        bg: "bg-purple-100 dark:bg-purple-900/20"
+    },
+    {
+        icon: Brain,
+        title: "Career Roadmap",
+        desc: "Not job-ready yet? Get a personalized learning plan to build the skills employers are asking for right now.",
         color: "text-orange-600",
         bg: "bg-orange-100 dark:bg-orange-900/20"
     }

@@ -27,7 +27,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Dr. Samuel Wise',
         profession: 'Software Engineer',
         bio: 'Senior Technical Analyst with 10+ years of experience in building scalable systems in Sierra Leone.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',
         calendly_link: 'https://calendly.com',
         contact_email: 'samuel@example.com'
     },
@@ -36,7 +36,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Aminata Kamara',
         profession: 'Medical Doctor',
         bio: 'Public Health Specialist focusing on community health initiatives in Freetown.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
         calendly_link: '',
         contact_email: 'aminata@example.com'
     },
@@ -45,7 +45,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Ibrahim Bah',
         profession: 'Entrepreneur',
         bio: 'Founder of TechSalone, helping startups grow and find investment.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
         calendly_link: 'https://calendly.com',
         contact_email: 'ibrahim@example.com'
     },
@@ -54,7 +54,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Nurse Hawa Conteh',
         profession: 'Senior Nurse',
         bio: 'Over 15 years of experience in maternal health and nursing education at COMAHS.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80',
         calendly_link: '',
         contact_email: 'hawa@example.com'
     },
@@ -63,7 +63,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Barrister Abu Bakarr',
         profession: 'Legal Practitioner',
         bio: 'Expert in Sierra Leonean Law, offering guidance for aspiring law students and junior practitioners.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80',
         calendly_link: 'https://calendly.com',
         contact_email: 'abu@example.com'
     },
@@ -72,7 +72,7 @@ const MOCK_MENTORS: Mentor[] = [
         name: 'Musa Bangura',
         profession: 'Agricultural Scientist',
         bio: 'Specialist in sustainable farming and agricultural value chains na Sierra Leone.',
-        image_url: '',
+        image_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
         calendly_link: '',
         contact_email: 'musa@example.com'
     }
