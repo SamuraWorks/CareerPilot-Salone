@@ -309,6 +309,50 @@ export default function RoadmapPage() {
             </TabsList>
 
             <TabsContent value="generator" className="space-y-6 sm:space-y-8">
+              {/* Popular Roadmaps Selection */}
+              {!roadmapToShow && (
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-yellow-500" />
+                    Popular Career Paths in Sierra Leone
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {[
+                      { title: "Software Developer", icon: "💻", role: "Technology" },
+                      { title: "Data Analyst", icon: "📊", role: "Business" },
+                      { title: "Digital Marketer", icon: "📱", role: "Marketing" },
+                      { title: "Civil Engineer", icon: "🏗️", role: "Engineering" },
+                      { title: "Nurse", icon: "👩‍⚕️", role: "Healthcare" },
+                      { title: "Accountant", icon: "💰", role: "Finance" },
+                    ].map((item) => (
+                      <button
+                        key={item.title}
+                        onClick={() => {
+                          setCareer(item.title)
+                          // Trigger generation immediately
+                          setTimeout(() => {
+                            const fakeEvent = { preventDefault: () => { } } as React.FormEvent
+                            handleGenerate(fakeEvent)
+                          }, 0)
+                        }}
+                        className="group relative p-4 bg-white hover:bg-slate-50 border hover:border-blue-500 rounded-xl transition-all text-left shadow-sm hover:shadow-md"
+                      >
+                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <TrendingUp className="w-4 h-4 text-blue-500" />
+                        </div>
+                        <div className="text-2xl mb-2">{item.icon}</div>
+                        <div className="font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                          {item.title}
+                        </div>
+                        <div className="text-xs text-slate-500 font-medium uppercase tracking-wider mt-1">
+                          {item.role}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Input Section */}
               <Card className="p-4 sm:p-6 md:p-8 shadow-xl border-primary/20 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm">
                 <form onSubmit={handleGenerate} className="space-y-4">
