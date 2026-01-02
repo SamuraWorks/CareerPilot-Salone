@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { toJpeg } from "html-to-image"
+import { toPng } from "html-to-image"
 import jsPDF from "jspdf"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Trash2, Download, Eye, Upload, User, Copy, Check, FileText, Phone, Mail, MapPin, Globe, Languages, UserCheck, Briefcase, GraduationCap, Award, Terminal, Calendar, Sparkles, Wand2, Loader2 } from "lucide-react"
+import { Plus, Trash2, Download, Eye, Upload, User, Copy, Check, FileText, Phone, Mail, MapPin, Globe, Languages, UserCheck, Briefcase, GraduationCap, Award, Terminal, Calendar, Sparkles, Wand2, Loader2, BadgeCheck } from "lucide-react"
 import { useCompletion } from "@ai-sdk/react"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
@@ -98,7 +98,9 @@ export default function CVBuilderPage() {
     { id: "1", name: "", issuer: "", date: "", url: "" },
   ])
 
-  const [skills, setSkills] = useState("")
+  const [skills, setSkills] = useState("Microsoft Excel, Customer Service")
+  const [verifiedSkills, setVerifiedSkills] = useState<string[]>(["Microsoft Excel"])
+  const [isVerifying, setIsVerifying] = useState(false)
   const [languages, setLanguages] = useState("")
   const [references, setReferences] = useState<Reference[]>([
     { id: "1", name: "", role: "", company: "", phone: "", email: "" },
@@ -219,10 +221,10 @@ export default function CVBuilderPage() {
     const styleEl = document.createElement('style')
     styleEl.id = 'pdf-color-override'
     styleEl.innerHTML = `
-      /* Force all colors to RGB format for PDF generation */
       #cv-preview-container, #cv-preview-container * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
         color: rgb(15, 23, 42) !important;
-        border-color: rgb(226, 232, 240) !important;
       }
       #cv-preview-container .bg-primary,
       #cv-preview-container [class*="bg-primary"] {
@@ -237,6 +239,9 @@ export default function CVBuilderPage() {
       }
       #cv-preview-container .text-secondary {
         color: rgb(34, 197, 94) !important;
+      }
+      #cv-preview-container .text-blue-600 {
+        color: rgb(37, 99, 235) !important;
       }
       #cv-preview-container .text-white {
         color: rgb(255, 255, 255) !important;
@@ -263,18 +268,18 @@ export default function CVBuilderPage() {
     // Optimize for print
     element.style.width = '210mm'
     element.style.minHeight = '297mm'
-    element.style.padding = '20px'
-    element.style.backgroundColor = 'rgb(255, 255, 255)'
+    element.style.padding = '0'
+    element.style.backgroundColor = 'white'
     element.style.position = 'relative'
 
     try {
-      // Wait for styles to apply
-      await new Promise(resolve => setTimeout(resolve, 200))
+      // Wait for styles to apply and images to load
+      await new Promise(resolve => setTimeout(resolve, 500))
 
-      // Use html-to-image which supports modern CSS better
-      const dataUrl = await toJpeg(element, {
-        quality: 0.95,
-        pixelRatio: 2,
+      // Use PNG for higher quality text rendering
+      const dataUrl = await toPng(element, {
+        quality: 1.0,
+        pixelRatio: 3, // 3x resolution for crisp text
         backgroundColor: '#ffffff'
       })
 
@@ -282,7 +287,6 @@ export default function CVBuilderPage() {
       const pdfWidth = pdf.internal.pageSize.getWidth()
       const pdfHeight = pdf.internal.pageSize.getHeight()
 
-      // Create an image to get dimensions
       const img = document.createElement('img')
       await new Promise<void>((resolve, reject) => {
         img.onload = () => resolve()
@@ -295,45 +299,35 @@ export default function CVBuilderPage() {
       const ratio = imgWidth / pdfWidth
       const totalPdfHeight = imgHeight / ratio
 
-      // Handle multiple pages if content is long
       let heightLeft = totalPdfHeight
       let position = 0
 
-      pdf.addImage(dataUrl, 'JPEG', 0, position, pdfWidth, totalPdfHeight)
+      pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, totalPdfHeight)
       heightLeft -= pdfHeight
 
       while (heightLeft > 0) {
         position -= pdfHeight
         pdf.addPage()
-        pdf.addImage(dataUrl, 'JPEG', 0, position, pdfWidth, totalPdfHeight)
+        pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, totalPdfHeight)
         heightLeft -= pdfHeight
       }
 
+      // Metadata
+      pdf.setProperties({
+        title: `CV - ${personalInfo.fullName}`,
+        subject: `CareerPilot Verified CV`,
+        creator: 'CareerPilot Salone'
+      })
+
       const fileName = personalInfo.fullName
-        ? `CV_${personalInfo.fullName.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`
-        : 'CareerPilot_CV.pdf'
+        ? `CV_${personalInfo.fullName.replace(/[^a-zA-Z0-9]/g, '_')}_Verified.pdf`
+        : 'CareerPilot_CV_Verified.pdf'
 
       pdf.save(fileName)
+
     } catch (err: any) {
       console.error("PDF generation failed:", err)
-      // Fallback: try simpler approach
-      try {
-        const simplePdf = new jsPDF()
-        simplePdf.setFontSize(16)
-        simplePdf.text(personalInfo.fullName || "Your CV", 20, 20)
-        simplePdf.setFontSize(12)
-        simplePdf.text(personalInfo.title || "", 20, 30)
-        simplePdf.text(`Email: ${personalInfo.email || ""}`, 20, 45)
-        simplePdf.text(`Phone: ${personalInfo.phone || ""}`, 20, 55)
-        simplePdf.text(`Location: ${personalInfo.location || ""}`, 20, 65)
-        simplePdf.text("Summary:", 20, 80)
-        const summaryLines = simplePdf.splitTextToSize(personalInfo.summary || "", 170)
-        simplePdf.text(summaryLines, 20, 90)
-        simplePdf.save('CareerPilot_CV_Basic.pdf')
-        alert("Generated a basic PDF. For best results, try using Chrome browser.")
-      } catch (fallbackErr) {
-        alert("PDF generation failed. Please try using a different browser or take a screenshot instead.")
-      }
+      alert("PDF generation encountered an error. Please try again or use a modern desktop browser.")
     } finally {
       // Cleanup
       element.style.cssText = originalStyle
@@ -714,19 +708,58 @@ export default function CVBuilderPage() {
                 <TabsContent value="skills">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Skills & Languages</CardTitle>
-                      <CardDescription>Enter values separated by commas</CardDescription>
+                      <CardTitle>Skills & Verification</CardTitle>
+                      <CardDescription>Add your top skills. Verified skills appear with a blue checkmark.</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-6">
                       <div className="space-y-2">
-                        <Label>Skills</Label>
+                        <Label>Skills (Comma Separated)</Label>
                         <Textarea
                           rows={4}
                           value={skills}
                           onChange={(e) => setSkills(e.target.value)}
-                          placeholder="Leadership, Communication, Python, Project Management..."
+                          placeholder="Microsoft Excel, Customer Service, Project Management..."
                         />
                       </div>
+
+                      {/* Verification Section */}
+                      <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <div className="flex items-start gap-3">
+                          <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
+                            <BadgeCheck className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-blue-900 text-sm">Get Skills Verified</h4>
+                            <p className="text-xs text-blue-700 mb-3 leading-relaxed">
+                              Take a short 5-minute quiz to earn a "Verified" badge for skills like Excel, English, or Sales.
+                              Employers trust verified candidates 3x more.
+                            </p>
+                            <Button
+                              size="sm"
+                              className="bg-blue-600 hover:bg-blue-700 text-white border-none shadow-none"
+                              onClick={() => {
+                                setIsVerifying(true)
+                                setTimeout(() => {
+                                  setIsVerifying(false)
+                                  // Mock adding a verified skill
+                                  if (!skills.includes("Customer Service")) {
+                                    setSkills(prev => prev ? `${prev}, Customer Service` : "Customer Service")
+                                  }
+                                  if (!verifiedSkills.includes("Customer Service")) {
+                                    setVerifiedSkills([...verifiedSkills, "Customer Service"])
+                                  }
+                                  alert("Simulating Quiz... Success! 'Customer Service' is now verified.")
+                                }, 1500)
+                              }}
+                              disabled={isVerifying}
+                            >
+                              {isVerifying ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+                              {isVerifying ? "Verifying..." : "Take Skill Assessment"}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="space-y-2">
                         <Label>Languages</Label>
                         <Input value={languages} onChange={(e) => setLanguages(e.target.value)} placeholder="English, Krio, French..." />
@@ -905,10 +938,21 @@ export default function CVBuilderPage() {
                           <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
                             Skills
                           </h3>
-                          <ul className="space-y-2 text-[12px] text-slate-700 font-medium list-disc list-inside">
-                            {skills.split(',').filter(s => s.trim()).map((s, i) => (
-                              <li key={i}>{s.trim()}</li>
-                            ))}
+                          <ul className="space-y-2 text-[12px] text-slate-700 font-medium">
+                            {skills.split(',').filter(s => s.trim()).map((s, i) => {
+                              const skillName = s.trim()
+                              const isVerified = verifiedSkills.some(vs => vs.toLowerCase() === skillName.toLowerCase())
+                              return (
+                                <li key={i} className="flex items-center justify-between">
+                                  <span>{skillName}</span>
+                                  {isVerified && (
+                                    <div className="flex items-center text-blue-600" title="Verified by CareerPilot">
+                                      <BadgeCheck className="w-3.5 h-3.5" />
+                                    </div>
+                                  )}
+                                </li>
+                              )
+                            })}
                           </ul>
                         </div>
                       )}
