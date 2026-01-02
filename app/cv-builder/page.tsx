@@ -209,15 +209,32 @@ export default function CVBuilderPage() {
   }
 
   const handleDownload = async () => {
-    if (!cvPreviewRef.current) {
-      alert("CV preview not found. Please ensure content is loaded.")
+    let element = cvPreviewRef.current
+    let wasHidden = false;
+
+    if (!element) {
+      console.log("CV Preview is hidden. Temporarily showing for download...")
+      setShowPreview(true)
+      wasHidden = true
+
+      // Wait for React to render the component
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Re-acquire the ref
+      element = cvPreviewRef.current
+    }
+
+    if (!element) {
+      alert("CV preview reference not found. Please click 'Show Preview' and try again.")
+      if (wasHidden) setShowPreview(false)
       return
     }
 
-    const element = cvPreviewRef.current
     const originalStyle = element.style.cssText
+    const originalWidth = element.style.width
+    const originalHeight = element.style.minHeight
 
-    // Create a style override to force RGB colors for html2canvas compatibility
+    // Create a style override to force RGB colors and exact printing
     const styleEl = document.createElement('style')
     styleEl.id = 'pdf-color-override'
     styleEl.innerHTML = `
@@ -261,26 +278,34 @@ export default function CVBuilderPage() {
     `
     document.head.appendChild(styleEl)
 
-    // Add ID to element for targeting
+    // Add ID to element for targeting if needed, though we primarily use the element ref
     const hadId = element.id
     element.id = 'cv-preview-container'
 
-    // Optimize for print
+    // Force specific dimensions for A4 PDF quality
     element.style.width = '210mm'
     element.style.minHeight = '297mm'
     element.style.padding = '0'
     element.style.backgroundColor = 'white'
     element.style.position = 'relative'
+    element.style.margin = '0'
+    element.style.overflow = 'hidden'
 
     try {
-      // Wait for styles to apply and images to load
+      // Wait for styles to settle
       await new Promise(resolve => setTimeout(resolve, 500))
 
-      // Use PNG for higher quality text rendering
+      // Use PNG for high quality text rendering
       const dataUrl = await toPng(element, {
         quality: 1.0,
-        pixelRatio: 3, // 3x resolution for crisp text
-        backgroundColor: '#ffffff'
+        pixelRatio: 4, // 4x resolution for crisp text
+        backgroundColor: '#ffffff',
+        width: 794, // 210mm at 96 DPI approx
+        height: 1123, // 297mm at 96 DPI approx
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left'
+        }
       })
 
       const pdf = new jsPDF('p', 'mm', 'a4')
@@ -302,9 +327,11 @@ export default function CVBuilderPage() {
       let heightLeft = totalPdfHeight
       let position = 0
 
+      // Add first page
       pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, totalPdfHeight)
       heightLeft -= pdfHeight
 
+      // Add subsequent pages if content overflows
       while (heightLeft > 0) {
         position -= pdfHeight
         pdf.addPage()
@@ -316,7 +343,8 @@ export default function CVBuilderPage() {
       pdf.setProperties({
         title: `CV - ${personalInfo.fullName}`,
         subject: `CareerPilot Verified CV`,
-        creator: 'CareerPilot Salone'
+        creator: 'CareerPilot Salone',
+        author: personalInfo.fullName
       })
 
       const fileName = personalInfo.fullName
@@ -331,9 +359,17 @@ export default function CVBuilderPage() {
     } finally {
       // Cleanup
       element.style.cssText = originalStyle
+      // Restore original specific styles if they were overwritten and not part of cssText
+      element.style.width = originalWidth
+      element.style.minHeight = originalHeight
+
       if (!hadId) element.removeAttribute('id')
       else element.id = hadId
       document.getElementById('pdf-color-override')?.remove()
+
+      if (wasHidden) {
+        setShowPreview(false)
+      }
     }
   }
 
