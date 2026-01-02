@@ -891,276 +891,283 @@ export default function CVBuilderPage() {
 
             {/* Preview Section */}
             {showPreview && (
-              <div className="lg:sticky lg:top-24 h-fit">
-                <div
-                  ref={cvPreviewRef}
-                  className="bg-white shadow-2xl border border-slate-200 overflow-hidden min-h-[1122px] w-full text-slate-800 flex flex-col font-sans"
-                  style={{ fontFamily: "'Inter', system-ui, sans-serif" }}
-                >
-                  {/* TWO-TONE HEADER */}
-                  <div className="flex w-full">
-                    <div className="w-[32%] bg-[#e7e7e7]" />
-                    <div className="flex-1 bg-[#333b47] text-white p-12 py-16 flex flex-col justify-center">
-                      <h1 className="text-4xl font-bold uppercase tracking-[0.2em] mb-1">
-                        {personalInfo.fullName}
-                      </h1>
-                      <p className="text-lg text-slate-300 font-medium tracking-[0.1em] uppercase">
-                        {personalInfo.title}
-                      </p>
+              <div className="lg:fixed lg:top-0 lg:right-0 lg:h-screen lg:w-[50%] lg:bg-slate-50 lg:z-50 lg:overflow-y-auto lg:p-8 lg:border-l lg:border-slate-200 xl:static xl:h-auto xl:w-auto xl:bg-transparent xl:border-none xl:overflow-visible xl:p-0">
+                <div className="sticky top-24 overflow-x-auto pb-8 flex justify-center">
+                  <div
+                    ref={cvPreviewRef}
+                    id="cv-preview-container"
+                    className="bg-white shadow-2xl border border-slate-200 overflow-hidden text-slate-800 flex flex-col font-sans shrink-0"
+                    style={{
+                      fontFamily: "'Inter', system-ui, sans-serif",
+                      width: '210mm',
+                      minHeight: '297mm'
+                    }}
+                  >
+                    {/* TWO-TONE HEADER */}
+                    <div className="flex w-full">
+                      <div className="w-[32%] bg-[#e7e7e7]" />
+                      <div className="flex-1 bg-[#333b47] text-white p-12 py-16 flex flex-col justify-center">
+                        <h1 className="text-4xl font-bold uppercase tracking-[0.2em] mb-1">
+                          {personalInfo.fullName}
+                        </h1>
+                        <p className="text-lg text-slate-300 font-medium tracking-[0.1em] uppercase">
+                          {personalInfo.title}
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex flex-1 relative min-h-0">
-                    {/* Floating Profile Photo - Circular & Overlapping */}
-                    <div className="absolute top-[-80px] left-[16%] -translate-x-1/2 z-20">
-                      <div className="w-48 h-48 rounded-full border-[8px] border-white shadow-xl overflow-hidden bg-slate-200 flex items-center justify-center">
-                        {profilePhoto ? (
-                          <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
-                        ) : (
-                          <User className="w-20 h-20 text-slate-400" />
+                    <div className="flex flex-1 relative min-h-0">
+                      {/* Floating Profile Photo - Circular & Overlapping */}
+                      <div className="absolute top-[-80px] left-[16%] -translate-x-1/2 z-20">
+                        <div className="w-48 h-48 rounded-full border-[8px] border-white shadow-xl overflow-hidden bg-slate-200 flex items-center justify-center">
+                          {profilePhoto ? (
+                            <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="w-20 h-20 text-slate-400" />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Left Sidebar (Light Gray) */}
+                      <div className="w-[32%] bg-[#e7e7e7] p-8 pt-32 flex flex-col gap-10">
+                        {/* Contact Info */}
+                        <div className="space-y-6">
+                          <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5 flex items-center gap-2">
+                            Contact
+                          </h3>
+                          <div className="space-y-4 text-[12px] text-slate-700 font-medium">
+                            {personalInfo.phone && (
+                              <div className="flex items-center gap-3">
+                                <Phone className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                                <span>{personalInfo.phone}</span>
+                              </div>
+                            )}
+                            {personalInfo.email && (
+                              <div className="flex items-center gap-3 break-all">
+                                <Mail className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                                <span>{personalInfo.email}</span>
+                              </div>
+                            )}
+                            {personalInfo.location && (
+                              <div className="flex items-center gap-3">
+                                <MapPin className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                                <span>{personalInfo.location}</span>
+                              </div>
+                            )}
+                            {personalInfo.portfolio && (
+                              <div className="flex items-center gap-3">
+                                <Globe className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                                <span>{personalInfo.portfolio}</span>
+                              </div>
+                            )}
+                            {personalInfo.linkedin && (
+                              <div className="flex items-center gap-3">
+                                <span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px] bg-slate-900 text-white rounded-[2px] shrink-0">in</span>
+                                <span>{personalInfo.linkedin}</span>
+                              </div>
+                            )}
+                            {personalInfo.github && (
+                              <div className="flex items-center gap-3">
+                                <Terminal className="w-3.5 h-3.5 text-slate-900 shrink-0" />
+                                <span>{personalInfo.github}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Skills Section */}
+                        {skills && (
+                          <div className="space-y-6">
+                            <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
+                              Skills
+                            </h3>
+                            <ul className="space-y-2 text-[12px] text-slate-700 font-medium">
+                              {skills.split(',').filter(s => s.trim()).map((s, i) => {
+                                const skillName = s.trim()
+                                const isVerified = verifiedSkills.some(vs => vs.toLowerCase() === skillName.toLowerCase())
+                                return (
+                                  <li key={i} className="flex items-center justify-between">
+                                    <span>{skillName}</span>
+                                    {isVerified && (
+                                      <div className="flex items-center text-blue-600" title="Verified by CareerPilot">
+                                        <BadgeCheck className="w-3.5 h-3.5" />
+                                      </div>
+                                    )}
+                                  </li>
+                                )
+                              })}
+                            </ul>
+                          </div>
                         )}
-                      </div>
-                    </div>
 
-                    {/* Left Sidebar (Light Gray) */}
-                    <div className="w-[32%] bg-[#e7e7e7] p-8 pt-32 flex flex-col gap-10">
-                      {/* Contact Info */}
-                      <div className="space-y-6">
-                        <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5 flex items-center gap-2">
-                          Contact
-                        </h3>
-                        <div className="space-y-4 text-[12px] text-slate-700 font-medium">
-                          {personalInfo.phone && (
-                            <div className="flex items-center gap-3">
-                              <Phone className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{personalInfo.phone}</span>
-                            </div>
-                          )}
-                          {personalInfo.email && (
-                            <div className="flex items-center gap-3 break-all">
-                              <Mail className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{personalInfo.email}</span>
-                            </div>
-                          )}
-                          {personalInfo.location && (
-                            <div className="flex items-center gap-3">
-                              <MapPin className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{personalInfo.location}</span>
-                            </div>
-                          )}
-                          {personalInfo.portfolio && (
-                            <div className="flex items-center gap-3">
-                              <Globe className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{personalInfo.portfolio}</span>
-                            </div>
-                          )}
-                          {personalInfo.linkedin && (
-                            <div className="flex items-center gap-3">
-                              <span className="w-3.5 h-3.5 flex items-center justify-center font-bold text-[10px] bg-slate-900 text-white rounded-[2px] shrink-0">in</span>
-                              <span>{personalInfo.linkedin}</span>
-                            </div>
-                          )}
-                          {personalInfo.github && (
-                            <div className="flex items-center gap-3">
-                              <Terminal className="w-3.5 h-3.5 text-slate-900 shrink-0" />
-                              <span>{personalInfo.github}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                        {/* Languages */}
+                        {languages && (
+                          <div className="space-y-6">
+                            <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
+                              Languages
+                            </h3>
+                            <ul className="space-y-2 text-[12px] text-slate-700 font-medium list-disc list-inside">
+                              {languages.split(',').filter(l => l.trim()).map((l, i) => (
+                                <li key={i}>{l.trim()}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-                      {/* Skills Section */}
-                      {skills && (
-                        <div className="space-y-6">
-                          <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
-                            Skills
-                          </h3>
-                          <ul className="space-y-2 text-[12px] text-slate-700 font-medium">
-                            {skills.split(',').filter(s => s.trim()).map((s, i) => {
-                              const skillName = s.trim()
-                              const isVerified = verifiedSkills.some(vs => vs.toLowerCase() === skillName.toLowerCase())
-                              return (
-                                <li key={i} className="flex items-center justify-between">
-                                  <span>{skillName}</span>
-                                  {isVerified && (
-                                    <div className="flex items-center text-blue-600" title="Verified by CareerPilot">
-                                      <BadgeCheck className="w-3.5 h-3.5" />
-                                    </div>
-                                  )}
-                                </li>
-                              )
-                            })}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* Languages */}
-                      {languages && (
-                        <div className="space-y-6">
-                          <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
-                            Languages
-                          </h3>
-                          <ul className="space-y-2 text-[12px] text-slate-700 font-medium list-disc list-inside">
-                            {languages.split(',').filter(l => l.trim()).map((l, i) => (
-                              <li key={i}>{l.trim()}</li>
+                        {/* References */}
+                        {/* References */}
+                        {references.some(r => r.name) && (
+                          <div className="space-y-6">
+                            <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
+                              Reference
+                            </h3>
+                            {references.map((ref: Reference) => ref.name && (
+                              <div key={ref.id} className="text-[11px] text-slate-700 space-y-1">
+                                <p className="font-bold text-slate-900 text-[12px]">{ref.name}</p>
+                                <p>{ref.role} {ref.company && `/ ${ref.company}`}</p>
+                                {ref.phone && <p>Phone: {ref.phone}</p>}
+                                {ref.email && <p>Email: {ref.email}</p>}
+                              </div>
                             ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* References */}
-                      {/* References */}
-                      {references.some(r => r.name) && (
-                        <div className="space-y-6">
-                          <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 border-b border-slate-400 pb-1.5">
-                            Reference
-                          </h3>
-                          {references.map((ref: Reference) => ref.name && (
-                            <div key={ref.id} className="text-[11px] text-slate-700 space-y-1">
-                              <p className="font-bold text-slate-900 text-[12px]">{ref.name}</p>
-                              <p>{ref.role} {ref.company && `/ ${ref.company}`}</p>
-                              {ref.phone && <p>Phone: {ref.phone}</p>}
-                              {ref.email && <p>Email: {ref.email}</p>}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Main Content Area (White) */}
-                    <div className="flex-1 bg-white p-12 pr-12 md:pl-16 min-w-0">
-
-                      {/* Timeline Line Container */}
-                      <div className="relative h-full">
-                        {/* The long vertical line across all sections */}
-                        <div className="absolute left-[13px] top-[24px] bottom-0 w-[1px] bg-slate-300" />
-
-                        {/* Profile Summary */}
-                        {personalInfo.summary && (
-                          <div className="mb-14 relative z-10 pl-10">
-                            {/* Dot/Icon */}
-                            <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
-                              <User className="w-4 h-4" />
-                            </div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-6 border-b border-slate-200 pb-2">
-                              Profile
-                            </h2>
-                            <p className="text-[12px] leading-[1.8] text-slate-700 text-justify font-medium whitespace-pre-wrap">
-                              {personalInfo.summary}
-                            </p>
                           </div>
                         )}
+                      </div>
 
-                        {/* Experience Section */}
-                        {/* Experience Section */}
-                        {experience.some(e => e.company) && (
-                          <div className="mb-14 relative z-10 pl-10">
-                            <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
-                              <Briefcase className="w-4 h-4" />
-                            </div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
-                              Work Experience
-                            </h2>
-                            <div className="space-y-10">
-                              {experience.map((exp: Experience) => exp.company && (
-                                <div key={exp.id} className="relative">
-                                  {/* Small connector dot on the line */}
-                                  <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
-                                  <div className="flex justify-between items-baseline mb-2">
-                                    <h4 className="font-bold text-[13px] text-slate-900">{exp.company}</h4>
-                                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                                      {exp.startDate} – {exp.current ? 'Present' : exp.endDate}
-                                    </span>
-                                  </div>
-                                  <div className="text-[12px] font-medium text-slate-600 mb-2 italic">{exp.position}</div>
-                                  <p className="text-[11px] text-slate-500 leading-relaxed font-medium whitespace-pre-wrap">
-                                    {exp.description}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                      {/* Main Content Area (White) */}
+                      <div className="flex-1 bg-white p-12 pr-12 md:pl-16 min-w-0">
 
-                        {/* Projects Section */}
-                        {projects.some(p => p.name) && (
-                          <div className="mb-14 relative z-10 pl-10">
-                            <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
-                              <Terminal className="w-4 h-4" />
+                        {/* Timeline Line Container */}
+                        <div className="relative h-full">
+                          {/* The long vertical line across all sections */}
+                          <div className="absolute left-[13px] top-[24px] bottom-0 w-[1px] bg-slate-300" />
+
+                          {/* Profile Summary */}
+                          {personalInfo.summary && (
+                            <div className="mb-14 relative z-10 pl-10">
+                              {/* Dot/Icon */}
+                              <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
+                                <User className="w-4 h-4" />
+                              </div>
+                              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-6 border-b border-slate-200 pb-2">
+                                Profile
+                              </h2>
+                              <p className="text-[12px] leading-[1.8] text-slate-700 text-justify font-medium whitespace-pre-wrap">
+                                {personalInfo.summary}
+                              </p>
                             </div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
-                              Projects
-                            </h2>
-                            <div className="space-y-8">
-                              {projects.map((proj: Project) => proj.name && (
-                                <div key={proj.id} className="relative">
-                                  <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
-                                  <div className="flex justify-between items-baseline mb-2">
-                                    <h4 className="font-bold text-[13px] text-slate-900">{proj.name}</h4>
-                                    {proj.url && <span className="text-[11px] text-slate-500">{proj.url}</span>}
-                                  </div>
-                                  <p className="text-[11px] text-slate-500 leading-relaxed font-medium whitespace-pre-wrap mb-1">
-                                    {proj.description}
-                                  </p>
-                                  {proj.technologies && (
-                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                                      Tech: {proj.technologies}
+                          )}
+
+                          {/* Experience Section */}
+                          {/* Experience Section */}
+                          {experience.some(e => e.company) && (
+                            <div className="mb-14 relative z-10 pl-10">
+                              <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
+                                <Briefcase className="w-4 h-4" />
+                              </div>
+                              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
+                                Work Experience
+                              </h2>
+                              <div className="space-y-10">
+                                {experience.map((exp: Experience) => exp.company && (
+                                  <div key={exp.id} className="relative">
+                                    {/* Small connector dot on the line */}
+                                    <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
+                                    <div className="flex justify-between items-baseline mb-2">
+                                      <h4 className="font-bold text-[13px] text-slate-900">{exp.company}</h4>
+                                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                        {exp.startDate} – {exp.current ? 'Present' : exp.endDate}
+                                      </span>
+                                    </div>
+                                    <div className="text-[12px] font-medium text-slate-600 mb-2 italic">{exp.position}</div>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium whitespace-pre-wrap">
+                                      {exp.description}
                                     </p>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Education Section */}
-                        {education.some(e => e.school) && (
-                          <div className="relative z-10 pl-10">
-                            <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
-                              <GraduationCap className="w-4 h-4" />
-                            </div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
-                              Education
-                            </h2>
-                            <div className="space-y-10">
-                              {education.map((edu: Education) => edu.school && (
-                                <div key={edu.id} className="relative">
-                                  <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
-                                  <div className="flex justify-between items-baseline mb-1">
-                                    <h4 className="font-bold text-[13px] text-slate-900">{edu.degree} in {edu.field}</h4>
-                                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{edu.startYear} – {edu.endYear}</span>
                                   </div>
-                                  <div className="text-[11px] text-slate-600 font-medium">{edu.school}</div>
-                                  {edu.gpa && <div className="text-[11px] font-bold text-slate-400 mt-1">GPA: {edu.gpa}</div>}
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
-                        {/* Certifications Section */}
-                        {certifications.some(c => c.name) && (
-                          <div className="relative z-10 pl-10 mt-14">
-                            <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
-                              <Award className="w-4 h-4" />
-                            </div>
-                            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
-                              Certifications
-                            </h2>
-                            <div className="space-y-6">
-                              {certifications.map((cert: Certification) => cert.name && (
-                                <div key={cert.id} className="relative">
-                                  <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
-                                  <div className="flex justify-between items-baseline mb-1">
-                                    <h4 className="font-bold text-[13px] text-slate-900">{cert.name}</h4>
-                                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{cert.date}</span>
+                          {/* Projects Section */}
+                          {projects.some(p => p.name) && (
+                            <div className="mb-14 relative z-10 pl-10">
+                              <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
+                                <Terminal className="w-4 h-4" />
+                              </div>
+                              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
+                                Projects
+                              </h2>
+                              <div className="space-y-8">
+                                {projects.map((proj: Project) => proj.name && (
+                                  <div key={proj.id} className="relative">
+                                    <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
+                                    <div className="flex justify-between items-baseline mb-2">
+                                      <h4 className="font-bold text-[13px] text-slate-900">{proj.name}</h4>
+                                      {proj.url && <span className="text-[11px] text-slate-500">{proj.url}</span>}
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-medium whitespace-pre-wrap mb-1">
+                                      {proj.description}
+                                    </p>
+                                    {proj.technologies && (
+                                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                        Tech: {proj.technologies}
+                                      </p>
+                                    )}
                                   </div>
-                                  <div className="text-[11px] text-slate-600 font-medium">{cert.issuer}</div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+
+                          {/* Education Section */}
+                          {education.some(e => e.school) && (
+                            <div className="relative z-10 pl-10">
+                              <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
+                                <GraduationCap className="w-4 h-4" />
+                              </div>
+                              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
+                                Education
+                              </h2>
+                              <div className="space-y-10">
+                                {education.map((edu: Education) => edu.school && (
+                                  <div key={edu.id} className="relative">
+                                    <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
+                                    <div className="flex justify-between items-baseline mb-1">
+                                      <h4 className="font-bold text-[13px] text-slate-900">{edu.degree} in {edu.field}</h4>
+                                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{edu.startYear} – {edu.endYear}</span>
+                                    </div>
+                                    <div className="text-[11px] text-slate-600 font-medium">{edu.school}</div>
+                                    {edu.gpa && <div className="text-[11px] font-bold text-slate-400 mt-1">GPA: {edu.gpa}</div>}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Certifications Section */}
+                          {certifications.some(c => c.name) && (
+                            <div className="relative z-10 pl-10 mt-14">
+                              <div className="absolute left-[-26px] top-0 w-8 h-8 rounded-full bg-white border border-slate-800 flex items-center justify-center text-slate-800">
+                                <Award className="w-4 h-4" />
+                              </div>
+                              <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-slate-900 mb-8 border-b border-slate-200 pb-2">
+                                Certifications
+                              </h2>
+                              <div className="space-y-6">
+                                {certifications.map((cert: Certification) => cert.name && (
+                                  <div key={cert.id} className="relative">
+                                    <div className="absolute left-[-31px] top-[8px] w-1.5 h-1.5 rounded-full bg-slate-400" />
+                                    <div className="flex justify-between items-baseline mb-1">
+                                      <h4 className="font-bold text-[13px] text-slate-900">{cert.name}</h4>
+                                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{cert.date}</span>
+                                    </div>
+                                    <div className="text-[11px] text-slate-600 font-medium">{cert.issuer}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
