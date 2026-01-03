@@ -102,7 +102,7 @@ export async function POST(req: Request) {
         console.log(`Generating clean roadmap for: ${trimmedCareer}`);
 
         const result = await generateObject({
-            model: google('gemini-1.5-flash'),
+            model: google('gemini-1.5-pro'),
             schema: roadmapSchema,
             system: getSystemPrompt(trimmedCareer, educationLevel, skills, interests, goals),
             prompt: `Generate a Clean & Focused career roadmap for ${trimmedCareer} in Sierra Leone.`,
@@ -117,6 +117,7 @@ export async function POST(req: Request) {
 
     } catch (error: any) {
         console.error('Error generating roadmap:', error);
+        if (error.cause) console.error('Error cause:', error.cause);
         return new Response(JSON.stringify({
             error: 'generation_failed',
             message: 'Unable to generate roadmap. Please try again.',
