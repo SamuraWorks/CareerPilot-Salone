@@ -13,9 +13,11 @@
 
   /* LOCKED THEME - DO NOT MODIFY */
   /* Exact colors from reference screenshot */
-  --primary: 221 83% 53%; /* #2563EB */
+  --primary: 221 83% 53%;
+  /* #2563EB */
   --primary-foreground: 0 0% 100%;
-  --secondary: 145 71% 42%; /* #1FB65E */
+  --secondary: 145 71% 42%;
+  /* #1FB65E */
   --secondary-foreground: 0 0% 100%;
 
   --muted: 210 40% 96.1%;
@@ -85,8 +87,8 @@
 }
 
 @theme inline {
-  --font-sans: "Geist", "Geist Fallback";
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
