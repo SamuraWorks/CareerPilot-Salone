@@ -110,6 +110,7 @@ export async function POST(req: Request) {
                     { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
                 ]
             }),
+            mode: 'json',
             schema: roadmapSchema,
             system: getSystemPrompt(trimmedCareer, educationLevel, skills, interests, goals),
             prompt: `Generate a Clean & Focused career roadmap for ${trimmedCareer} in Sierra Leone. Keep it brief.`,
