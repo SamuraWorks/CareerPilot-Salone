@@ -2,8 +2,8 @@ import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 
-// Maximum duration for the API route
-export const maxDuration = 60;
+// Use Edge Runtime for longer timeout support
+export const runtime = 'edge';
 
 // Clean & Focused Schema
 const roadmapSchema = z.object({
@@ -102,11 +102,17 @@ export async function POST(req: Request) {
         console.log(`Generating clean roadmap for: ${trimmedCareer}`);
 
         const result = await generateObject({
-            // Revert to Flash for speed (avoid 10s Vercel timeout)
-            model: google('gemini-1.5-flash'),
+            model: google('gemini-1.5-flash', {
+                safetySettings: [
+                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                ]
+            }),
             schema: roadmapSchema,
             system: getSystemPrompt(trimmedCareer, educationLevel, skills, interests, goals),
-            prompt: `Generate a Clean & Focused career roadmap for ${trimmedCareer} in Sierra Leone.`,
+            prompt: `Generate a Clean & Focused career roadmap for ${trimmedCareer} in Sierra Leone. Keep it brief.`,
         });
 
         console.log('Clean roadmap generation successful');
