@@ -73,44 +73,36 @@ Make it actionable, encouraging, and local. If data is unknown, give the best lo
 }
 
 export async function POST(req: Request) {
+    const body = await req.json();
+    const {
+        career,
+        educationLevel = 'Secondary School',
+        skills = 'Basic computer literacy',
+        interests = 'Technology and problem solving',
+        goals = 'Career start and job readiness'
+    } = body;
+
+    // Validate input
+    if (!career || typeof career !== 'string' || career.trim().length === 0) {
+        return new Response(JSON.stringify({
+            error: 'Invalid input',
+            message: 'Career field is required.'
+        }), { status: 400 });
+    }
+
+    const trimmedCareer = career.trim();
+    if (trimmedCareer.length > 100) {
+        return new Response(JSON.stringify({
+            error: 'Invalid input',
+            message: 'Career name is too long.'
+        }), { status: 400 });
+    }
+
     try {
-        const body = await req.json();
-        const {
-            career,
-            educationLevel = 'Secondary School',
-            skills = 'Basic computer literacy',
-            interests = 'Technology and problem solving',
-            goals = 'Career start and job readiness'
-        } = body;
-
-        // Validate input
-        if (!career || typeof career !== 'string' || career.trim().length === 0) {
-            return new Response(JSON.stringify({
-                error: 'Invalid input',
-                message: 'Career field is required.'
-            }), { status: 400 });
-        }
-
-        const trimmedCareer = career.trim();
-        if (trimmedCareer.length > 100) {
-            return new Response(JSON.stringify({
-                error: 'Invalid input',
-                message: 'Career name is too long.'
-            }), { status: 400 });
-        }
-
         console.log(`Generating clean roadmap for: ${trimmedCareer}`);
 
         const result = await generateObject({
-            model: google('gemini-1.5-flash', {
-                safetySettings: [
-                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-                ]
-            }),
-            mode: 'json',
+            model: google('gemini-1.5-flash'),
             schema: roadmapSchema,
             system: getSystemPrompt(trimmedCareer, educationLevel, skills, interests, goals),
             prompt: `Generate a Clean & Focused career roadmap for ${trimmedCareer} in Sierra Leone. Keep it brief.`,
