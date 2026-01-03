@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { toPng } from "html-to-image"
 import jsPDF from "jspdf"
 import { DashboardLayout } from "@/components/dashboard-layout"
@@ -19,7 +20,8 @@ import {
   User,
   HelpCircle,
   ChevronRight,
-  Download
+  Download,
+  ArrowLeft
 } from "lucide-react"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
@@ -63,6 +65,7 @@ interface DetailedRoadmapData {
 }
 
 export default function RoadmapPage() {
+  const router = useRouter()
   const { user, session } = useAuth()
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -196,30 +199,41 @@ export default function RoadmapPage() {
   // --- RENDER ---
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 min-h-screen bg-slate-50 font-sans text-slate-900">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 space-y-6 sm:space-y-8 min-h-screen bg-slate-50 font-sans text-slate-900">
+
+        {/* BACK BUTTON */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => router.push('/dashboard')}
+          className="mb-4 hover:bg-slate-100 transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          Back to Dashboard
+        </Button>
 
         {/* TABS FOR GENERATOR / HISTORY */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border rounded-xl p-1 h-12 shadow-sm">
-            <TabsTrigger value="generator" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium">New Roadmap</TabsTrigger>
-            <TabsTrigger value="history" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium">My History</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 mb-6 sm:mb-8 bg-white border rounded-xl p-1 h-11 sm:h-12 shadow-sm">
+            <TabsTrigger value="generator" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium text-sm sm:text-base">New Roadmap</TabsTrigger>
+            <TabsTrigger value="history" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium text-sm sm:text-base">My History</TabsTrigger>
           </TabsList>
 
           <TabsContent value="generator" className="space-y-8 animate-in fade-in duration-500">
 
             {/* SEARCH INPUT */}
             {!displayedRoadmap && (
-              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm text-center px-6">
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                  <MapIcon className="w-8 h-8 text-blue-600" />
+              <div className="flex flex-col items-center justify-center py-12 sm:py-16 md:py-20 bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm text-center px-4 sm:px-6">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 sm:mb-6">
+                  <MapIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
                 </div>
-                <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Where do you want to go?</h1>
-                <p className="text-slate-500 mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 12-week plan.</p>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3 tracking-tight">Where do you want to go?</h1>
+                <p className="text-sm sm:text-base text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 12-week plan.</p>
 
-                <div className="flex w-full max-w-md gap-3">
+                <div className="flex flex-col sm:flex-row w-full max-w-md gap-3">
                   <Input
                     placeholder="E.g. Civil Engineer..."
-                    className="h-12 text-lg bg-slate-50 border-slate-200 focus:bg-white transition-all"
+                    className="h-11 sm:h-12 text-base sm:text-lg bg-slate-50 border-slate-200 focus:bg-white transition-all"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
@@ -228,7 +242,7 @@ export default function RoadmapPage() {
                     size="lg"
                     onClick={handleGenerate}
                     disabled={isLoading || !query}
-                    className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-md hover:shadow-lg shadow-blue-200"
+                    className="h-11 sm:h-12 w-full sm:w-auto px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-md hover:shadow-lg shadow-blue-200"
                   >
                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                   </Button>
@@ -438,16 +452,16 @@ export default function RoadmapPage() {
                 </div>
 
                 {/* 9. FLOATING ACTION BAR */}
-                <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-center gap-3 z-50">
-                  <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 font-semibold gap-2" onClick={handleSave} disabled={isSaving}>
+                <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 bg-white/95 backdrop-blur-md border-t border-slate-200 flex justify-center gap-2 sm:gap-3 z-50 shadow-lg">
+                  <Button variant="outline" size="lg" className="rounded-full px-4 sm:px-6 md:px-8 font-semibold gap-2 h-11 sm:h-12" onClick={handleSave} disabled={isSaving}>
                     {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                     <span className="hidden sm:inline">Save</span>
                   </Button>
-                  <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 font-semibold gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200" onClick={handleDownloadPDF}>
+                  <Button variant="outline" size="lg" className="rounded-full px-4 sm:px-6 md:px-8 font-semibold gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 h-11 sm:h-12" onClick={handleDownloadPDF}>
                     <Download className="w-4 h-4" />
                     <span className="hidden sm:inline">Download PDF</span>
                   </Button>
-                  <Button variant="ghost" size="lg" className="rounded-full px-4 text-slate-500">
+                  <Button variant="ghost" size="lg" className="rounded-full px-3 sm:px-4 text-slate-500 h-11 sm:h-12">
                     <HelpCircle className="w-5 h-5" />
                   </Button>
                 </div>
