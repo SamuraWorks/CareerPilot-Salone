@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { toPng } from "html-to-image"
+import jsPDF from "jspdf"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +18,8 @@ import {
   Map as MapIcon,
   User,
   HelpCircle,
-  ChevronRight
+  ChevronRight,
+  Download
 } from "lucide-react"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
@@ -60,7 +63,7 @@ interface DetailedRoadmapData {
 }
 
 export default function RoadmapPage() {
-  const { user } = useAuth()
+  const { user, session } = useAuth()
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [displayedRoadmap, setDisplayedRoadmap] = useState<DetailedRoadmapData | null>(null)
@@ -115,7 +118,11 @@ export default function RoadmapPage() {
 
   // --- SAVE ---
   const handleSave = async () => {
-    if (!displayedRoadmap || !user) {
+    if (!displayedRoadmap) {
+      toast.error("No roadmap to save.");
+      return;
+    }
+    if (!user) {
       toast.error("You must be logged in to save roadmaps.");
       return;
     }
@@ -123,7 +130,10 @@ export default function RoadmapPage() {
     try {
       const res = await fetch('/api/roadmaps', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`
+        },
         body: JSON.stringify({
           career: query || displayedRoadmap.title,
           title: displayedRoadmap.title,
@@ -132,14 +142,54 @@ export default function RoadmapPage() {
         })
       });
 
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Save failed");
+      }
 
-      toast.success("Roadmap saved to history");
-      loadHistory();
-    } catch (e) {
-      toast.error("Failed to save roadmap");
+      toast.success("Roadmap saved to history!");
+      await loadHistory();
+      setActiveTab("history");
+    } catch (e: any) {
+      console.error('Save error:', e);
+      toast.error(e.message || "Failed to save roadmap");
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  // --- DOWNLOAD PDF ---
+  const handleDownloadPDF = async () => {
+    if (!roadmapRef.current || !displayedRoadmap) {
+      toast.error("No roadmap to download");
+      return;
+    }
+
+    try {
+      toast.info("Generating PDF...");
+
+      const dataUrl = await toPng(roadmapRef.current, {
+        quality: 0.95,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff'
+      });
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (roadmapRef.current.offsetHeight * imgWidth) / roadmapRef.current.offsetWidth;
+
+      pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`${displayedRoadmap.title.replace(/\s+/g, '_')}_Roadmap.pdf`);
+
+      toast.success("PDF downloaded successfully!");
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error("Failed to generate PDF");
     }
   }
 
@@ -388,9 +438,14 @@ export default function RoadmapPage() {
                 </div>
 
                 {/* 9. FLOATING ACTION BAR */}
-                <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-center gap-4 z-50">
-                  <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold gap-2" onClick={handleSave}>
-                    <Save className="w-4 h-4" /> Save
+                <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-center gap-3 z-50">
+                  <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 font-semibold gap-2" onClick={handleSave} disabled={isSaving}>
+                    {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                    <span className="hidden sm:inline">Save</span>
+                  </Button>
+                  <Button variant="outline" size="lg" className="rounded-full px-6 sm:px-8 font-semibold gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200" onClick={handleDownloadPDF}>
+                    <Download className="w-4 h-4" />
+                    <span className="hidden sm:inline">Download PDF</span>
                   </Button>
                   <Button variant="ghost" size="lg" className="rounded-full px-4 text-slate-500">
                     <HelpCircle className="w-5 h-5" />
