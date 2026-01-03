@@ -1,6 +1,12 @@
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { z } from 'zod';
+
+// Initialize Google AI with the provided key (Temporary Fix for Deployment)
+// TODO: Move this to Vercel Environment Variables for security
+const google = createGoogleGenerativeAI({
+    apiKey: 'AIzaSyAqIESOc2NbSVsgv2UuMdzyOBgiHQ72lhY' // User provided key
+});
 
 // Use Edge Runtime for longer timeout support
 export const runtime = 'edge';
