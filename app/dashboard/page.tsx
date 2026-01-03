@@ -22,7 +22,8 @@ import {
   Map,
   Quote,
   TrendingUp,
-  Zap
+  Zap,
+  Search
 } from "lucide-react"
 
 interface UserProfile {
@@ -132,18 +133,13 @@ export default function DashboardPage() {
                   <span className="sm:hidden">CV</span>
                 </Button>
               </Link>
-              {/* INTERACTIVE VELOCITY CARD */}
-              <div className="h-16 sm:h-20 w-full rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#1fb65e]/20 to-[#0072bc]/20 backdrop-blur-xl border border-white/30 p-2 sm:p-4 flex items-center justify-between group cursor-help transition-all hover:border-white/50">
-                <div className="space-y-0.5">
-                  <div className="text-[8px] sm:text-[9px] font-black text-white/60 uppercase tracking-widest">Velocity</div>
-                  <div className="text-lg sm:text-xl font-black text-white flex items-center gap-1 sm:gap-2">
-                    85% <TrendingUp className="w-3 sm:w-4 h-3 sm:h-4 text-green-400 animate-bounce" />
-                  </div>
-                </div>
-                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 border-white/20 flex items-center justify-center">
-                  <Zap className="w-4 sm:w-5 h-4 sm:h-5 text-yellow-400 fill-yellow-400" />
-                </div>
-              </div>
+              <Link href="/careers">
+                <Button className="h-16 sm:h-20 w-full rounded-xl sm:rounded-2xl bg-white/10 hover:bg-white backdrop-blur-md text-white hover:text-slate-900 border border-white/20 font-black uppercase text-[8px] sm:text-[10px] tracking-[0.15em] sm:tracking-[0.2em] transition-all group/btn shadow-2xl">
+                  <Search className="mr-1 sm:mr-3 w-4 sm:w-5 h-4 sm:h-5 text-yellow-400 group-hover/btn:text-yellow-600" />
+                  <span className="hidden sm:inline">Browse Careers</span>
+                  <span className="sm:hidden">Browse</span>
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

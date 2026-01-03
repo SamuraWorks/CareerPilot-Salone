@@ -20,7 +20,8 @@ import {
   HelpCircle,
   ChevronRight,
   Bell,
-  Zap
+  Zap,
+  Search
 } from "lucide-react"
 import {
   Sheet,
@@ -39,6 +40,7 @@ const MENU_GROUPS = [
     items: [
       { label: "Career Test", href: "/aptitude-test", icon: FileText },
       { label: "My Career Roadmap", href: "/roadmap", icon: Compass },
+      { label: "Browse Careers", href: "/careers", icon: Search },
       { label: "AI Career Advisor", href: "#", icon: Brain, onClick: () => window.dispatchEvent(new CustomEvent('openCareerAdvisor')) },
       { label: "Career Mentors", href: "/mentorship", icon: Users },
     ]
