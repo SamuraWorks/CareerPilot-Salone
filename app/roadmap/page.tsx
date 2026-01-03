@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { toJpeg } from "html-to-image"
-import jsPDF from "jspdf"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,7 +11,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Save,
-  Search,
   ArrowRight,
   BookOpen,
   Map as MapIcon,
@@ -26,10 +23,16 @@ import { useAuth } from "@/lib/auth-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// --- TYPES ---
-interface CleanRoadmapData {
+// --- TYPES (UPDATED FOR DETAILED SCHEMA) ---
+interface DetailedRoadmapData {
   title: string;
   short_explanation: string;
+  career_details: {
+    description: string;
+    salary_range: string;
+    market_demand: 'High' | 'Medium' | 'Low';
+    responsibilities: string[];
+  };
   why_this_career: {
     reason: string;
     demand_locations: string[];
@@ -46,15 +49,21 @@ interface CleanRoadmapData {
   universities: {
     name: string;
     focus: string;
+    requirements?: string;
   }[];
-  mentor_guidance: string;
+  mentors: {
+    type: string;
+    contact_method: string;
+  }[];
+  opportunities: string[];
+  next_steps: string[];
 }
 
 export default function RoadmapPage() {
   const { user } = useAuth()
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [displayedRoadmap, setDisplayedRoadmap] = useState<CleanRoadmapData | null>(null)
+  const [displayedRoadmap, setDisplayedRoadmap] = useState<DetailedRoadmapData | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([])
   const [activeTab, setActiveTab] = useState("generator")
@@ -155,7 +164,7 @@ export default function RoadmapPage() {
                   <MapIcon className="w-8 h-8 text-blue-600" />
                 </div>
                 <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Where do you want to go?</h1>
-                <p className="text-slate-500 mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 90-day plan.</p>
+                <p className="text-slate-500 mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 12-week plan.</p>
 
                 <div className="flex w-full max-w-md gap-3">
                   <Input
@@ -188,11 +197,11 @@ export default function RoadmapPage() {
               </div>
             )}
 
-            {/* RESULTS DISPLAY - CLEAN & FOCUSED */}
+            {/* RESULTS DISPLAY - DETAILED & FOCUSED */}
             {displayedRoadmap && (
               <div ref={roadmapRef} className="space-y-8 pb-32 animate-in slide-in-from-bottom-4 duration-700">
 
-                {/* 1. HEADER (ONLY THIS) */}
+                {/* 1. HEADER (Detailed) */}
                 <div className="bg-white border text-center p-8 sm:p-12 rounded-3xl shadow-sm space-y-4">
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
                     <MapIcon className="w-3 h-3" /> Career Pathway
@@ -203,41 +212,51 @@ export default function RoadmapPage() {
                   <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-slate-500">
                     <span className="flex items-center gap-1"><User className="w-4 h-4" /> Beginner Level</span>
                     <span className="hidden sm:inline text-slate-300">•</span>
-                    <span className="flex items-center gap-1"><Loader2 className="w-4 h-4" /> 90-Day Starter Plan</span>
+                    <span className="flex items-center gap-1"><Loader2 className="w-4 h-4" /> 12-Week Plan</span>
                     <span className="hidden sm:inline text-slate-300">•</span>
                     <span className="flex items-center gap-1"><MapIcon className="w-4 h-4" /> For Sierra Leone</span>
                   </div>
-                  <div className="max-w-2xl mx-auto pt-4 border-t border-slate-100 mt-6">
+                  <div className="max-w-3xl mx-auto pt-6 border-t border-slate-100 mt-6 space-y-4">
                     <p className="text-lg text-slate-700 font-medium leading-relaxed">
                       {displayedRoadmap.short_explanation}
+                    </p>
+                    {/* Career Details Summary */}
+                    <p className="text-sm text-slate-500 leading-relaxed italic">
+                      {displayedRoadmap.career_details.description}
                     </p>
                   </div>
                 </div>
 
-                {/* 2. WHY THIS CAREER (ONE SHORT BLOCK) */}
-                <Card className="p-8 border-none bg-blue-50/50 space-y-4">
-                  <h3 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Why {displayedRoadmap.title}?</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-                    <div>
-                      <div className="font-semibold text-blue-800 mb-1">Key Context</div>
-                      <p className="text-blue-700 leading-relaxed">{displayedRoadmap.why_this_career.reason}</p>
+                {/* 2. CAREER METRICS (Salary & Demand) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="p-6 bg-blue-600 text-white border-none shadow-lg">
+                    <div className="text-blue-100 text-xs font-bold uppercase tracking-widest mb-1">Estimated Annual Salary</div>
+                    <div className="text-2xl font-bold">{displayedRoadmap.career_details.salary_range}</div>
+                    <div className="text-blue-200 text-sm mt-1">Sierra Leone Average (approx)</div>
+                  </Card>
+                  <Card className="p-6 bg-white border border-slate-200 shadow-sm">
+                    <div className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Market Demand</div>
+                    <div className="flex items-center gap-2">
+                      <div className={`text-2xl font-bold ${displayedRoadmap.career_details.market_demand === 'High' ? 'text-green-600' : 'text-slate-900'}`}>{displayedRoadmap.career_details.market_demand} Demand</div>
+                      {displayedRoadmap.career_details.market_demand === 'High' && <Badge className="bg-green-100 text-green-700 border-green-200">Hot Job</Badge>}
                     </div>
-                    <div>
-                      <div className="font-semibold text-blue-800 mb-1">Demand Locations</div>
-                      <div className="flex flex-wrap gap-2">
-                        {displayedRoadmap.why_this_career.demand_locations.map(loc => (
-                          <Badge key={loc} variant="outline" className="border-blue-200 bg-white text-blue-700 hover:bg-white">{loc}</Badge>
-                        ))}
+                    <div className="text-slate-500 text-sm mt-1">Growth Outlook: {displayedRoadmap.why_this_career.growth_outlook}</div>
+                  </Card>
+                </div>
+
+                {/* 3. KEY RESPONSIBILITIES (New Section) */}
+                <Card className="p-8 bg-white border border-slate-200 shadow-sm space-y-4">
+                  <h3 className="font-bold text-slate-900 text-sm uppercase tracking-widest">Key Responsibilities</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {displayedRoadmap.career_details.responsibilities.map((resp, i) => (
+                      <div key={i} className="flex gap-3 items-start text-sm text-slate-700 border p-3 rounded-xl bg-slate-50">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 shrink-0" /> {resp}
                       </div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-blue-800 mb-1">Outlook</div>
-                      <p className="text-blue-700 leading-relaxed">{displayedRoadmap.why_this_career.growth_outlook}</p>
-                    </div>
+                    ))}
                   </div>
                 </Card>
 
-                {/* 3. ENTRY REQUIREMENTS (CLEAR & REAL) */}
+                {/* 4. ENTRY REQUIREMENTS */}
                 <Card className="p-8 bg-white border border-slate-200 shadow-sm space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="font-bold text-slate-900 text-lg">Minimum Entry Requirements</h3>
@@ -257,29 +276,29 @@ export default function RoadmapPage() {
                   </div>
                 </Card>
 
-                {/* 4. 90-DAY ROADMAP (THE CORE CONTENT) */}
+                {/* 5. 12-WEEK ROADMAP (3 Phases) */}
                 <div className="space-y-6">
                   <div className="flex items-center justify-between px-2">
-                    <h2 className="text-2xl font-black text-slate-900">Your 90-Day Plan</h2>
+                    <h2 className="text-2xl font-black text-slate-900">Your 12-Week Plan</h2>
                     <span className="text-sm font-medium text-slate-500">Step-by-step</span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Phase 1 */}
-                    {displayedRoadmap.phases[0] && (
-                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-blue-500 shadow-md">
+                    {/* Phase Loop */}
+                    {displayedRoadmap.phases.map((phase, i) => (
+                      <Card key={i} className={`flex flex-col overflow-hidden border-t-4 shadow-md ${i === 0 ? 'border-t-blue-500' : i === 1 ? 'border-t-indigo-500' : 'border-t-emerald-500'}`}>
                         <div className="p-6 bg-slate-50 border-b">
-                          <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[0].duration}</div>
-                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[0].name}</h3>
-                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[0].goal}</p>
+                          <div className={`text-xs font-bold uppercase tracking-widest mb-1 ${i === 0 ? 'text-blue-600' : i === 1 ? 'text-indigo-600' : 'text-emerald-600'}`}>{phase.duration}</div>
+                          <h3 className="text-xl font-bold text-slate-900">{phase.name}</h3>
+                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {phase.goal}</p>
                         </div>
                         <div className="p-6 space-y-6 flex-1 bg-white">
                           <div>
                             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
                             <ul className="space-y-2">
-                              {displayedRoadmap.phases[0].what_you_will_learn.map((item, i) => (
-                                <li key={i} className="text-sm text-slate-700 flex gap-2">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" /> {item}
+                              {phase.what_you_will_learn.map((item, j) => (
+                                <li key={j} className="text-sm text-slate-700 flex gap-2">
+                                  <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${i === 0 ? 'bg-blue-400' : i === 1 ? 'bg-indigo-400' : 'bg-emerald-400'}`} /> {item}
                                 </li>
                               ))}
                             </ul>
@@ -287,86 +306,20 @@ export default function RoadmapPage() {
                           <div>
                             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
                             <ul className="space-y-2">
-                              {displayedRoadmap.phases[0].what_you_must_do.map((item, i) => (
-                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
-                                  <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 shrink-0" /> {item}
+                              {phase.what_you_must_do.map((item, j) => (
+                                <li key={j} className="text-sm font-medium text-slate-900 flex gap-2">
+                                  <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${i === 0 ? 'text-green-500' : i === 1 ? 'text-indigo-500' : 'text-emerald-500'}`} /> {item}
                                 </li>
                               ))}
                             </ul>
                           </div>
                         </div>
                       </Card>
-                    )}
-
-                    {/* Phase 2 */}
-                    {displayedRoadmap.phases[1] && (
-                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-indigo-500 shadow-md">
-                        <div className="p-6 bg-slate-50 border-b">
-                          <div className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[1].duration}</div>
-                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[1].name}</h3>
-                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[1].goal}</p>
-                        </div>
-                        <div className="p-6 space-y-6 flex-1 bg-white">
-                          <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
-                            <ul className="space-y-2">
-                              {displayedRoadmap.phases[1].what_you_will_learn.map((item, i) => (
-                                <li key={i} className="text-sm text-slate-700 flex gap-2">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
-                            <ul className="space-y-2">
-                              {displayedRoadmap.phases[1].what_you_must_do.map((item, i) => (
-                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
-                                  <CheckCircle2 className="w-4 h-4 text-indigo-500 mt-0.5 shrink-0" /> {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </Card>
-                    )}
-
-                    {/* Phase 3 */}
-                    {displayedRoadmap.phases[2] && (
-                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-emerald-500 shadow-md">
-                        <div className="p-6 bg-slate-50 border-b">
-                          <div className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[2].duration}</div>
-                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[2].name}</h3>
-                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[2].goal}</p>
-                        </div>
-                        <div className="p-6 space-y-6 flex-1 bg-white">
-                          <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
-                            <ul className="space-y-2">
-                              {displayedRoadmap.phases[2].what_you_will_learn.map((item, i) => (
-                                <li key={i} className="text-sm text-slate-700 flex gap-2">
-                                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" /> {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
-                            <ul className="space-y-2">
-                              {displayedRoadmap.phases[2].what_you_must_do.map((item, i) => (
-                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
-                                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" /> {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </Card>
-                    )}
+                    ))}
                   </div>
                 </div>
 
-                {/* 5. UNIVERSITIES (ONLY RELEVANT ONES) */}
+                {/* 6. UNIVERSITIES & TRAINING */}
                 <Card className="p-8 bg-white border border-slate-200 shadow-sm space-y-6">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-slate-100 rounded-lg"><BookOpen className="w-5 h-5 text-slate-600" /></div>
@@ -374,31 +327,68 @@ export default function RoadmapPage() {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {displayedRoadmap.universities.map((uni, i) => (
-                      <div key={i} className="p-4 border rounded-xl hover:bg-slate-50 transition-colors">
+                      <div key={i} className="p-4 border rounded-xl hover:bg-slate-50 transition-colors bg-white">
                         <div className="font-bold text-slate-900">{uni.name}</div>
                         <div className="text-sm text-slate-500 mt-1">{uni.focus}</div>
+                        {uni.requirements && <div className="text-xs text-slate-400 mt-2 pt-2 border-t border-slate-100">{uni.requirements}</div>}
                       </div>
                     ))}
                   </div>
                 </Card>
 
-                {/* 6. MENTOR SUPPORT (OPTIONAL, NOT PUSHED) */}
-                <div className="text-center py-8 space-y-4">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-sm border text-slate-400 mb-2">
-                    <User className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-900">Need Guidance?</h4>
-                    <p className="text-slate-500 text-sm max-w-sm mx-auto mt-1">{displayedRoadmap.mentor_guidance}</p>
-                  </div>
-                  <Button variant="outline" className="rounded-full">Find a Mentor</Button>
+                {/* 7. MENTORS & OPPORTUNITIES (Combined) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Mentors */}
+                  <Card className="p-6 bg-slate-50 border-none">
+                    <div className="flex items-center gap-2 mb-4">
+                      <User className="w-5 h-5 text-slate-600" />
+                      <h4 className="font-bold text-slate-900">Recommended Mentors</h4>
+                    </div>
+                    <ul className="space-y-4">
+                      {displayedRoadmap.mentors.map((mentor, i) => (
+                        <li key={i} className="flex flex-col text-sm border-b border-slate-200 pb-2 last:border-0 last:pb-0">
+                          <span className="font-semibold text-slate-900">{mentor.type}</span>
+                          <span className="text-slate-500">Contact via: <span className="text-blue-600">{mentor.contact_method}</span></span>
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
+
+                  {/* Opportunities */}
+                  <Card className="p-6 bg-slate-50 border-none">
+                    <div className="flex items-center gap-2 mb-4">
+                      <MapIcon className="w-5 h-5 text-slate-600" />
+                      <h4 className="font-bold text-slate-900">Opportunities to Watch</h4>
+                    </div>
+                    <ul className="space-y-3">
+                      {displayedRoadmap.opportunities.map((opp, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                          <div className="w-1.5 h-1.5 rounded-full bg-orange-400 mt-1.5 shrink-0" /> {opp}
+                        </li>
+                      ))}
+                    </ul>
+                  </Card>
                 </div>
 
-                {/* 7. ACTION BUTTONS (MINIMAL) */}
+                {/* 8. NEXT STEPS (ACTION ITEMS) */}
+                <div className="bg-slate-900 text-slate-300 rounded-3xl p-8 sm:p-12 text-center space-y-6">
+                  <h3 className="text-2xl font-bold text-white">Your Next Steps</h3>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    {displayedRoadmap.next_steps.map((step, i) => (
+                      <div key={i} className="bg-slate-800 px-4 py-3 rounded-xl text-sm font-medium hover:bg-slate-700 transition-colors cursor-default border border-slate-700">
+                        {step}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pt-4">
+                    <Button size="lg" className="rounded-full bg-white text-slate-900 hover:bg-slate-200 px-8 font-bold" onClick={handleSave}>
+                      Save This Plan <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* 9. FLOATING ACTION BAR */}
                 <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-center gap-4 z-50">
-                  <Button size="lg" className="rounded-full bg-slate-900 text-white hover:bg-slate-800 px-8 font-semibold">
-                    Continue Roadmap
-                  </Button>
                   <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold gap-2" onClick={handleSave}>
                     <Save className="w-4 h-4" /> Save
                   </Button>
@@ -416,8 +406,8 @@ export default function RoadmapPage() {
             <RoadmapHistory
               roadmaps={savedRoadmaps}
               isLoading={false}
-              onLoad={(r) => { }}
-              onDelete={(id) => { }}
+              onLoad={(r) => { }} // Implement full load if necessary
+              onDelete={(id) => { }} // Implement delete
             />
           </TabsContent>
         </Tabs>
