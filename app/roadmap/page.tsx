@@ -57,8 +57,10 @@ interface DetailedRoadmapData {
     requirements?: string;
   }[];
   mentors: {
-    type: string;
-    contact_method: string;
+    name: string;
+    role: string;
+    help_with: string;
+    contact: string;
   }[];
   opportunities: string[];
   next_steps: string[];
@@ -410,9 +412,14 @@ export default function RoadmapPage() {
                     </div>
                     <ul className="space-y-4">
                       {displayedRoadmap.mentors.map((mentor, i) => (
-                        <li key={i} className="flex flex-col text-sm border-b border-slate-200 pb-2 last:border-0 last:pb-0">
-                          <span className="font-semibold text-slate-900">{mentor.type}</span>
-                          <span className="text-slate-500">Contact via: <span className="text-blue-600">{mentor.contact_method}</span></span>
+                        <li key={i} className="flex flex-col text-sm border-b border-slate-200 pb-3 last:border-0 last:pb-0 mb-3 last:mb-0">
+                          <span className="font-bold text-slate-900 text-lg">{mentor.name}</span>
+                          <span className="text-blue-600 font-semibold text-xs uppercase tracking-wider mb-1">{mentor.role}</span>
+                          <p className="text-slate-600 text-xs mb-2 leading-relaxed">
+                            <span className="font-bold text-slate-400 uppercase text-[10px] block mb-1">Expertise:</span>
+                            {mentor.help_with}
+                          </p>
+                          <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Connect: <span className="text-slate-900">{mentor.contact}</span></span>
                         </li>
                       ))}
                     </ul>

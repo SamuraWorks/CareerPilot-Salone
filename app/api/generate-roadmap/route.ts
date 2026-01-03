@@ -5,7 +5,7 @@ import { z } from 'zod';
 // Initialize Google AI with the provided key (Temporary Fix for Deployment)
 // TODO: Move this to Vercel Environment Variables for security
 const google = createGoogleGenerativeAI({
-    apiKey: 'AIzaSyAqIESOc2NbSVsgv2UuMdzyOBgiHQ72lhY' // User provided key
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || ''
 });
 
 // Use Edge Runtime for longer timeout support
@@ -41,9 +41,11 @@ const roadmapSchema = z.object({
         requirements: z.string().describe('Specific admission requirements if known')
     })).describe('3-5 Relevant Sierra Leone institutions'),
     mentors: z.array(z.object({
-        type: z.string().describe('Type of mentor (e.g. "Senior Engineer")'),
-        contact_method: z.string().describe('e.g. "LinkedIn", "Alumni Network", "Mining Association"')
-    })).describe('2-3 aligned mentor profiles'),
+        name: z.string().describe('Real name of a prominent Sierra Leonean mentor or specific role title'),
+        role: z.string().describe('Official title / company / role'),
+        help_with: z.string().describe('What they can specifically help with in this career'),
+        contact: z.string().describe('e.g. "LinkedIn", "Official Website", "Government Office"')
+    })).describe('2-3 real or representative Sierra Leonean mentors. Use the provided MENTOR DIRECTORY where possible.'),
     opportunities: z.array(z.string()).describe('List of 3-4 relevant job types, internships, or scholarships'),
     next_steps: z.array(z.string()).describe('3-4 clear, immediate action items')
 });
@@ -158,6 +160,13 @@ End with one clear action: "Your next step: _______"
 
 ✅ SUPPORTED CAREERS (50+):
 Software Developer, Data Analyst, ICT Support, Network Admin, Cybersecurity Analyst, UX/UI Designer, Digital Marketer, Graphic Designer, Project Manager, Business Analyst, Accountant, Auditor, Civil Engineer, Mechanical Engineer, Electrical Engineer, Mining Engineer, Agricultural Engineer, Teacher, Trainer, Healthcare Worker, Nurse, Lab Technician, Pharmacy Tech, Public Health Officer, Environmental Scientist, Agripreneur, Supply Chain Coordinator, Logistics Manager, Entrepreneur, Sales Officer, Customer Service Rep, HR Officer, Legal Assistant, Journalist, Content Creator, Translator, Tourism Guide, Hospitality Manager, Chef, Construction Supervisor, Welder, Electrician, Plumber, Carpenter, Auto Mechanic, Machine Operator, Quality Control Inspector, Account Manager, Financial Analyst, Insurance Officer, Risk & Safety Officer, and more.
+
+📜 MENTOR DIRECTORY (PREFER THESE FOR RELEVANT CAREERS):
+- Dr. David Moinina Sengeh (Chief Minister): Career strategy, Innovation, Tech pathways, National leadership.
+- Yvonne Aki-Sawyerr OBE (Mayor of Freetown): Public service, Jobs, Leadership, Community engagement.
+- Hon. Ibrahim Sannoh (Deputy Minister, MoCTI): Technology careers, Digital policy, Innovation.
+- Hon. Salima Monorma Bah (Minister, MoCTI): Digital economy, Tech inclusion, Innovation policy.
+- Vickie Remoe (Media Entrepreneur): Creative careers, Content creation, Branding, Communication.
 
 🛑 FINAL SYSTEM BEHAVIOR:
 - One career at a time
@@ -283,8 +292,18 @@ export async function POST(req: Request) {
                         requirements: "WASSCE with credits in English and Math"
                     })),
                     mentors: [
-                        { type: "Senior " + fallbackCareer.title, contact_method: "LinkedIn" },
-                        { type: "University Lecturer", contact_method: "Campus Office" }
+                        {
+                            name: "Dr. David Moinina Sengeh",
+                            role: "Chief Minister of Sierra Leone",
+                            help_with: "Strategic career advice and innovation leadership",
+                            contact: "LinkedIn / Official Government Profile"
+                        },
+                        {
+                            name: "Senior " + fallbackCareer.title,
+                            role: "Industry Professional",
+                            help_with: "Practical skills and local networking",
+                            contact: "Professional Associations (SL)"
+                        }
                     ],
                     opportunities: ["Junior " + fallbackCareer.title, "Internship", "Trainee Program"],
                     next_steps: [

@@ -44,20 +44,32 @@ export default function CareerDetailPage({ params }: { params: Promise<{ id: str
         setLoading(true)
         // Mock network delay
         await new Promise(resolve => setTimeout(resolve, 800))
+        // Import real data
+        const { SIERRA_LEONE_CAREERS } = await import("@/lib/career-data")
 
-        const foundCareer = sampleCareers.find(c => c.id === resolvedParams.id)
+        // Find career by ID (which is index + 1)
+        const careerIndex = parseInt(resolvedParams.id) - 1;
+        const foundCareer = (careerIndex >= 0 && careerIndex < SIERRA_LEONE_CAREERS.length)
+          ? SIERRA_LEONE_CAREERS[careerIndex]
+          : null;
 
         if (foundCareer) {
           setCareer({
-            id: foundCareer.id,
+            id: resolvedParams.id,
             title: foundCareer.title,
             description: foundCareer.description,
-            skills: foundCareer.skills || [],
-            salary: foundCareer.salary,
+            skills: foundCareer.requiredSkills || [],
+            salary: foundCareer.salaryUSD,
             demand: foundCareer.demand,
-            category: foundCareer.category,
-            imageUrl: foundCareer.imageUrl,
-            educational_paths: []
+            category: foundCareer.industry,
+            imageUrl: "/placeholder.svg", // Fallback image logic can be added later
+            educational_paths: foundCareer.localInstitutions.map(inst => ({
+              name: inst,
+              institution: inst,
+              type: 'Local',
+              cost: 'Varies',
+              url: '#'
+            }))
           })
         } else {
           setError("Career not found")

@@ -159,6 +159,68 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
         ]
     },
     {
+        keywords: ['network administrator', 'network engineer', 'sysadmin', 'system administrator', 'it administrator'],
+        title: 'Network Administrator',
+        overview: 'Network administrators are responsible for the day-to-day operation of an organization\'s computer networks. They organize, install, and support computer systems, including local area networks (LANs) and wide area networks (WANs). High demand in banking, government, and telecommunications in Sierra Leone. Salary: SLE 3,500 - 8,500 (approx. $155 - $380)/month.',
+        salaryRange: 'SLE 3,500 - 8,500 (approx. $155 - $480)/month',
+        demand: 'High',
+        phases: [
+            {
+                name: 'Month 1: Networking Fundamentals',
+                goal: 'Understand how computers communicate and basic network hardware',
+                steps: [
+                    'Learn the OSI model and TCP/IP protocols',
+                    'Understand IP addressing (IPv4/IPv6) and subnetting',
+                    'Learn about networking hardware: routers, switches, and firewalls',
+                    'Study for CompTIA Network+ certification',
+                    'Visit local tech hubs to see live setups',
+                    'Research network providers in SL (Africell, Orange, Sierratel)'
+                ],
+                resources: [
+                    'CompTIA Network+ Study Guide',
+                    'YouTube: Jeremy\'s IT Lab',
+                    'Cisco Networking Academy (NetAcad)',
+                    'Njala University IT programs',
+                    'Online courses (Coursera, Udemy)'
+                ]
+            },
+            {
+                name: 'Month 2: Practical Configuration',
+                goal: 'Gain hands-on experience with routing, switching, and servers',
+                steps: [
+                    'Learn to configure simple LANs and WANs using Cisco Packet Tracer',
+                    'Understand basic server administration (Windows Server or Linux)',
+                    'Learn about network security basics: VPNs, VLANs, and ACLs',
+                    'Practice cabling and physical network troubleshooting',
+                    'Follow technical workshops at iDT Labs or similar institutions'
+                ],
+                resources: [
+                    'Cisco Packet Tracer (free simulator)',
+                    'Linux Fundamentals (Ubuntu Server)',
+                    'Sierratel technical guides',
+                    'BlueCrest College IT courses'
+                ]
+            },
+            {
+                name: 'Month 3: Advanced Skills & Job Search',
+                goal: 'Prepare for entry-level networking roles and certification',
+                steps: [
+                    'Study for Cisco Certified Network Associate (CCNA)',
+                    'Perfect your technical CV highlighting networking skills',
+                    'Apply for IT support or junior network admin roles',
+                    'Volunteer to help set up networks for small businesses or schools',
+                    'Network with IT professionals on LinkedIn and local tech groups'
+                ],
+                resources: [
+                    'CCNA 200-301 Official Cert Guide',
+                    'JobSearch SL',
+                    'LinkedIn',
+                    'Direct contact with IT departments of local banks'
+                ]
+            }
+        ]
+    },
+    {
         keywords: ['it support', 'help desk', 'technical support', 'it technician', 'computer technician'],
         title: 'IT Support Specialist',
         overview: 'IT support specialists help users with technical problems, maintain computer systems, and ensure technology runs smoothly. Every organization needs IT support. Salary: SLE 2,700 - 6,750 (approx. $120 - $300)/month.',

@@ -61,6 +61,94 @@ interface Mentor {
 
 const MOCK_MENTORS: Mentor[] = [
     {
+        id: 'sengeh',
+        name: 'Dr. David Moinina Sengeh',
+        role: 'Chief Minister',
+        field: 'Technology',
+        experience: '15+ Years',
+        location: 'Sierra Leone',
+        education: 'Professional',
+        bio: 'Chief Minister and former Minister of Basic and Senior Secondary Education. MIT and Harvard alumnus. Advocate for innovation, digital skills, and youth inclusion.',
+        image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/David_Moinina_Sengeh_2020.jpg/440px-David_Moinina_Sengeh_2020.jpg',
+        support_types: ['Career Strategy', 'Innovation', 'Education Reform'],
+        availability: 'Sponsored',
+        credibility: 'PhD (MIT), Chief Minister of SL',
+        insights: [
+            'Digital skills are the future of Sierra Leone\'s economy.',
+            'Creativity and problem-solving are more important than just certificates.'
+        ]
+    },
+    {
+        id: 'akisawyerr',
+        name: 'Yvonne Aki-Sawyerr OBE',
+        role: 'Mayor of Freetown',
+        field: 'Public Service',
+        experience: '25+ Years',
+        location: 'Sierra Leone',
+        education: 'Graduate',
+        bio: 'Mayor of Freetown, specializing in urban transformation, job creation, and climate resilience. Dedicated to community empowerment.',
+        image_url: 'https://yvonneakisawyerr.com/wp-content/uploads/2023/12/YAS-Mayor.jpg',
+        support_types: ['Leadership', 'Community Impact', 'Entrepreneurship'],
+        availability: 'Sponsored',
+        credibility: 'Mayor, MSc (LSE)',
+        insights: [
+            'Data-driven development is key to urban transformation.',
+            'Community engagement makes every project sustainable.'
+        ]
+    },
+    {
+        id: 'sannoh',
+        name: 'Hon. Ibrahim Sannoh',
+        role: 'Deputy Minister (MoCTI)',
+        field: 'Technology',
+        experience: '10+ Years',
+        location: 'Sierra Leone',
+        education: 'Graduate',
+        bio: 'Deputy Minister of Communication, Technology, and Innovation. Expert in digital services and policy reform.',
+        image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Ibrahim_Sannoh.jpg/440px-Ibrahim_Sannoh.jpg',
+        support_types: ['Tech Policy', 'Digital Innovation', 'Public Administration'],
+        availability: 'Free',
+        credibility: 'Deputy Minister, MoCTI',
+        insights: [
+            'Digital automation is the backbone of efficient government services.'
+        ]
+    },
+    {
+        id: 'bah',
+        name: 'Hon. Salima Monorma Bah',
+        role: 'Minister of Communication, Technology & Innovation',
+        field: 'Technology',
+        experience: '12+ Years',
+        location: 'Sierra Leone',
+        education: 'Professional',
+        bio: 'Oversees Sierra Leone\'s tech ecosystem and digital economy. Leads national innovation and youth inclusion programs.',
+        image_url: 'https://mocti.gov.sl/wp-content/uploads/2023/07/Hon.-Salima-Bah.jpg',
+        support_types: ['Digital Economy', 'Tech Startups', 'National Innovation'],
+        availability: 'Sponsored',
+        credibility: 'Minister, MoCTI',
+        insights: [
+            'Our goal is to create a digital landscape where every pikin kin learn to earn.'
+        ]
+    },
+    {
+        id: 'remoe',
+        name: 'Vickie Remoe',
+        role: 'Media Entrepreneur',
+        field: 'Media',
+        experience: '15+ Years',
+        location: 'Sierra Leone',
+        education: 'Graduate',
+        bio: 'Host of The Vickie Remoe Show. Branding Expert and advocate for entrepreneurship and storytelling in Salone.',
+        image_url: 'https://expomediasl.com/wp-content/uploads/2020/01/VickieRemoe_Media_Headshot.jpg',
+        support_types: ['Branding', 'Media Careers', 'Storytelling'],
+        availability: 'Free',
+        credibility: 'Founder, VR&C Marketing',
+        insights: [
+            'Your brand is the story people tell about you when you are not in the room.',
+            'Sierra Leone has so many stories that need to be told professionally.'
+        ]
+    },
+    {
         id: '1',
         name: 'Dr. Samuel Wise',
         role: 'Senior Software Architect',
@@ -76,85 +164,6 @@ const MOCK_MENTORS: Mentor[] = [
         insights: [
             'How to land your first tech job in Freetown.',
             'Why soft skills matter as much as coding.'
-        ]
-    },
-    {
-        id: '2',
-        name: 'Aminata Kamara',
-        role: 'Public Health Physician',
-        field: 'Medical',
-        experience: '8 Years',
-        location: 'Sierra Leone',
-        education: 'Professional',
-        bio: 'Specialist in community health and health policy. Passionate about guiding medical students.',
-        image_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-        support_types: ['Career direction', 'Scholarship guidance'],
-        availability: 'Sponsored',
-        credibility: 'Consultant at Ministry of Health',
-        insights: [
-            'Preparing for medical residency in Salone.'
-        ]
-    },
-    {
-        id: '3',
-        name: 'Ibrahim Bah',
-        role: 'Founder & CEO',
-        field: 'Entrepreneurship',
-        experience: '15 Years',
-        location: 'Diaspora',
-        education: 'Graduate',
-        bio: 'Helping Salone entrepreneurs scale their businesses and access international markets.',
-        image_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
-        support_types: ['Business Strategy', 'Fundraising Advice'],
-        availability: 'Premium',
-        credibility: 'Forbes 30 Under 30 Africa',
-        insights: [
-            'Building for the global market from Freetown.'
-        ]
-    },
-    {
-        id: '4',
-        name: 'Nurse Hawa Conteh',
-        role: 'Clinical Nursing Lead',
-        field: 'Healthcare',
-        experience: '20 Years',
-        location: 'Sierra Leone',
-        education: 'Professional',
-        bio: 'Dedicated to nursing excellence and maternal health advocacy across West Africa.',
-        image_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80',
-        support_types: ['Clinical Guidance', 'Nursing Scholarships'],
-        availability: 'Free',
-        credibility: 'Head of Nursing at COMAHS',
-    },
-    {
-        id: '5',
-        name: 'Abu Bakarr Samura',
-        role: 'Partner, Samura & Co',
-        field: 'Law',
-        experience: '10 Years',
-        location: 'Sierra Leone',
-        education: 'Graduate',
-        bio: 'Corporate law specialist helping students navigate the Law School journey.',
-        image_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80',
-        support_types: ['CV Review', 'Bar Exam Prep'],
-        availability: 'Sponsored',
-        credibility: 'Counsel for Supreme Court',
-    },
-    {
-        id: '6',
-        name: 'Fatima Sesay',
-        role: 'Data Scientist',
-        field: 'Data & AI',
-        experience: '5 Years',
-        location: 'Diaspora',
-        education: 'Graduate',
-        bio: 'Working at Google London, helping bridge the AI gap for Salone youth.',
-        image_url: 'https://i.pravatar.cc/400?img=33',
-        support_types: ['AI Career Direction', 'Scholarship guidance'],
-        availability: 'Free',
-        credibility: 'MSc Data Science, Edinburgh',
-        insights: [
-            'How I used a scholarship to study in the UK.'
         ]
     }
 ]
