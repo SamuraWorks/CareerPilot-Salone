@@ -11,15 +11,15 @@ export function WhatsAppFAB() {
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 
     return (
-        <div className="fixed bottom-24 left-4 z-50">
+        <div className="fixed bottom-6 left-6 z-[90]">
             <motion.a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
                 className={cn(
-                    "flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-2xl shadow-green-500/30 hover:bg-[#128C7E] transition-colors group"
+                    "flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-2xl shadow-green-500/30 hover:bg-[#128C7E] transition-all hover:scale-105 active:scale-95 group"
                 )}
             >
                 <FaWhatsapp className="w-8 h-8" />
