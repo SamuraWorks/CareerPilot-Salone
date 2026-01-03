@@ -11,10 +11,17 @@ const google = createGoogleGenerativeAI({
 // Use Edge Runtime for longer timeout support
 export const runtime = 'edge';
 
-// Clean & Focused Schema
+// Detailed Career Schema (Updated for "50+ Careers" depth)
 const roadmapSchema = z.object({
     title: z.string().describe('The career title (e.g., "Mining Engineering")'),
     short_explanation: z.string().describe('A step-by-step starter pathway explanation (1 line)'),
+    // Expanded Career Summary
+    career_details: z.object({
+        description: z.string().describe('2-3 sentence career description in Sierra Leone context'),
+        salary_range: z.string().describe('Typical salary range in SLE (e.g. "SLE 2,500 - 6,000")'),
+        market_demand: z.enum(['High', 'Medium', 'Low']),
+        responsibilities: z.array(z.string()).describe('List of 3-4 key job responsibilities')
+    }),
     why_this_career: z.object({
         reason: z.string().describe('Why it is a key industry in Sierra Leone'),
         demand_locations: z.array(z.string()).describe('List of specific locations/districts in SL where demand exists'),
@@ -23,59 +30,46 @@ const roadmapSchema = z.object({
     entry_requirements: z.array(z.string()).describe('List of 3-4 minimum entry requirements (WASSCE subjects, traits, literacy)'),
     phases: z.array(z.object({
         name: z.string().describe('Phase name (e.g., "Foundations", "Practical Exposure")'),
-        duration: z.string().describe('Duration string (e.g., "Weeks 1-2")'),
+        duration: z.string().describe('Duration string (e.g., "Weeks 1-4")'),
         goal: z.string().describe('Main goal of this phase'),
         what_you_will_learn: z.array(z.string()).describe('3-4 key learning points'),
         what_you_must_do: z.array(z.string()).describe('2-3 specific action items')
-    })).describe('Exactly 3 phases: Foundations, Practical Exposure, Transition'),
+    })).describe('Exactly 3 phases: Fundamentals (Weeks 1-4), Practice (Weeks 5-8), Apply (Weeks 9-12)'),
     universities: z.array(z.object({
         name: z.string(),
-        focus: z.string().describe('Short focus description (e.g. "Engineering & Earth Sciences")')
-    })).describe('3-4 Relevant Sierra Leone institutions'),
-    mentor_guidance: z.string().describe('Short text encouraging connection with a mentor')
+        focus: z.string().describe('Short focus/course name (e.g. "BSc Geology")'),
+        requirements: z.string().describe('Specific admission requirements if known')
+    })).describe('3-5 Relevant Sierra Leone institutions'),
+    mentors: z.array(z.object({
+        type: z.string().describe('Type of mentor (e.g. "Senior Engineer")'),
+        contact_method: z.string().describe('e.g. "LinkedIn", "Alumni Network", "Mining Association"')
+    })).describe('2-3 aligned mentor profiles'),
+    opportunities: z.array(z.string()).describe('List of 3-4 relevant job types, internships, or scholarships'),
+    next_steps: z.array(z.string()).describe('3-4 clear, immediate action items')
 });
 
 function getSystemPrompt(career: string, educationLevel: string, skills: string, interests: string, goals: string): string {
-    return `You are the AI Career Roadmap engine for CareerPilot Salone. You must generate a "Clean & Focused" roadmap.
+    return `You are the specific Career Roadmap engine for CareerPilot Salone.
 
-USER CONTEXT:
-- Career: ${career}
-- Education: ${educationLevel}
-- Location: Sierra Leone
+USER REQUEST: ${career}
+CONTEXT: Sierra Leone (Real Data Only)
 
-CORE PRINCIPLES (NON-NEGOTIABLE):
-1. One search → One career → One clear pathway.
-2. NO distractions, NO "related careers", NO personality analysis.
-3. Tone: Calm, honest, direct, encouraging but realistic.
-4. Context: STRICTLY Sierra Leone (locations, institutions, realities).
+STRICT RULES:
+1. **Real Data**: Use real institutions, real salary ranges (in SLE), and real market realities.
+2. **One Path**: Focus ONLY on ${career}. Do not suggest alternatives.
+3. **Structure**:
+   - **Summary**: Description, Salary (SLE), Demand (High/Med/Low).
+   - **Requirements**: WASSCE subjects, skills.
+   - **Universities**: Real SL colleges (FBC, Njala, UNIMAK, etc.) with courses.
+   - **Mentors**: Types of pros to find.
+   - **12-Week Roadmap**:
+     - Phase 1 (Weeks 1-4): Fundamentals.
+     - Phase 2 (Weeks 5-8): Practice/Projects.
+     - Phase 3 (Weeks 9-12): Apply/Internships.
+   - **Opportunities**: Real job titles/internships.
+   - **Next Steps**: Immediate actions.
 
-OUTPUT INSTRUCTIONS:
-
-1. **Short Explanation**: A single sentence summarizing what this roadmap offers (e.g. "A step-by-step starter pathway to enter...").
-
-2. **Why This Career**:
-   - Reason: Factual statement about the industry in SL.
-   - Demand Locations: Real districts (e.g. Kono, Freetown, Bo).
-   - Growth: Realistic long-term outlook.
-
-3. **Entry Requirements**:
-   - 3-4 bullet points. Real constraints (WASSCE subjects, physical traits if needed, literacy).
-   - Be honest about what is needed to *start*.
-
-4. **90-Day Roadmap (3 Phases)**:
-   - Phase 1 (Weeks 1-2): Foundations. Goal: Basics & Safety.
-   - Phase 2 (Weeks 3-6): Practical Exposure. Goal: Applied understanding.
-   - Phase 3 (Weeks 7-12): Transition. Goal: Next steps (School/Internship).
-   - For each phase: List 3-4 specific things to "Learn" and 2-3 specific things to "Do".
-
-5. **Universities**:
-   - Only relevant SL institutions.
-   - Short focus note for each.
-
-6. **Mentor Guidance**:
-   - One sentence encouraging them to find a mentor.
-
-Keep it simple. Clarity beats noise.`;
+Make it actionable, encouraging, and local. If data is unknown, give the best local approximation.`;
 }
 
 export async function POST(req: Request) {
