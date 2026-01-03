@@ -18,7 +18,6 @@ import {
   Users,
   Info,
   HelpCircle,
-  LogOut,
   ChevronRight,
   Bell,
   Zap
@@ -32,7 +31,6 @@ import {
   SheetClose
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
-import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
 
 const MENU_GROUPS = [
@@ -72,7 +70,6 @@ const MENU_GROUPS = [
 
 export function Navigation() {
   const pathname = usePathname()
-  const { logout } = useAuth()
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
@@ -178,18 +175,7 @@ export function Navigation() {
               </div>
 
               <div className="p-6 border-t bg-slate-50/50 mt-auto">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    logout()
-                    setIsOpen(false)
-                  }}
-                  className="w-full justify-start gap-4 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-2xl py-6 font-bold"
-                >
-                  <LogOut className="w-5 h-5" />
-                  Sign Out
-                </Button>
-                <p className="text-center text-[10px] font-medium text-slate-400 mt-6">CareerPilot Salone v1.0 • Built for Salone</p>
+                <p className="text-center text-[10px] font-medium text-slate-400">CareerPilot Salone v1.0 • Built for Salone</p>
               </div>
             </SheetContent>
           </Sheet>

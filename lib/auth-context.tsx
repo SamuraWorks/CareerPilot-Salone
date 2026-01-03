@@ -1,10 +1,14 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
-import { supabase } from "./supabase"
-import type { User as SupabaseUser, Session } from "@supabase/supabase-js"
+// Mock User for no-auth environment
+const MOCK_USER = {
+  id: "mock-user-id",
+  email: "mentor@careerpilot.sl",
+  name: "Salone Youth"
+}
 
 interface User {
   id: string
@@ -14,7 +18,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  session: Session | null
+  session: any | null
   login: (email: string, password: string) => Promise<void>
   signup: (name: string, email: string, password: string) => Promise<any>
   loginWithGoogle: () => Promise<void>
@@ -26,101 +30,35 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(MOCK_USER)
+  const [session, setSession] = useState<any | null>({ user: MOCK_USER, access_token: "mock-token" })
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
-    // 1. Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email || "",
-          name: session.user.user_metadata?.full_name || "User"
-        })
-      }
-      setLoading(false)
-    })
-
-    // 2. Listen for changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email || "",
-          name: session.user.user_metadata?.full_name || "User"
-        })
-      } else {
-        setUser(null)
-      }
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+    // Permanent mock state
+    setUser(MOCK_USER)
+    setSession({ user: MOCK_USER, access_token: "mock-token" })
+    setLoading(false)
   }, [])
 
   const login = async (email: string, password: string) => {
-    setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      setLoading(false)
-      throw error
-    }
-
-    if (data.session) {
-      setSession(data.session)
-      setUser({
-        id: data.user.id,
-        email: data.user.email || "",
-        name: data.user.user_metadata?.full_name || "User"
-      })
-      router.push("/dashboard")
-    }
-    setLoading(false)
+    setUser(MOCK_USER)
+    router.push("/dashboard")
   }
 
   const signup = async (name: string, email: string, password: string) => {
-    setLoading(true)
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: name,
-        },
-      },
-    })
-
-    if (error) {
-      setLoading(false)
-      throw error
-    }
-
-    setLoading(false)
-    return data
+    setUser(MOCK_USER)
+    return { user: MOCK_USER }
   }
 
   const loginWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
-      }
-    })
+    setUser(MOCK_USER)
+    router.push("/dashboard")
   }
 
   const logout = async () => {
-    await supabase.auth.signOut()
     setUser(null)
-    setSession(null)
     router.push("/")
   }
 
@@ -132,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signup,
       loginWithGoogle,
       logout,
-      isAuthenticated: !!user,
-      loading
+      isAuthenticated: true,
+      loading: false
     }}>
       {children}
     </AuthContext.Provider>

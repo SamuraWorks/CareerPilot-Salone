@@ -79,7 +79,7 @@ export default function Home() {
               variants={itemVariants}
               className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-4"
             >
-              <Link href="/signup" className="w-full sm:w-auto">
+              <Link href="/dashboard" className="w-full sm:w-auto">
                 <Button size="lg" className="h-16 px-10 rounded-2xl bg-white text-[#2563eb] font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-black/10 hover:bg-slate-50 transition-all hover:scale-[1.02] active:scale-95 w-full sm:w-auto gap-3">
                   Get Started Free
                   <ArrowRight className="h-4 w-4" />
@@ -142,7 +142,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter">150+ Career Roadmaps.<br /> 1.2k+ Job Openings.</h2>
             <p className="text-slate-400 font-medium text-lg">The most comprehensive career intelligence platform in Sierra Leone.</p>
             <div className="pt-8">
-              <Link href="/signup">
+              <Link href="/dashboard">
                 <Button size="lg" className="h-14 px-12 rounded-2xl bg-white text-slate-900 font-black uppercase tracking-widest text-[11px] hover:bg-[#1fb65e] hover:text-white transition-all">
                   Join for Free
                 </Button>
