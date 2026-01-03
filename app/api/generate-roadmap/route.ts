@@ -102,7 +102,7 @@ export async function POST(req: Request) {
         console.log(`Generating clean roadmap for: ${trimmedCareer}`);
 
         const result = await generateObject({
-            model: google('gemini-1.5-flash-001', {
+            model: google('gemini-1.5-flash', {
                 safetySettings: [
                     { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
                     { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
@@ -124,7 +124,96 @@ export async function POST(req: Request) {
         });
 
     } catch (error: any) {
-        console.error('Error generating roadmap:', error);
+        console.error('Error generating roadmap (Primary):', error);
+
+        // FALLBACK SYSTEM: Attempt to use local static data
+        try {
+            const { SIERRA_LEONE_CAREERS } = await import("@/lib/career-data");
+
+            // formatting helper
+            const formatSalary = (usdStr: string) => {
+                // Try to extract only the SLE part or return raw
+                const sleMatch = usdStr.match(/SLE [0-9,]+ - [0-9,]+/);
+                return sleMatch ? sleMatch[0] : usdStr;
+            };
+
+            const fallbackCareer = SIERRA_LEONE_CAREERS.find(c =>
+                c.title.toLowerCase().includes(trimmedCareer.toLowerCase()) ||
+                trimmedCareer.toLowerCase().includes(c.title.toLowerCase()) ||
+                c.keywords.some(k => trimmedCareer.toLowerCase().includes(k))
+            );
+
+            if (fallbackCareer) {
+                console.log(`Using fallback data for: ${trimmedCareer}`);
+
+                const fallbackRoadmap = {
+                    title: fallbackCareer.title,
+                    short_explanation: fallbackCareer.description,
+                    career_details: {
+                        description: fallbackCareer.description,
+                        salary_range: formatSalary(fallbackCareer.salaryRange),
+                        market_demand: fallbackCareer.demand,
+                        responsibilities: [
+                            `Master core skills like ${fallbackCareer.requiredSkills.slice(0, 3).join(', ')}`,
+                            "Complete relevant projects or internships",
+                            "Network with professionals in the " + fallbackCareer.industry
+                        ]
+                    },
+                    why_this_career: {
+                        reason: `${fallbackCareer.industry} is a growing key sector in Sierra Leone.`,
+                        demand_locations: ["Freetown", "Bo", "Kenema", "Makeni"], // Generic major cities
+                        growth_outlook: fallbackCareer.growthPotential
+                    },
+                    entry_requirements: fallbackCareer.requiredEducation.slice(0, 4),
+                    phases: [
+                        {
+                            name: "Fundamentals",
+                            duration: "Weeks 1-4",
+                            goal: "Build a strong foundation",
+                            what_you_will_learn: fallbackCareer.requiredSkills.slice(0, 3),
+                            what_you_must_do: ["Complete introductory course", "Join a local community group", "Find a mentor"]
+                        },
+                        {
+                            name: "Practical Application",
+                            duration: "Weeks 5-8",
+                            goal: "Apply knowledge to real projects",
+                            what_you_will_learn: ["Advanced techniques", "Project management basics", "Industry tools"],
+                            what_you_must_do: ["Build a portfolio project", "Apply for internships", "Attend industry workshops"]
+                        },
+                        {
+                            name: "Career Entry",
+                            duration: "Weeks 9-12",
+                            goal: "Secure a position or advanced training",
+                            what_you_will_learn: ["Interview preparation", "CV writing", "Professional networking"],
+                            what_you_must_do: ["Submit 5 job applications", "Refine CV and cover letter", "Mock interview practice"]
+                        }
+                    ],
+                    universities: fallbackCareer.localInstitutions.map(inst => ({
+                        name: inst,
+                        focus: fallbackCareer.industry + " Studies",
+                        requirements: "WASSCE with credits in English and Math"
+                    })),
+                    mentors: [
+                        { type: "Senior " + fallbackCareer.title, contact_method: "LinkedIn" },
+                        { type: "University Lecturer", contact_method: "Campus Office" }
+                    ],
+                    opportunities: ["Junior " + fallbackCareer.title, "Internship", "Trainee Program"],
+                    next_steps: [
+                        "Update your CV",
+                        "Enroll in a recommended course",
+                        "Join a professional WhatsApp group"
+                    ]
+                };
+
+                return new Response(JSON.stringify(fallbackRoadmap), {
+                    status: 200,
+                    headers: { 'Content-Type': 'application/json', 'X-Fallback': 'true' }
+                });
+            }
+        } catch (fallbackError) {
+            console.error("Fallback generation failed:", fallbackError);
+        }
+
         return new Response(JSON.stringify({
             error: 'generation_failed',
             message: error.message || 'Unable to generate roadmap.',
