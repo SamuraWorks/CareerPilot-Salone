@@ -90,11 +90,15 @@ export default function RoadmapPage() {
         body: JSON.stringify({ career: query })
       })
 
-      if (!res.ok) throw new Error("Generation failed")
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Generation failed");
+      }
       const data = await res.json()
       setDisplayedRoadmap(data)
-    } catch (e) {
-      toast.error("Failed to generate roadmap. Please try again.")
+    } catch (e: any) {
+      console.error(e);
+      toast.error(`Generation Failed: ${e.message}`);
     } finally {
       setIsLoading(false)
     }
