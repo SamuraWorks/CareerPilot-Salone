@@ -197,7 +197,7 @@ export default function RoadmapPage() {
                   <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
                     <MapIcon className="w-3 h-3" /> Career Pathway
                   </div>
-                  <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+                  <h1 className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent tracking-tight pb-1">
                     {displayedRoadmap.title}
                   </h1>
                   <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-slate-500">
