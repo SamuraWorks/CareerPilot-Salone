@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef } from "react"
 import { toJpeg } from "html-to-image"
 import jsPDF from "jspdf"
 import { DashboardLayout } from "@/components/dashboard-layout"
@@ -9,622 +9,414 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-  Map,
   Loader2,
   CheckCircle2,
-  RefreshCw,
   AlertCircle,
-  Download,
-  Sparkles,
-  Target,
-  TrendingUp,
   Save,
-  DollarSign,
-  Activity,
-  ArrowRight,
-  ShieldCheck,
-  ChevronRight,
-  Navigation,
-  Clock,
-  Circle,
-  BookOpen,
-  MessageSquare,
-  CheckCircle,
   Search,
-  ArrowLeft,
-  ChevronLeft,
-  X
+  ArrowRight,
+  BookOpen,
+  Map as MapIcon,
+  User,
+  HelpCircle,
+  ChevronRight
 } from "lucide-react"
-import { z } from "zod"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
-import { AICareerGuidance } from "@/components/ai-career-guidance"
-import { useExchangeRate } from "@/hooks/use-exchange-rate"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Link from 'next/link'
 
-// Define the schema type for TypeScript intellisense
-const roadmapSchema = z.object({
-  title: z.string(),
-  overview: z.string(),
-  salaryRange: z.string().optional(),
-  demand: z.string().optional(),
-  skillLevel: z.string().optional().default("Beginner"),
-  duration: z.string().optional().default("90 Days"),
-  phases: z.array(z.object({
-    name: z.string(),
-    goal: z.string(),
-    steps: z.array(z.string()),
-    resources: z.array(z.string()),
-  })),
-})
-
-type RoadmapData = z.infer<typeof roadmapSchema>
-
-// Task item interface for state tracking
-interface TaskStatus {
-  taskId: string;
-  completed: boolean;
+// --- TYPES ---
+interface CleanRoadmapData {
+  title: string;
+  short_explanation: string;
+  why_this_career: {
+    reason: string;
+    demand_locations: string[];
+    growth_outlook: string;
+  };
+  entry_requirements: string[];
+  phases: {
+    name: string;
+    duration: string;
+    goal: string;
+    what_you_will_learn: string[];
+    what_you_must_do: string[];
+  }[];
+  universities: {
+    name: string;
+    focus: string;
+  }[];
+  mentor_guidance: string;
 }
 
 export default function RoadmapPage() {
-  const { user, session } = useAuth()
-  const [career, setCareer] = useState("")
-  const [hasError, setHasError] = useState(false)
-  const [lastCareer, setLastCareer] = useState("")
-  const [activeTab, setActiveTab] = useState("generator")
-  const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([])
-  const [loadingHistory, setLoadingHistory] = useState(false)
-  const [displayedRoadmap, setDisplayedRoadmap] = useState<RoadmapData | null>(null)
+  const { user } = useAuth()
+  const [query, setQuery] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [displayedRoadmap, setDisplayedRoadmap] = useState<CleanRoadmapData | null>(null)
   const [isSaving, setIsSaving] = useState(false)
-  const [isDownloading, setIsDownloading] = useState(false)
-  const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({})
+  const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([])
+  const [activeTab, setActiveTab] = useState("generator")
   const roadmapRef = useRef<HTMLDivElement>(null)
 
-  // Currency Data
-  const { rate, loading: rateLoading } = useExchangeRate();
-
-  // Manual fetch state
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null)
-
-  // Fetch history on mount
+  // --- FETCH HISTORY ---
   useEffect(() => {
-    if (session?.access_token) {
-      setLoadingHistory(true)
-      fetch('/api/roadmaps', {
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (Array.isArray(data)) setSavedRoadmaps(data)
-        })
-        .catch(err => console.error("Failed to load history", err))
-        .finally(() => setLoadingHistory(false))
-    }
-  }, [session])
+    if (user) loadHistory();
+  }, [user]);
 
-  const handleGenerate = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault()
-    if (!career.trim()) {
-      toast.error("Tell us which career you want to master.")
-      return
+  async function loadHistory() {
+    try {
+      const res = await fetch('/api/roadmaps');
+      if (res.ok) {
+        const data = await res.json();
+        setSavedRoadmaps(data);
+      }
+    } catch (e) {
+      console.error("Failed to load history", e);
     }
+  }
 
-    setHasError(false)
-    setError(null)
-    setLastCareer(career)
-    setDisplayedRoadmap(null)
-    setActiveTab("generator")
+  // --- GENERATE ---
+  const handleGenerate = async () => {
+    if (!query) return
     setIsLoading(true)
-    setCompletedTasks({}) // Reset progress
+    setDisplayedRoadmap(null)
 
     try {
-      const { generateRoadmap } = await import('@/lib/local-ai');
-      const data = await generateRoadmap(career);
-
-      setDisplayedRoadmap({
-        ...data,
-        skillLevel: data.skillLevel || "Beginner",
-        duration: data.duration || "90 Days"
-      })
-      toast.success("Roadmap Successfully Built", {
-        description: `Your 90-day plan for ${career} is ready.`,
+      const res = await fetch('/api/generate-roadmap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ career: query })
       })
 
-    } catch (err: any) {
-      console.error("Generation error:", err)
-      setHasError(true)
-      setError(err)
-      toast.error("Processing Interrupted")
+      if (!res.ok) throw new Error("Generation failed")
+      const data = await res.json()
+      setDisplayedRoadmap(data)
+    } catch (e) {
+      toast.error("Failed to generate roadmap. Please try again.")
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleRetry = () => {
-    if (lastCareer) {
-      handleGenerate()
-    }
-  }
-
-  const toggleTask = (phaseIndex: number, stepIndex: number) => {
-    const key = `${phaseIndex}-${stepIndex}`;
-    setCompletedTasks(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
-
-  const calculateProgress = useMemo(() => {
-    if (!displayedRoadmap) return 0;
-    const totalSteps = displayedRoadmap.phases.reduce((acc, phase) => acc + phase.steps.length, 0);
-    const completedCount = Object.values(completedTasks).filter(Boolean).length;
-    return totalSteps > 0 ? Math.round((completedCount / totalSteps) * 100) : 0;
-  }, [displayedRoadmap, completedTasks]);
-
+  // --- SAVE ---
   const handleSave = async () => {
-    if (!session) {
-      toast.error("Please sign in to save your strategies")
-      return
+    if (!displayedRoadmap || !user) {
+      toast.error("You must be logged in to save roadmaps.");
+      return;
     }
-    if (!displayedRoadmap) return
-
-    setIsSaving(true)
+    setIsSaving(true);
     try {
       const res = await fetch('/api/roadmaps', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          career: lastCareer || displayedRoadmap.title.split('for ')[1] || "Career",
+          career: query || displayedRoadmap.title,
           title: displayedRoadmap.title,
-          overview: displayedRoadmap.overview,
-          phases: displayedRoadmap.phases
+          overview: displayedRoadmap.short_explanation,
+          content: displayedRoadmap
         })
-      })
+      });
 
-      if (!res.ok) throw new Error('Failed to save')
+      if (!res.ok) throw new Error("Save failed");
 
-      const savedMap = await res.json()
-      setSavedRoadmaps([savedMap, ...savedRoadmaps])
-      toast.success("Strategy Archived Successfully")
-    } catch (err) {
-      toast.error("Archive Failure")
-      console.error(err)
+      toast.success("Roadmap saved to history");
+      loadHistory();
+    } catch (e) {
+      toast.error("Failed to save roadmap");
     } finally {
       setIsSaving(false)
     }
   }
 
-  const handleLoad = (map: any) => {
-    setDisplayedRoadmap({
-      title: map.title,
-      overview: map.overview,
-      salaryRange: map.salaryRange,
-      demand: map.demand,
-      skillLevel: map.skillLevel || "Beginner",
-      duration: map.duration || "90 Days",
-      phases: map.phases
-    })
-    setCareer(map.career)
-    setLastCareer(map.career)
-    setActiveTab("generator")
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    toast.success("Plan Loaded")
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm("Remove this strategy from your local archive?")) return
-    try {
-      const res = await fetch(`/api/roadmaps?id=${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      })
-      if (!res.ok) throw new Error('Failed to delete')
-
-      setSavedRoadmaps(savedRoadmaps.filter(m => m.id !== id))
-      toast.success("Strategy Removed")
-    } catch (err) {
-      toast.error("Cleanup Failed")
-    }
-  }
-
-  // Judge Spec Helper: Get time estimate based on step content length (heuristic)
-  const getEstimate = (step: string) => {
-    if (step.toLowerCase().includes("complete") || step.toLowerCase().includes("course")) return "5-10 hours";
-    if (step.toLowerCase().includes("build") || step.toLowerCase().includes("project")) return "8-12 hours";
-    if (step.toLowerCase().includes("research") || step.toLowerCase().includes("join")) return "2 hours";
-    return "3-4 hours";
-  }
-
-  const getWhy = (step: string) => {
-    if (step.toLowerCase().includes("research")) return "Market knowledge is your strongest weapon.";
-    if (step.toLowerCase().includes("apply")) return "Consistency in applications leads to the interview room.";
-    if (step.toLowerCase().includes("portfolio")) return "Show, don't just tell. Proof of work wins jobs.";
-    return "This builds a critical foundation for your career success in Sierra Leone.";
-  }
-
+  // --- RENDER ---
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-[#F8FAFC]">
-        {/* PROGRESS BAR - STICKY PER SPEC */}
-        {displayedRoadmap && !isLoading && (
-          <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-[#E5E7EB] px-4 py-3 shadow-sm transition-all animate-in slide-in-from-top-full">
-            <div className="max-w-4xl mx-auto flex items-center justify-between gap-6">
-              <div className="flex-1 space-y-2">
-                <div className="flex justify-between items-end mb-1">
-                  <span className="text-[14px] font-bold text-[#2563EB]">You’re {calculateProgress}% career-ready</span>
-                  <span className="text-[12px] font-medium text-[#6B7280]">
-                    {Object.values(completedTasks).filter(Boolean).length} of {displayedRoadmap.phases.reduce((acc, p) => acc + p.steps.length, 0)} tasks complete
-                  </span>
+      <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 min-h-screen bg-slate-50 font-sans text-slate-900">
+
+        {/* TABS FOR GENERATOR / HISTORY */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border rounded-xl p-1 h-12 shadow-sm">
+            <TabsTrigger value="generator" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium">New Roadmap</TabsTrigger>
+            <TabsTrigger value="history" className="rounded-lg data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 font-medium">My History</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="generator" className="space-y-8 animate-in fade-in duration-500">
+
+            {/* SEARCH INPUT */}
+            {!displayedRoadmap && (
+              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm text-center px-6">
+                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                  <MapIcon className="w-8 h-8 text-blue-600" />
                 </div>
-                <div className="h-2 w-full bg-[#E5E7EB] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-[#2563EB] to-[#10B981] transition-all duration-1000 ease-out"
-                    style={{ width: `${calculateProgress}%` }}
+                <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Where do you want to go?</h1>
+                <p className="text-slate-500 mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 90-day plan.</p>
+
+                <div className="flex w-full max-w-md gap-3">
+                  <Input
+                    placeholder="E.g. Civil Engineer..."
+                    className="h-12 text-lg bg-slate-50 border-slate-200 focus:bg-white transition-all"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                   />
-                </div>
-              </div>
-              <Button
-                onClick={async () => {
-                  if (!roadmapRef.current) return;
-                  setIsDownloading(true);
-                  try {
-                    const canvas = await toJpeg(roadmapRef.current, { backgroundColor: '#F8FAFC', quality: 0.95 });
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    pdf.addImage(canvas, 'JPEG', 0, 0, 210, 297);
-                    pdf.save(`ROADMAP_${lastCareer.replace(/\s+/g, '_').toUpperCase()}.pdf`);
-                    toast.success("Roadmap Finalized");
-                  } catch (e) { toast.error("Export Failed"); } finally { setIsDownloading(false); }
-                }}
-                size="sm"
-                className="bg-[#2563EB] text-white hover:bg-blue-700 hidden sm:flex font-bold"
-                disabled={isDownloading}
-              >
-                {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4 mr-2" />}
-                Export Plan
-              </Button>
-            </div>
-          </div>
-        )}
-
-        <div className="max-w-4xl mx-auto py-8 sm:py-12 px-4 sm:px-6">
-
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8 bg-white border border-[#E5E7EB] p-1 rounded-xl shadow-sm">
-              <TabsTrigger value="generator" className="data-[state=active]:bg-[#F8FAFC] data-[state=active]:text-[#2563EB] data-[state=active]:shadow-none font-bold text-xs uppercase tracking-widest">
-                Roadmap Designer
-              </TabsTrigger>
-              <TabsTrigger value="history" className="data-[state=active]:bg-[#F8FAFC] data-[state=active]:text-[#2563EB] data-[state=active]:shadow-none font-bold text-xs uppercase tracking-widest">
-                Saved Roadmaps ({savedRoadmaps.length})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="generator" className="space-y-8 outline-none">
-
-              {!displayedRoadmap && !isLoading && (
-                <div className="space-y-12 animate-in fade-in duration-700">
-                  <div className="text-center space-y-4">
-                    <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1fb65e] to-[#0072bc] pb-2">
-                      Your Career GPS
-                    </h1>
-                    <p className="text-[#6B7280] text-lg font-medium max-w-xl mx-auto">
-                      Clear, calm, and motivating. Build your 90-day step-by-step strategy for the Sierra Leonean job market.
-                    </p>
-                  </div>
-
-                  <Card className="p-8 border-[#E5E7EB] shadow-[0_4px_20px_rgba(0,0,0,0.03)] rounded-3xl bg-white">
-                    <form onSubmit={handleGenerate} className="space-y-6">
-                      <div className="relative group">
-                        <Target className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#94a3b8] transition-colors group-focus-within:text-[#2563EB]" />
-                        <Input
-                          placeholder="What is your Dream Career? (e.g. Web Developer, Mining Engineer)"
-                          className="h-16 pl-14 pr-6 rounded-2xl border-2 border-[#E5E7EB] bg-white text-lg font-bold focus:border-[#2563EB] transition-all"
-                          value={career}
-                          onChange={(e) => setCareer(e.target.value)}
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        className="w-full h-16 rounded-2xl bg-[#2563EB] hover:bg-blue-700 text-white font-bold uppercase text-sm tracking-widest gap-2 shadow-xl shadow-blue-500/10 transition-all active:scale-95"
-                        disabled={!career}
-                      >
-                        Build 90-Day Strategy <ArrowRight className="w-5 h-5" />
-                      </Button>
-                    </form>
-                  </Card>
-
-                  <div className="pt-8">
-                    <h3 className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#6B7280] mb-6 flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-[#F59E0B]" /> High-Demand Tracks in Salone
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {[
-                        { name: "Software Developer", duration: "90 Days", level: "Beginner" },
-                        { name: "Public Health Officer", duration: "120 Days", level: "Intermediate" },
-                        { name: "Mining Engineer", duration: "180 Days", level: "Professional" },
-                      ].map((item) => (
-                        <button
-                          key={item.name}
-                          onClick={() => { setCareer(item.name); setTimeout(() => handleGenerate(), 0); }}
-                          className="p-6 bg-white border border-[#E5E7EB] rounded-2xl text-left hover:border-[#2563EB] hover:shadow-lg transition-all group"
-                        >
-                          <div className="font-bold text-[#1e293b] group-hover:text-[#2563EB] mb-2">{item.name}</div>
-                          <div className="flex items-center gap-3 text-[11px] font-bold text-[#6B7280] uppercase tracking-widest">
-                            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {item.duration}</span>
-                            <span className="flex items-center gap-1"><Target className="w-3 h-3" /> {item.level}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {isLoading && (
-                <div className="py-20 flex flex-col items-center justify-center space-y-6 animate-in fade-in duration-700">
-                  <div className="relative">
-                    <div className="w-20 h-20 border-4 border-[#E5E7EB] border-t-[#2563EB] rounded-full animate-spin" />
-                    <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-[#F59E0B] animate-pulse" />
-                  </div>
-                  <div className="text-center space-y-2">
-                    <h2 className="text-2xl font-black text-[#1e293b]">Analyzing Market Trends...</h2>
-                    <p className="text-[#6B7280] font-medium">Matching your skills with top opportunities in Sierra Leone.</p>
-                  </div>
-
                   <Button
-                    variant="ghost"
-                    onClick={() => {
-                      // In a real app we might cancel the fetch, here we just reset state
-                      window.location.reload()
-                    }}
-                    className="text-slate-400 hover:text-red-500 font-bold text-xs uppercase tracking-widest mt-4"
+                    size="lg"
+                    onClick={handleGenerate}
+                    disabled={isLoading || !query}
+                    className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-md hover:shadow-lg shadow-blue-200"
                   >
-                    <X className="w-4 h-4 mr-2" />
-                    Cancel & Exit
+                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                   </Button>
                 </div>
-              )}
+              </div>
+            )}
 
-              {displayedRoadmap && (
-                <div ref={roadmapRef} className="animate-in fade-in slide-in-from-bottom-8 duration-1000 space-y-12 pb-20">
+            {/* LOADING STATE - SKELETON */}
+            {isLoading && !displayedRoadmap && (
+              <div className="space-y-8 animate-pulse">
+                <div className="h-40 bg-slate-200 rounded-3xl w-full"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="h-32 bg-slate-200 rounded-2xl"></div>
+                  <div className="h-32 bg-slate-200 rounded-2xl"></div>
+                </div>
+              </div>
+            )}
 
-                  {/* BACK BUTTON */}
-                  <div className="flex justify-start">
-                    <Button
-                      variant="ghost"
-                      onClick={() => setDisplayedRoadmap(null)}
-                      className="group flex items-center gap-2 text-[#6B7280] hover:text-[#2563EB] font-bold text-xs uppercase tracking-widest pl-0 transition-all"
-                    >
-                      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                      Back to Generator
-                    </Button>
+            {/* RESULTS DISPLAY - CLEAN & FOCUSED */}
+            {displayedRoadmap && (
+              <div ref={roadmapRef} className="space-y-8 pb-32 animate-in slide-in-from-bottom-4 duration-700">
+
+                {/* 1. HEADER (ONLY THIS) */}
+                <div className="bg-white border text-center p-8 sm:p-12 rounded-3xl shadow-sm space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
+                    <MapIcon className="w-3 h-3" /> Career Pathway
                   </div>
-
-                  {/* TOP SECTION - ORIENTATION PER SPEC */}
-                  <div className="space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                      <div className="space-y-2">
-                        <Badge className="bg-[#eff6ff] text-[#2563EB] border-none font-bold text-[10px] uppercase tracking-widest px-3 py-1">YOUR PATHWAY</Badge>
-                        <h1 className="text-3xl sm:text-5xl font-black leading-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1fb65e] to-[#0072bc] pb-1">
-                          {displayedRoadmap.title.replace("Your Roadmap to ", "")}
-                        </h1>
-                      </div>
-                      <div className="flex flex-wrap gap-4">
-                        <div className="px-4 py-2 bg-white border border-[#E5E7EB] rounded-xl shadow-sm">
-                          <div className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">Skill Level</div>
-                          <div className="text-[14px] font-black text-[#1e293b]">{displayedRoadmap.skillLevel}</div>
-                        </div>
-                        <div className="px-4 py-2 bg-white border border-[#E5E7EB] rounded-xl shadow-sm">
-                          <div className="text-[10px] font-bold text-[#6B7280] uppercase tracking-widest">Duration</div>
-                          <div className="text-[14px] font-black text-[#1e293b]">{displayedRoadmap.duration}</div>
-                        </div>
-                        <div className="px-4 py-2 bg-[#f0fdf4] border border-[#dcfce7] rounded-xl shadow-sm">
-                          <div className="text-[10px] font-bold text-[#10B981] uppercase tracking-widest">Market Demand</div>
-                          <div className="text-[14px] font-black text-[#1e293b]">High (Salone)</div>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-[#6B7280] text-lg font-medium leading-relaxed border-l-4 border-[#2563EB] pl-6 bg-blue-50/30 py-4 rounded-r-xl">
-                      {displayedRoadmap.overview}
+                  <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">
+                    {displayedRoadmap.title}
+                  </h1>
+                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-slate-500">
+                    <span className="flex items-center gap-1"><User className="w-4 h-4" /> Beginner Level</span>
+                    <span className="hidden sm:inline text-slate-300">•</span>
+                    <span className="flex items-center gap-1"><Loader2 className="w-4 h-4" /> 90-Day Starter Plan</span>
+                    <span className="hidden sm:inline text-slate-300">•</span>
+                    <span className="flex items-center gap-1"><MapIcon className="w-4 h-4" /> For Sierra Leone</span>
+                  </div>
+                  <div className="max-w-2xl mx-auto pt-4 border-t border-slate-100 mt-6">
+                    <p className="text-lg text-slate-700 font-medium leading-relaxed">
+                      {displayedRoadmap.short_explanation}
                     </p>
                   </div>
+                </div>
 
-                  {/* AI CAREER GUIDANCE SECTION PER SPEC */}
-                  <AICareerGuidance
-                    userContext={{
-                      strengths: ["Technical Aptitude", "Problem Solving", "Digital Literacy"],
-                      interests: ["Sustainable Tech", "Practical Work"],
-                      location: "Sierra Leone",
-                      education: "WASSCE Graduate"
-                    }}
-                    guidance={{
-                      careerPaths: [
-                        { title: displayedRoadmap.title.replace("Your Roadmap to ", "") },
-                        { title: "ICT Support Specialist" },
-                        { title: "Renewable Energy Technician" }
-                      ],
-                      whyItFits: [
-                        "Matches your practical skills and previous technical interest.",
-                        "Requires affordable local training options.",
-                        "Strong and growing demand in Freetown and beyond."
-                      ],
-                      nextSteps: [
-                        "Review the 12-week timeline below to begin your training.",
-                        "Connect with a mentor in the 'Mentorship' section for guidance.",
-                        "Build a specialized CV using our builder tool."
-                      ],
-                      localOpportunities: ["Ministry of Energy projects", "Senergy Salone internships"]
-                    }}
-                    onFollowUp={() => window.dispatchEvent(new CustomEvent('openCareerAdvisor'))}
-                    onSave={() => toast.success("Career roadmap saved to your profile!")}
-                    onViewResources={() => window.location.href = "/universities"}
-                  />
+                {/* 2. WHY THIS CAREER (ONE SHORT BLOCK) */}
+                <Card className="p-8 border-none bg-blue-50/50 space-y-4">
+                  <h3 className="font-bold text-blue-900 uppercase text-xs tracking-widest">Why {displayedRoadmap.title}?</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                    <div>
+                      <div className="font-semibold text-blue-800 mb-1">Key Context</div>
+                      <p className="text-blue-700 leading-relaxed">{displayedRoadmap.why_this_career.reason}</p>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-blue-800 mb-1">Demand Locations</div>
+                      <div className="flex flex-wrap gap-2">
+                        {displayedRoadmap.why_this_career.demand_locations.map(loc => (
+                          <Badge key={loc} variant="outline" className="border-blue-200 bg-white text-blue-700 hover:bg-white">{loc}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-blue-800 mb-1">Outlook</div>
+                      <p className="text-blue-700 leading-relaxed">{displayedRoadmap.why_this_career.growth_outlook}</p>
+                    </div>
+                  </div>
+                </Card>
 
-                  {/* VERTICAL TIMELINE PER SPEC */}
-                  <div className="space-y-12 relative pt-4">
-                    {/* Vertical Line Connector */}
-                    <div className="absolute left-[27px] top-6 bottom-6 w-[2px] bg-[#E5E7EB] z-0 hidden sm:block" />
+                {/* 3. ENTRY REQUIREMENTS (CLEAR & REAL) */}
+                <Card className="p-8 bg-white border border-slate-200 shadow-sm space-y-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-slate-900 text-lg">Minimum Entry Requirements</h3>
+                    <Badge variant="secondary" className="bg-slate-100 text-slate-600">To Start</Badge>
+                  </div>
+                  <ul className="space-y-3">
+                    {displayedRoadmap.entry_requirements.map((req, i) => (
+                      <li key={i} className="flex items-start gap-3 text-slate-700">
+                        <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                        <span>{req}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl flex gap-3 text-sm text-amber-800">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p>This roadmap prepares you for further study or entry-level exposure — not full professional certification immediately.</p>
+                  </div>
+                </Card>
 
-                    {displayedRoadmap.phases.map((phase, pIdx) => (
-                      <div key={pIdx} className="relative z-10 space-y-6">
-                        {/* Phase Header */}
-                        <div className="flex items-center gap-5">
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 z-10 shadow-lg ${pIdx === 0 ? 'bg-[#2563EB] text-white' : 'bg-white border-2 border-[#E5E7EB] text-[#6B7280]'}`}>
-                            <Navigation className="w-6 h-6" />
+                {/* 4. 90-DAY ROADMAP (THE CORE CONTENT) */}
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between px-2">
+                    <h2 className="text-2xl font-black text-slate-900">Your 90-Day Plan</h2>
+                    <span className="text-sm font-medium text-slate-500">Step-by-step</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Phase 1 */}
+                    {displayedRoadmap.phases[0] && (
+                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-blue-500 shadow-md">
+                        <div className="p-6 bg-slate-50 border-b">
+                          <div className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[0].duration}</div>
+                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[0].name}</h3>
+                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[0].goal}</p>
+                        </div>
+                        <div className="p-6 space-y-6 flex-1 bg-white">
+                          <div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[0].what_you_will_learn.map((item, i) => (
+                                <li key={i} className="text-sm text-slate-700 flex gap-2">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                           <div>
-                            <div className="text-[12px] font-bold text-[#6B7280] uppercase tracking-[0.2em] mb-1">
-                              Phase {pIdx + 1} • {pIdx === 0 ? 'Weeks 1–2' : pIdx === 1 ? 'Weeks 3–6' : 'Weeks 7–12'}
-                            </div>
-                            <h2 className="text-2xl font-black text-[#1e293b] tracking-tight">{phase.name}</h2>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[0].what_you_must_do.map((item, i) => (
+                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         </div>
+                      </Card>
+                    )}
 
-                        {/* Phase Content Card */}
-                        <Card className="ml-0 sm:ml-12 p-6 sm:p-8 bg-white border-[#E5E7EB] shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-[2rem] space-y-10 group hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all">
-
-                          {/* Goal & Description */}
-                          <div className="space-y-3">
-                            <div className="inline-flex items-center gap-2 text-[#2563EB] font-bold text-xs uppercase tracking-widest bg-blue-50 px-3 py-1.5 rounded-full">
-                              <Target className="w-3.5 h-3.5" /> Phase Goal
-                            </div>
-                            <p className="text-[#475569] font-bold text-lg leading-snug">
-                              {phase.goal}
-                            </p>
+                    {/* Phase 2 */}
+                    {displayedRoadmap.phases[1] && (
+                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-indigo-500 shadow-md">
+                        <div className="p-6 bg-slate-50 border-b">
+                          <div className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[1].duration}</div>
+                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[1].name}</h3>
+                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[1].goal}</p>
+                        </div>
+                        <div className="p-6 space-y-6 flex-1 bg-white">
+                          <div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[1].what_you_will_learn.map((item, i) => (
+                                <li key={i} className="text-sm text-slate-700 flex gap-2">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-
-                          {/* Task List - JUDGE DESIGN SPEC */}
-                          <div className="space-y-6">
-                            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#6B7280]">Key Milestone Tasks</h4>
-                            <div className="space-y-4">
-                              {phase.steps.map((step, sIdx) => {
-                                const isCompleted = completedTasks[`${pIdx}-${sIdx}`];
-                                return (
-                                  <div
-                                    key={sIdx}
-                                    onClick={() => toggleTask(pIdx, sIdx)}
-                                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer select-none flex items-start gap-4 ${isCompleted ? 'bg-[#f0fdf4] border-[#dcfce7]' : 'bg-[#F8FAFC] border-[#f1f5f9] hover:border-[#E5E7EB]'}`}
-                                  >
-                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all ${isCompleted ? 'bg-[#10B981] text-white' : 'bg-white border-2 border-[#cbd5e1]'}`}>
-                                      {isCompleted && <CheckCircle className="w-4 h-4" />}
-                                    </div>
-                                    <div className="flex-1 space-y-2">
-                                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                        <span className={`text-[15px] font-bold leading-tight ${isCompleted ? 'text-[#1e293b] line-through decoration-2 decoration-[#10B981]/30' : 'text-[#1e293b]'}`}>
-                                          {step}
-                                        </span>
-                                        <div className="flex items-center gap-1.5 shrink-0">
-                                          <Badge variant="outline" className={`bg-white border-[#E5E7EB] text-[#6B7280] text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1`}>
-                                            <Clock className="w-3 h-3" /> {getEstimate(step)}
-                                          </Badge>
-                                        </div>
-                                      </div>
-                                      <div className="flex items-start gap-2 bg-white/50 p-3 rounded-xl border border-white/80">
-                                        <span className="text-[10px] font-black text-[#F59E0B] uppercase tracking-widest pt-0.5">Why:</span>
-                                        <p className="text-[13px] font-medium text-[#6B7280] leading-relaxed italic">
-                                          {getWhy(step)}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
+                          <div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[1].what_you_must_do.map((item, i) => (
+                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-indigo-500 mt-0.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
+                        </div>
+                      </Card>
+                    )}
 
-                          {/* Resources */}
-                          {phase.resources && phase.resources.length > 0 && (
-                            <div className="pt-6 border-t border-[#f1f5f9] space-y-4">
-                              <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-[#6B7280] flex items-center gap-2">
-                                <BookOpen className="w-4 h-4" /> Recommended Learning
-                              </h4>
-                              <div className="flex flex-wrap gap-3">
-                                {phase.resources.map((res, rIdx) => (
-                                  <Badge key={rIdx} className="bg-white border border-[#E5E7EB] text-[#1e293b] hover:bg-slate-50 transition-all font-bold text-[11px] px-4 py-2 rounded-xl shadow-sm cursor-pointer">
-                                    {res}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* PHASE FOOTER CTAs PER SPEC */}
-                          <div className="pt-8 flex flex-col sm:flex-row items-center justify-start gap-4">
-                            <Button className="w-full sm:w-auto px-8 h-12 rounded-xl bg-[#2563EB] hover:bg-blue-700 font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
-                              Continue Roadmap
-                            </Button>
-                            <Button variant="outline" className="w-full sm:w-auto px-8 h-12 rounded-xl border-[#2563EB] text-[#2563EB] hover:bg-blue-50 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all">
-                              Ask Career AI
-                            </Button>
-                            <Button variant="ghost" className="text-[#6B7280] font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50">
-                              Update Skills
-                            </Button>
+                    {/* Phase 3 */}
+                    {displayedRoadmap.phases[2] && (
+                      <Card className="flex flex-col overflow-hidden border-t-4 border-t-emerald-500 shadow-md">
+                        <div className="p-6 bg-slate-50 border-b">
+                          <div className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">{displayedRoadmap.phases[2].duration}</div>
+                          <h3 className="text-xl font-bold text-slate-900">{displayedRoadmap.phases[2].name}</h3>
+                          <p className="text-sm text-slate-500 mt-2 italic">Goal: {displayedRoadmap.phases[2].goal}</p>
+                        </div>
+                        <div className="p-6 space-y-6 flex-1 bg-white">
+                          <div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you will learn</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[2].what_you_will_learn.map((item, i) => (
+                                <li key={i} className="text-sm text-slate-700 flex gap-2">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-                        </Card>
+                          <div>
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">What you must do</div>
+                            <ul className="space-y-2">
+                              {displayedRoadmap.phases[2].what_you_must_do.map((item, i) => (
+                                <li key={i} className="text-sm font-medium text-slate-900 flex gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" /> {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+
+                {/* 5. UNIVERSITIES (ONLY RELEVANT ONES) */}
+                <Card className="p-8 bg-white border border-slate-200 shadow-sm space-y-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-slate-100 rounded-lg"><BookOpen className="w-5 h-5 text-slate-600" /></div>
+                    <h3 className="font-bold text-slate-900 text-lg">Where to Study</h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {displayedRoadmap.universities.map((uni, i) => (
+                      <div key={i} className="p-4 border rounded-xl hover:bg-slate-50 transition-colors">
+                        <div className="font-bold text-slate-900">{uni.name}</div>
+                        <div className="text-sm text-slate-500 mt-1">{uni.focus}</div>
                       </div>
                     ))}
                   </div>
+                </Card>
 
-                  {/* FINAL BOTTOM ACTION */}
-                  <div className="py-12 flex flex-col items-center justify-center space-y-8 bg-blue-50/50 rounded-[3rem] border border-blue-100">
-                    <div className="text-center space-y-2">
-                      <h3 className="text-2xl font-black text-[#1e293b]">Ready to take the next step?</h3>
-                      <p className="text-[#6B7280] font-medium max-w-sm">Save this roadmap to track your progress daily on your dashboard.</p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-4 w-full px-6 max-w-md">
-                      <Button
-                        onClick={handleSave}
-                        disabled={isSaving}
-                        className="flex-1 h-14 rounded-2xl bg-[#10B981] hover:bg-green-600 text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-green-500/20"
-                      >
-                        {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                        Save Strategy
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        onClick={handleRetry}
-                        className="flex-1 h-14 rounded-2xl border border-[#E5E7EB] bg-white font-black uppercase text-xs tracking-widest text-[#1e293b]"
-                      >
-                        <RefreshCw className="w-4 h-4 mr-2" />
-                        Regenerate
-                      </Button>
-                    </div>
+                {/* 6. MENTOR SUPPORT (OPTIONAL, NOT PUSHED) */}
+                <div className="text-center py-8 space-y-4">
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-sm border text-slate-400 mb-2">
+                    <User className="w-6 h-6" />
                   </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Need Guidance?</h4>
+                    <p className="text-slate-500 text-sm max-w-sm mx-auto mt-1">{displayedRoadmap.mentor_guidance}</p>
+                  </div>
+                  <Button variant="outline" className="rounded-full">Find a Mentor</Button>
                 </div>
-              )}
-            </TabsContent>
 
-            <TabsContent value="history" className="outline-none animate-in fade-in duration-700">
-              {user ? (
-                <RoadmapHistory
-                  roadmaps={savedRoadmaps}
-                  isLoading={loadingHistory}
-                  onLoad={handleLoad}
-                  onDelete={handleDelete}
-                />
-              ) : (
-                <div className="text-center py-20 bg-white border border-[#E5E7EB] rounded-[3rem] shadow-sm space-y-8">
-                  <div className="w-24 h-24 bg-[#F8FAFC] rounded-full flex items-center justify-center mx-auto border-2 border-[#E5E7EB]">
-                    <ShieldCheck className="w-10 h-10 text-[#2563EB]/20" />
-                  </div>
-                  <div className="space-y-2 px-6">
-                    <h3 className="text-2xl font-black text-[#1e293b]">Sync Your Progress</h3>
-                    <p className="text-[#6B7280] font-medium max-w-xs mx-auto">Create an account to save your generated strategies and track task completion on multiple devices.</p>
-                  </div>
-                  <Link href="/login" className="inline-block px-12 h-14 leading-[56px] rounded-2xl bg-[#2563EB] text-white font-black uppercase text-xs tracking-widest shadow-xl active:scale-95 transition-all">
-                    Authenticate Now
-                  </Link>
+                {/* 7. ACTION BUTTONS (MINIMAL) */}
+                <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-slate-200 flex justify-center gap-4 z-50">
+                  <Button size="lg" className="rounded-full bg-slate-900 text-white hover:bg-slate-800 px-8 font-semibold">
+                    Continue Roadmap
+                  </Button>
+                  <Button variant="outline" size="lg" className="rounded-full px-8 font-semibold gap-2" onClick={handleSave}>
+                    <Save className="w-4 h-4" /> Save
+                  </Button>
+                  <Button variant="ghost" size="lg" className="rounded-full px-4 text-slate-500">
+                    <HelpCircle className="w-5 h-5" />
+                  </Button>
                 </div>
-              )}
-            </TabsContent>
-          </Tabs>
 
-        </div>
+              </div>
+            )}
+
+          </TabsContent>
+
+          <TabsContent value="history">
+            <RoadmapHistory
+              roadmaps={savedRoadmaps}
+              isLoading={false}
+              onLoad={(r) => { }}
+              onDelete={(id) => { }}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   )

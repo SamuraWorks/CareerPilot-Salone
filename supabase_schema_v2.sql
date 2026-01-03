@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS public.whatsapp_sessions (
 
 -- RLS for whatsapp_sessions (Simplified for Bot access)
 ALTER TABLE public.whatsapp_sessions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Bot can access sessions" ON public.whatsapp_sessions;
 CREATE POLICY "Bot can access sessions" ON public.whatsapp_sessions FOR ALL USING (true);
 
 -- RLS POLICIES (Example: Profiles)
@@ -269,3 +270,36 @@ CREATE INDEX IF NOT EXISTS idx_applications_user_id ON public.applications(user_
 CREATE INDEX IF NOT EXISTS idx_applications_opportunity_id ON public.applications(opportunity_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON public.notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_feedback_user_id ON public.user_feedback(user_id);
+
+-- 9. ROADMAPS (AI Generated Career Plans)
+CREATE TABLE IF NOT EXISTS public.roadmaps (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES public.profiles(id),
+  title TEXT NOT NULL,
+  career TEXT NOT NULL,
+  overview TEXT,
+  content JSONB, -- Stores the full complex AI response
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- RLS for roadmaps
+ALTER TABLE public.roadmaps ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can view their own roadmaps" ON public.roadmaps;
+CREATE POLICY "Users can view their own roadmaps"
+  ON public.roadmaps FOR SELECT USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert their own roadmaps" ON public.roadmaps;
+CREATE POLICY "Users can insert their own roadmaps"
+  ON public.roadmaps FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update their own roadmaps" ON public.roadmaps;
+CREATE POLICY "Users can update their own roadmaps"
+  ON public.roadmaps FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete their own roadmaps" ON public.roadmaps;
+CREATE POLICY "Users can delete their own roadmaps"
+  ON public.roadmaps FOR DELETE USING (auth.uid() = user_id);
+
+CREATE INDEX IF NOT EXISTS idx_roadmaps_user_id ON public.roadmaps(user_id);

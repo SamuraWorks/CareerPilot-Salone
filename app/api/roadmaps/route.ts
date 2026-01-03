@@ -52,9 +52,9 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { career, title, overview, phases } = body;
+        const { career, title, overview, content } = body;
 
-        if (!career || !title || !phases) {
+        if (!career || !title || !content) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
                 career,
                 title,
                 overview,
-                phases
+                content
             })
             .select()
             .single();
