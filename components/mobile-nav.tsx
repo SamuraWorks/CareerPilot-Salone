@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils"
 
 const MOBILE_NAV_ITEMS = [
     { label: "Home", href: "/", icon: Home },
-    { label: "Careers", href: "/careers", icon: Briefcase },
+    { label: "Explore", href: "/careers", icon: Briefcase },
     { label: "Roadmap", href: "/roadmap", icon: Map },
-    { label: "AI Chat", href: "/ai-guidance", icon: MessageSquare },
+    { label: "AI Guide", href: "/ai-guidance", icon: MessageSquare },
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
 ]
 

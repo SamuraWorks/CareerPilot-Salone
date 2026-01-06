@@ -8,7 +8,10 @@ import {
   Compass,
   FileText,
   Brain,
-  Briefcase
+  Briefcase,
+  UserCircle,
+  Search,
+  Map
 } from "lucide-react"
 import { motion } from "framer-motion"
 
@@ -109,18 +112,20 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: "Career Test", icon: FileText, color: "text-blue-500", bg: "bg-blue-50", href: "/aptitude-test" },
-              { title: "Roadmaps", icon: Compass, color: "text-emerald-500", bg: "bg-emerald-50", href: "/roadmap" },
-              { title: "AI Advisor", icon: Brain, color: "text-purple-500", bg: "bg-purple-50", href: "/ai-guidance" },
-              { title: "Opportunities", icon: Briefcase, color: "text-orange-500", bg: "bg-orange-50", href: "/jobs" }
+              { title: "Let's Get to Know You", icon: UserCircle, color: "text-blue-500", bg: "bg-blue-50", href: "/onboarding" },
+              { title: "Explore Careers", icon: Search, color: "text-emerald-500", bg: "bg-emerald-50", href: "/careers" },
+              { title: "Roadmaps", icon: Map, color: "text-purple-500", bg: "bg-purple-50", href: "/roadmap" },
+              { title: "Opportunities", icon: Briefcase, color: "text-orange-500", bg: "bg-orange-50", href: "/opportunities" }
             ].map((f, i) => (
               <Link href={f.href} key={i}>
                 <div className="p-10 rounded-[2.5rem] bg-slate-50 border border-slate-100 group hover:bg-white hover:shadow-2xl hover:shadow-slate-200 transition-all cursor-pointer h-full">
                   <div className={`${f.bg} w-14 h-14 rounded-2xl flex items-center justify-center mb-8 shadow-sm`}>
                     <f.icon className={`w-6 h-6 ${f.color}`} />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-2 font-poppins">{f.title}</h3>
-                  <div className="w-10 h-1 bg-slate-200 rounded-full group-hover:bg-[#1F7A4D] transition-colors" />
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-slate-900 font-poppins">{f.title}</h3>
+                    <div className="w-10 h-1 bg-slate-200 rounded-full group-hover:bg-[#1F7A4D] transition-colors" />
+                  </div>
                 </div>
               </Link>
             ))}

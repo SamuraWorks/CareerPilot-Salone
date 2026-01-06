@@ -10,22 +10,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
-    const chat = (useChat as any)({
-        api: '/api/assistant',
-        body: {
-            userProfile: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem("userOnboarding") || '{}') : {}
+    const [localInput, setLocalInput] = useState('');
+    const [userProfile, setUserProfile] = useState({});
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            try {
+                const stored = localStorage.getItem("userOnboarding");
+                if (stored) setUserProfile(JSON.parse(stored));
+            } catch (e) {
+                console.error("Error parsing user profile:", e);
+            }
         }
-    });
+    }, []);
 
     const {
         messages = [],
-        input = '',
-        handleInputChange = () => { },
-        handleSubmit = () => { },
-        isLoading = false,
-        append,
-        setInput = () => { }
-    } = chat;
+        isLoading,
+        append
+    } = (useChat as any)({
+        api: '/api/assistant',
+        body: { userProfile }
+    });
+
+    const handleFormSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!localInput.trim() || isLoading || !append) return;
+
+        append({ role: 'user', content: localInput });
+        setLocalInput('');
+    };
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -59,8 +73,6 @@ export function ChatWidget() {
     const handleQuickAction = (action: string) => {
         if (append) {
             append({ role: 'user', content: action });
-        } else {
-            setInput(action);
         }
     };
 
@@ -151,18 +163,18 @@ export function ChatWidget() {
                                     ))}
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="flex gap-2">
+                                <form onSubmit={handleFormSubmit} className="flex gap-2">
                                     <input
                                         className="flex-1 px-5 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none focus:ring-2 focus:ring-slate-900/5 outline-none text-sm transition-all font-medium"
-                                        value={input}
-                                        onChange={handleInputChange}
+                                        value={localInput}
+                                        onChange={(e) => setLocalInput(e.target.value)}
                                         placeholder="Type your question..."
                                     />
                                     <Button
                                         type="submit"
                                         size="icon"
                                         className="rounded-2xl w-12 h-12 shrink-0 bg-slate-900 hover:bg-slate-800 shadow-lg"
-                                        disabled={!input?.trim() || isLoading}
+                                        disabled={!localInput?.trim() || isLoading}
                                     >
                                         <Send className="w-5 h-5 text-white" />
                                     </Button>

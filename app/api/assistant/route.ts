@@ -1,8 +1,9 @@
 import { openai } from '@ai-sdk/openai';
+import { google } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { SIERRA_LEONE_CAREERS, INSTITUTIONS, ONLINE_RESOURCES } from '@/lib/career-data';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
     try {
@@ -96,20 +97,37 @@ RULES
 - Be inclusive and accessible.
         `;
 
-        // 2. Generate Stream with OpenAI
-        const result = await streamText({
-            model: openai('gpt-4o'),
-            system: groundingContext,
-            messages: messages,
-            temperature: 0.7,
-        });
+        let result;
+
+        // 2. Try OpenAI Primary
+        if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
+            result = await streamText({
+                model: openai('gpt-4o'),
+                system: groundingContext,
+                messages: messages,
+                temperature: 0.7,
+            });
+        }
+        // 3. Fallback to Gemini
+        else if (process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+            result = await streamText({
+                model: google('gemini-1.5-flash'),
+                system: groundingContext,
+                messages: messages,
+                temperature: 0.7,
+            });
+        }
+        // 4. Critical Failure
+        else {
+            throw new Error("No AI API keys configured");
+        }
 
         return result.toTextStreamResponse();
 
     } catch (error) {
         console.error('Assistant API Error:', error);
 
-        // Fallback to a helpful mentor-like local message if Gemini fails
+        // Fallback to a helpful mentor-like local message if both fail
         const fallbackMsg = "Kusheh! I'm having a slight technical hitch, but I'm still here to help. Whether you're a school leaver or a graduate, tell me: what are you passionate about, and what did you study? I'll help you find your path in Salone!";
 
         return new Response(fallbackMsg, {
