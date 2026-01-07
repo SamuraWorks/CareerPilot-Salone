@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle, CheckCheck, ArrowRight } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
+import Image from "next/image"
 
 interface WhatsAppMessage {
   id: number
@@ -72,16 +73,43 @@ export default function WhatsAppPage() {
 
       <main className="flex-1 bg-gradient-to-br from-secondary/10 via-background to-primary/10 py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-secondary rounded-full mb-4">
-              <MessageCircle className="w-8 h-8 text-secondary-foreground" />
+          {/* PREMIUM HERO HEADER */}
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group mb-16">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="WhatsApp Guidance"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">WhatsApp Bot Integration</h1>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-balance">
-              Experience how CareerPilot Salone works on WhatsApp. Get career guidance, generate CVs, and track your
-              roadmap—all through simple chat messages.
-            </p>
-          </div>
+
+            <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full backdrop-blur-md">
+                <FaWhatsapp className="w-4 h-4 text-[#25D366]" />
+                <span className="text-[#25D366] font-bold text-xs uppercase tracking-widest">Mobile Guidance</span>
+              </div>
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                WhatsApp <span className="text-[#F4C430]">Smart</span> Assistant
+              </h1>
+              <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                Experience the future of career mentorship on your favorite chat app. Fast, inclusive, and available everywhere.
+              </p>
+
+              <div className="flex items-center gap-6 pt-2">
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-white">24/7</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Availability</span>
+                </div>
+                <div className="w-px h-8 bg-white/10" />
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-[#F4C430]">Krio</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Language Support</span>
+                </div>
+              </div>
+            </div>
+          </section>
 
           <div className="grid lg:grid-cols-2 gap-8">
             {/* WhatsApp Chat Mockup */}

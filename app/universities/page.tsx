@@ -55,15 +55,44 @@ export default function UniversitiesPage() {
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         Back to Dashboard
                     </Link>
-                    <div className="text-center mb-12">
-                        <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/10 border-none font-bold uppercase tracking-widest text-[10px] px-4 py-1.5">
-                            Academic Excellence
-                        </Badge>
-                        <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-slate-900">Sierra Leone Universities</h1>
-                        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
-                            Explore the top higher education institutions in the Lion Mountain. Build your future today.
-                        </p>
-                    </div>
+                    {/* PREMIUM HERO HEADER */}
+                    <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[350px] flex items-center shadow-2xl group mb-12">
+                        <div className="absolute inset-0 z-0">
+                            <Image
+                                src="/images/universities/campus.png"
+                                alt="University Campus"
+                                fill
+                                className="object-cover opacity-60 transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+                        </div>
+
+                        <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                                <GraduationCap className="w-4 h-4 text-[#1FA774]" />
+                                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Academic Excellence</span>
+                            </div>
+                            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                                Sierra Leone <span className="text-[#F4C430]">Universities</span>
+                            </h1>
+                            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                                Explore the top higher education institutions in the Lion Mountain. Find the right faculty to power your career path.
+                            </p>
+
+                            <div className="flex items-center gap-6 pt-2">
+                                <div className="flex flex-col">
+                                    <span className="text-2xl font-black text-white">{universities.length}</span>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Institutions</span>
+                                </div>
+                                <div className="w-px h-8 bg-white/10" />
+                                <div className="flex flex-col text-center">
+                                    <span className="text-2xl font-black text-[#F4C430]">100%</span>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
                     <div className="mb-10 max-w-2xl mx-auto space-y-6">
                         <div className="relative group">

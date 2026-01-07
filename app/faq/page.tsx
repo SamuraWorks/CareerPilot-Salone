@@ -1,6 +1,7 @@
 import { Footer } from "@/components/footer"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import Image from "next/image"
+import { Sparkles, HelpCircle } from "lucide-react"
 
 export default function FAQPage() {
   return (
@@ -9,23 +10,31 @@ export default function FAQPage() {
 
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
-          <div className="relative w-full h-48 rounded-2xl overflow-hidden mb-8">
-            <Image
-              src="/faq-help-support.jpg"
-              alt="Frequently Asked Questions"
-              fill
-              className="object-cover brightness-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-white">Frequently Asked Questions</h1>
+          {/* PREMIUM HERO HEADER */}
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="FAQ"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
             </div>
-          </div>
 
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
-            <p className="text-xl text-muted-foreground">Find answers to common questions about CareerPilot Salone</p>
-          </div>
+            <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Support Center</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
+                Frequently <span className="text-[#F4C430]">Asked</span> Questions
+              </h1>
+              <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                Find answers to common questions about CareerPilot Salone and how we empower your journey.
+              </p>
+            </div>
+          </section>
 
           <Accordion type="single" collapsible className="space-y-4">
             <AccordionItem value="item-1">

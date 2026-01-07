@@ -3,9 +3,11 @@
 import { useChat } from '@ai-sdk/react'
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Bot, MessageCircle, Send, User } from 'lucide-react'
+import { Bot, MessageCircle, Send, User, Sparkles, ArrowLeft } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function AIChatPage() {
     const [userProfile, setUserProfile] = useState({});
@@ -82,13 +84,35 @@ export default function AIChatPage() {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-col h-[calc(100vh-14rem)] md:h-[calc(100vh-12rem)] max-w-4xl mx-auto md:pb-0">
+            <div className="flex flex-col h-[calc(100vh-14rem)] md:h-[calc(100vh-12rem)] max-w-5xl mx-auto md:pb-0 space-y-6">
 
-                {/* Header */}
-                <div className="text-center space-y-2 mb-6">
-                    <h1 className="text-3xl font-bold font-poppins text-gradient-salone tracking-tight">AI Career Guidance</h1>
-                    <p className="text-sm text-slate-500 font-inter">Ask me anything about careers in Sierra Leone</p>
-                </div>
+                {/* PREMIUM HERO HEADER */}
+                <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] min-h-[220px] flex items-center shadow-2xl group shrink-0">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="AI Guidance"
+                            fill
+                            className="object-cover opacity-30 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/60 to-transparent z-10" />
+                    </div>
+
+                    <div className="relative z-20 p-8 md:p-12 space-y-4">
+                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1FA774] hover:text-white transition-colors">
+                            <ArrowLeft className="w-4 h-4" /> Go Back
+                        </Link>
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-2xl bg-[#1FA774]/20 flex items-center justify-center text-[#1FA774] border border-[#1FA774]/20">
+                                <Sparkles className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-black text-white tracking-tight">AI Career <span className="text-[#F4C430]">Mentor</span></h1>
+                                <p className="text-sm text-slate-400 font-medium">Built for the Sierra Leonean professional landscape.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Chat Container */}
                 <div className="flex-1 bg-white border border-slate-200 rounded-[2rem] shadow-sm flex flex-col overflow-hidden">

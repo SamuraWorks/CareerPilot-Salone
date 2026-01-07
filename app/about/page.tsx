@@ -12,25 +12,32 @@ export default function AboutPage() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          {/* Hero Image Section */}
-          <div className="relative w-full h-80 md:h-[400px] rounded-3xl overflow-hidden mb-16 shadow-2xl">
-            <Image src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" alt="CareerPilot Salone Team" fill className="object-cover" priority />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
-            <div className="absolute bottom-10 left-8 md:left-12 right-8 max-w-2xl">
-              <div className="inline-block mb-4 px-4 py-1.5 bg-blue-600/90 backdrop-blur-sm rounded-full border border-blue-400/30">
-                <span className="text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Empowering Youth
-                </span>
+          {/* PREMIUM HERO HEADER */}
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[360px] flex items-center shadow-2xl group mb-16">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="About CareerPilot"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+            </div>
+
+            <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Users className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Our Mission</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4">
-                Your Personal Career Mentor in Your Pocket.
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                Empowering the <span className="text-[#F4C430]">Youth</span> of Salone
               </h1>
-              <p className="text-lg md:text-xl text-slate-200 font-medium">
+              <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
                 Helping young people in Sierra Leone choose the right career, the right course, and discover real opportunities using AI.
               </p>
             </div>
-          </div>
+          </section>
 
           {/* The Challenge */}
           <section className="mb-24">

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useAuth } from "@/lib/auth-context"
 import {
+    ArrowLeft,
     FileText,
     Target,
     Sparkles,
@@ -131,10 +132,16 @@ export default function MenuPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-6 max-w-2xl mx-auto pb-12">
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">Menu</h1>
-                    <p className="text-muted-foreground">Access all tools and settings</p>
+            <div className="max-w-2xl mx-auto pb-12 space-y-8">
+                <div className="bg-[#0B1F3A] rounded-[2.5rem] p-10 mb-10 shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all" />
+                    <div className="relative z-10 space-y-2">
+                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1FA774] hover:text-white transition-colors mb-4">
+                            <ArrowLeft className="w-4 h-4" /> Go Back
+                        </Link>
+                        <h1 className="text-4xl font-black text-white tracking-tight">App <span className="text-[#F4C430]">Menu</span></h1>
+                        <p className="text-slate-400 font-medium">Access all CareerPilot tools and ecosystem settings.</p>
+                    </div>
                 </div>
 
                 {menuItems.map((section, idx) => (
@@ -175,6 +182,6 @@ export default function MenuPage() {
                     CareerPilot Salone v1.0.0
                 </div>
             </div>
-        </DashboardLayout>
+        </DashboardLayout >
     )
 }

@@ -23,6 +23,7 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
+import Image from "next/image"
 
 export default function ProfilePage() {
   const { logout } = useAuth()
@@ -47,80 +48,89 @@ export default function ProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="space-y-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-        {/* Navigation Breadcrumb */}
-        <div className="flex justify-between items-center">
-          <Link
-            href="/dashboard"
-            className="group inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors font-bold font-poppins text-[10px] uppercase tracking-[0.2em]"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Dashboard
-          </Link>
-
-          {!isEditing ? (
-            <Button
-              onClick={() => setIsEditing(true)}
-              variant="ghost"
-              className="rounded-xl font-bold font-poppins text-[10px] uppercase tracking-widest gap-2 bg-slate-100 hover:bg-primary hover:text-white transition-all"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-              Edit Profile
-            </Button>
-          ) : (
-            <Button
-              onClick={() => setIsEditing(false)}
-              variant="ghost"
-              className="rounded-xl font-bold font-poppins text-[10px] uppercase tracking-widest gap-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-all"
-            >
-              <X className="w-3.5 h-3.5" />
-              Cancel Editing
-            </Button>
-          )}
-        </div>
-
-        {/* --- HEADER / AVATAR --- */}
-        <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-          <div className="relative">
-            <div className="w-32 h-32 rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-4 border-white dark:border-slate-950 shadow-2xl overflow-hidden">
-              <User className="w-16 h-16 text-slate-300" />
-              {/* Optional: Add image preview if we had a real upload */}
-            </div>
-            {isEditing && (
-              <button className="absolute -bottom-2 -right-2 w-10 h-10 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                <Camera className="w-5 h-5" />
-              </button>
-            )}
+        {/* PREMIUM HERO SECTION */}
+        <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[320px] flex items-center shadow-2xl group">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/dashboard/salone_success.png"
+              alt="Profile Background"
+              fill
+              className="object-cover opacity-30 transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/60 to-transparent z-10" />
           </div>
-          <div className="space-y-2">
-            {!isEditing ? (
-              <>
-                <h1 className="text-4xl font-bold font-poppins text-slate-900 dark:text-white tracking-tight leading-none">{profile.name}</h1>
-                <p className="text-lg text-slate-500 font-medium font-inter">{profile.university}</p>
-              </>
-            ) : (
-              <div className="space-y-4 max-w-sm">
-                <Input
-                  value={profile.name}
-                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  className="h-12 rounded-xl text-xl font-bold font-poppins tracking-tight bg-white border-2 border-primary/20 focus:border-primary shadow-inner"
-                  placeholder="Full Name"
-                />
-                <Input
-                  value={profile.university}
-                  onChange={(e) => setProfile({ ...profile, university: e.target.value })}
-                  className="h-10 rounded-xl font-bold font-inter bg-white border-2 border-primary/10"
-                  placeholder="University / Organization"
-                />
+
+          <div className="relative z-20 w-full px-10 md:px-16 flex flex-col md:flex-row items-center justify-between gap-8 pt-12">
+            <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+              <div className="relative">
+                <div className="w-32 h-32 rounded-[2.5rem] bg-white/10 backdrop-blur-md flex items-center justify-center border-4 border-white/20 shadow-2xl overflow-hidden group-hover:border-[#F4C430]/50 transition-colors">
+                  <User className="w-16 h-16 text-white/50" />
+                </div>
+                {isEditing && (
+                  <button className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#F4C430] text-slate-900 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                    <Camera className="w-5 h-5" />
+                  </button>
+                )}
               </div>
-            )}
-            <div className="flex flex-wrap justify-center md:justify-start gap-2 pt-1">
-              <Badge className="bg-emerald-500 text-white border-none font-bold font-poppins text-[9px] uppercase tracking-widest px-3 py-1">Verified Profile</Badge>
-              <Badge variant="outline" className="border-slate-200 dark:border-slate-800 font-bold font-poppins text-[9px] uppercase tracking-widest px-3 py-1 text-slate-400">Student Account</Badge>
+              <div className="space-y-3">
+                {!isEditing ? (
+                  <>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight leading-none font-poppins">{profile.name}</h1>
+                    <p className="text-xl text-slate-300 font-medium font-inter">{profile.university}</p>
+                  </>
+                ) : (
+                  <div className="space-y-3 max-w-sm">
+                    <Input
+                      value={profile.name}
+                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                      className="h-12 rounded-xl text-xl font-bold font-poppins tracking-tight bg-white/10 text-white border-white/20 focus:border-[#F4C430] shadow-inner"
+                      placeholder="Full Name"
+                    />
+                    <Input
+                      value={profile.university}
+                      onChange={(e) => setProfile({ ...profile, university: e.target.value })}
+                      className="h-10 rounded-xl font-bold font-inter bg-white/10 text-white border-white/20"
+                      placeholder="University / Organization"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-wrap justify-center md:justify-start gap-2 pt-1">
+                  <Badge className="bg-emerald-500 text-white border-none font-bold font-poppins text-[9px] uppercase tracking-widest px-3 py-1">Verified Profile</Badge>
+                  <Badge variant="outline" className="border-white/20 font-bold font-poppins text-[9px] uppercase tracking-widest px-3 py-1 text-white/60">Student Account</Badge>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/dashboard"
+                className="group inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors font-bold font-poppins text-[10px] uppercase tracking-[0.2em] mb-4 md:mb-0"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                Back to Dashboard
+              </Link>
+              {!isEditing ? (
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  className="rounded-2xl h-14 px-8 font-black font-poppins text-[10px] uppercase tracking-widest gap-2 bg-[#F4C430] text-slate-900 shadow-xl shadow-[#F4C430]/20 hover:scale-[1.02] active:scale-95 transition-all border-none"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                  Edit Profile
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => setIsEditing(false)}
+                  className="rounded-2xl h-14 px-8 font-black font-poppins text-[10px] uppercase tracking-widest gap-2 bg-red-500 text-white shadow-xl shadow-red-500/20 hover:scale-[1.02] active:scale-95 transition-all border-none"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Cancel Editing
+                </Button>
+              )}
             </div>
           </div>
-        </div>
+        </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 

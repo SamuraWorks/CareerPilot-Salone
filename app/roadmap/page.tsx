@@ -30,6 +30,7 @@ import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
 
 // --- TYPES (UPDATED FOR DETAILED SCHEMA) ---
 // --- TYPES (UPDATED FOR DETAILED SCHEMA) ---

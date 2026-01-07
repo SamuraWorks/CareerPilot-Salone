@@ -475,38 +475,42 @@ export default function CVBuilderPage() {
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Dashboard
           </Link>
-          <div className="bg-primary/5 rounded-[2rem] p-4 md:p-8 border border-primary/10 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-1/3 h-full opacity-15 hidden lg:block pointer-events-none">
-              <Image src="/cv_builder_african.png" alt="CV Success" fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-primary/5" />
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="CV Builder"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
             </div>
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
 
-              <div className="bg-primary/10 p-4 rounded-2xl hidden md:block">
-                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg">
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
+            <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">AI CV Engine</span>
               </div>
-              <div className="text-center md:text-left flex-1">
-                <h1 className="text-2xl md:text-4xl font-bold font-poppins text-gradient-salone mb-2 tracking-tight">Professional CV Builder</h1>
-                <p className="text-muted-foreground font-inter text-sm md:text-lg">Fill in your details to create an ATS-friendly CV.</p>
-              </div>
-              <div className="flex flex-wrap justify-center gap-2 md:gap-3 w-full md:w-auto">
-                <Button variant="outline" onClick={() => setShowPreview(!showPreview)} className="gap-2 h-11 px-4 text-sm font-bold font-poppins flex-1 md:flex-none rounded-xl">
-                  <Eye className="w-4 h-4" />
-                  {showPreview ? "Hide" : "Show"} Preview
-                </Button>
-                <Button variant="secondary" onClick={handleCopyText} className="gap-2 h-11 px-4 text-sm font-bold font-poppins flex-1 md:flex-none rounded-xl">
-                  {copySuccess ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copySuccess ? "Copied!" : "Copy Text"}
-                </Button>
-                <Button onClick={handleDownload} className="gap-2 h-11 px-6 text-sm font-bold font-poppins w-full md:w-auto shadow-lg shadow-primary/20 bg-slate-900 text-white hover:bg-primary rounded-xl">
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                Build Your <span className="text-[#F4C430]">Professional</span> Future
+              </h1>
+              <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                Create an ATS-friendly, high-impact CV tailored specifically for the Sierra Leonean and international job markets.
+              </p>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Button onClick={handleDownload} className="h-14 px-10 rounded-2xl bg-[#1FA774] hover:bg-[#1FA774]/90 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-[#1FA774]/20 transition-all hover:scale-[1.02] active:scale-95 gap-3">
                   <Download className="w-4 h-4" />
                   Download PDF
                 </Button>
+                <Button variant="outline" onClick={() => setShowPreview(!showPreview)} className="h-14 px-8 rounded-2xl border-white/20 bg-white/5 text-white hover:bg-white/10 backdrop-blur-md font-black uppercase tracking-widest text-[11px] transition-all gap-3">
+                  <Eye className="w-4 h-4" />
+                  {showPreview ? "Hide" : "Show"} Preview
+                </Button>
               </div>
             </div>
-          </div>
+          </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Form Section */}

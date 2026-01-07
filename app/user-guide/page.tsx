@@ -4,7 +4,8 @@ import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowLeft, User, Search, BookOpen, GraduationCap, FileText, MessageSquare } from "lucide-react"
+import { ArrowLeft, User, Search, BookOpen, GraduationCap, FileText, MessageSquare, Sparkles } from "lucide-react"
+import Image from "next/image"
 
 export default function UserGuidePage() {
     return (
@@ -13,18 +14,31 @@ export default function UserGuidePage() {
 
             <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8 bg-muted/10">
                 <div className="max-w-4xl mx-auto">
-                    <div className="mb-8">
-                        <Link href="/help">
-                            <Button variant="ghost" className="gap-2 pl-0 hover:bg-transparent hover:text-primary">
-                                <ArrowLeft className="w-4 h-4" />
-                                Back to Help Center
-                            </Button>
-                        </Link>
-                        <h1 className="text-3xl font-bold mt-4">CareerPilot Salone User Guide</h1>
-                        <p className="text-muted-foreground text-lg mt-2">
-                            Master the platform with this step-by-step guide to achieving your career goals.
-                        </p>
-                    </div>
+                    {/* PREMIUM HERO HEADER */}
+                    <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
+                        <div className="absolute inset-0 z-0">
+                            <Image
+                                src="/images/dashboard/salone_success.png"
+                                alt="User Guide"
+                                fill
+                                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                        </div>
+
+                        <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                                <BookOpen className="w-4 h-4 text-[#1FA774]" />
+                                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Master Class</span>
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
+                                CareerPilot <span className="text-[#F4C430]">User</span> Guide
+                            </h1>
+                            <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                                Master the platform with this step-by-step guide to achieving your career goals in Sierra Leone.
+                            </p>
+                        </div>
+                    </section>
 
                     <div className="space-y-8">
                         {/* Section 1: Getting Started */}

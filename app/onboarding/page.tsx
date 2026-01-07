@@ -144,17 +144,24 @@ export default function OnboardingPage() {
           <Progress value={progress} className="h-2 bg-white/20" />
         </div>
 
-        <Card className="p-8 md:p-12 shadow-2xl overflow-hidden relative">
-          <div className="relative h-48 -mt-8 -mx-8 md:-mt-12 md:-mx-12 mb-8">
+        <Card className="p-8 md:p-12 shadow-2xl overflow-hidden relative border-none bg-white/95 backdrop-blur-xl rounded-[3rem]">
+          <div className="relative h-64 -mt-8 -mx-8 md:-mt-12 md:-mx-12 mb-10 group overflow-hidden">
             <Image
-              src="/onboarding_african.png"
+              src="/images/dashboard/salone_success.png"
               alt="Sierra Leonean Youth"
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-1000 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-4 left-6 text-white font-black text-2xl drop-shadow-lg">
-              Unlock Your Future
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/40 to-transparent" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.2),transparent)]" />
+
+            <div className="absolute bottom-8 left-10 space-y-2">
+              <Badge className="bg-[#1FA774] text-white border-none font-bold uppercase tracking-[0.2em] text-[10px] px-4 py-1.5">
+                New Journey
+              </Badge>
+              <h2 className="text-white font-black text-4xl leading-tight tracking-tight drop-shadow-2xl">
+                Unlock Your <span className="text-[#F4C430]">Future</span>
+              </h2>
             </div>
           </div>
 

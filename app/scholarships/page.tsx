@@ -57,26 +57,44 @@ export default function ScholarshipsPage() {
     return (
         <DashboardLayout>
             <div className="space-y-6">
-                {/* Header Card with Image */}
-                <Card className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background border-none shadow-md">
-                    <div className="flex flex-col md:flex-row items-center">
-                        <div className="p-8 flex-1">
-                            <h1 className="text-3xl md:text-4xl font-black mb-4 tracking-tight">Scholarship Opportunities</h1>
-                            <p className="text-muted-foreground text-lg max-w-lg">
-                                Scholarships for Sierra Leonean students - local and international. Find your path to higher education.
-                            </p>
+                {/* PREMIUM HERO HEADER */}
+                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Scholarships"
+                            fill
+                            className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+                    </div>
+
+                    <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                            <GraduationCap className="w-4 h-4 text-[#1FA774]" />
+                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Global Access</span>
                         </div>
-                        <div className="relative w-full md:w-64 h-48 md:h-64 shrink-0">
-                            <Image
-                                src="/scholarships_african.png"
-                                alt="Graduate Success"
-                                fill
-                                className="object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent hidden md:block" />
+                        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                            Scholarship <span className="text-[#F4C430]">Future</span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                            Find your path to local and international higher education with curated funding opportunities for Sierra Leonean students.
+                        </p>
+
+                        <div className="flex items-center gap-6 pt-2">
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black text-white">{scholarships.length}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Active</span>
+                            </div>
+                            <div className="w-px h-8 bg-white/10" />
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black text-[#F4C430]">{scholarships.filter(s => s.category?.includes("international")).length}</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">International</span>
+                            </div>
                         </div>
                     </div>
-                </Card>
+                </section>
 
                 {/* Search */}
                 <div className="relative">

@@ -2,7 +2,7 @@ import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { BookOpen, MessageCircle, Mail, Video, HelpCircle } from "lucide-react"
+import { BookOpen, MessageCircle, Mail, Video, HelpCircle, Sparkles, Search, MapPin, Briefcase, Clock, ExternalLink, Bookmark, Loader2, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 
 export default function HelpPage() {
@@ -12,15 +12,31 @@ export default function HelpPage() {
 
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          {/* Hero Image Section */}
-          <div className="relative w-full h-56 rounded-2xl overflow-hidden mb-8">
-            <Image src="/help-center-learning.jpg" alt="Help Center" fill className="object-cover brightness-75" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90" />
-            <div className="absolute bottom-8 left-0 right-0 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Help Center</h1>
-              <p className="text-lg text-white/90">Get the support you need to make the most of CareerPilot Salone</p>
+          {/* PREMIUM HERO HEADER */}
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="Help Center"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
             </div>
-          </div>
+
+            <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Resource Hub</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
+                How can we <span className="text-[#F4C430]">Help</span> you?
+              </h1>
+              <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                Access guides, tutorials, and support to help you navigate your career path with confidence.
+              </p>
+            </div>
+          </section>
 
           {/* Quick Links */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">

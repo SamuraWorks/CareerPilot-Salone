@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Briefcase, GraduationCap, Zap, Users, MapPin, ArrowRight, Loader2, Search } from "lucide-react"
+import { Briefcase, GraduationCap, Zap, Users, MapPin, ArrowRight, Loader2, Search, Sparkles } from "lucide-react"
 import { getJobs, getScholarships } from "@/lib/db"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function OpportunitiesPage() {
     const [activeTab, setActiveTab] = useState<'jobs' | 'internships' | 'scholarships' | 'training'>('jobs')
@@ -54,14 +55,36 @@ export default function OpportunitiesPage() {
     return (
         <DashboardLayout>
             <div className="space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                            <Briefcase className="w-6 h-6 text-primary" />
-                            <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Opportunities</h1>
+                {/* HERO HEADER */}
+                <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Opportunities"
+                            fill
+                            className="object-cover opacity-50 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                    </div>
+
+                    <div className="relative z-20 max-w-2xl p-10 md:p-16 space-y-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                            <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Growth Center</span>
                         </div>
-                        <p className="text-slate-500 font-medium text-lg">Actionable steps to land your next big role.</p>
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
+                            Your Next <span className="text-[#F4C430]">Big Move</span>
+                        </h1>
+                        <p className="text-lg text-slate-300 font-medium font-inter max-w-lg">
+                            Discover vetted jobs, internships, and scholarships tailored to the Sierra Leonean market.
+                        </p>
+                    </div>
+                </section>
+
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                    <div className="space-y-1">
+                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Browse Categories</h2>
+                        <p className="text-slate-500 font-medium">Filter by what matters to you today.</p>
                     </div>
 
                     <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-3xl w-fit">
@@ -70,8 +93,8 @@ export default function OpportunitiesPage() {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as any)}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === tab.id
-                                        ? 'bg-white dark:bg-slate-900 text-primary shadow-xl'
-                                        : 'text-slate-400 hover:text-slate-600'
+                                    ? 'bg-white dark:bg-slate-900 text-primary shadow-xl'
+                                    : 'text-slate-400 hover:text-slate-600'
                                     }`}
                             >
                                 <tab.icon className="w-4 h-4" />
@@ -96,9 +119,9 @@ export default function OpportunitiesPage() {
                                         <div className="space-y-6">
                                             <div className="flex justify-between items-start">
                                                 <Badge className={`${activeTab === 'jobs' ? 'bg-green-100 text-green-700' :
-                                                        activeTab === 'scholarships' ? 'bg-blue-100 text-blue-700' :
-                                                            activeTab === 'internships' ? 'bg-orange-100 text-orange-700' :
-                                                                'bg-purple-100 text-purple-700'
+                                                    activeTab === 'scholarships' ? 'bg-blue-100 text-blue-700' :
+                                                        activeTab === 'internships' ? 'bg-orange-100 text-orange-700' :
+                                                            'bg-purple-100 text-purple-700'
                                                     } border-none font-black text-[9px] uppercase tracking-wider px-3 py-1 rounded-full`}>
                                                     {activeTab}
                                                 </Badge>

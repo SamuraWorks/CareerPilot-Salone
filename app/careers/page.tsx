@@ -86,28 +86,46 @@ export default function CareersPage() {
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-700 pb-20">
 
-        {/* HERO HEADER */}
-        <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] p-10 md:p-16 shadow-2xl group">
+        {/* PREMIUM HERO HEADER */}
+        <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[400px] flex items-center shadow-2xl group">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/60 to-transparent z-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.1),transparent)] z-10" />
+            <Image
+              src="/images/dashboard/salone_success.png"
+              alt="Careers in Sierra Leone"
+              fill
+              className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
           </div>
 
-          <div className="relative z-20 max-w-2xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+          <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
               <Sparkles className="w-4 h-4 text-[#1FA774]" />
               <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Market Insights 2026</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold font-poppins text-white leading-tight">
-              Explore Careers in <span className="text-[#F4C430]">Sierra Leone</span>
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+              Explore Careers in <br /><span className="text-[#F4C430]">Sierra Leone</span>
             </h1>
-            <p className="text-slate-300 font-inter text-lg md:text-xl leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
               Find verified career paths with realistic salary data, required skills, and local university recommendations.
             </p>
+
+            <div className="flex items-center gap-6 pt-2">
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-white">{careers.length}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Paths</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-[#F4C430]">{categories.length}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Industries</span>
+              </div>
+            </div>
           </div>
 
-          <div className="absolute top-1/2 right-20 -translate-y-1/2 hidden lg:block opacity-20">
-            <Briefcase className="w-64 h-64 text-white" />
+          <div className="absolute top-1/2 right-20 -translate-y-1/2 hidden lg:block opacity-10">
+            <Briefcase className="w-64 h-64 text-white hover:scale-110 transition-transform duration-700" />
           </div>
         </section>
 

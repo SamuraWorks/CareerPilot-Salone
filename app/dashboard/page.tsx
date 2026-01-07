@@ -90,36 +90,61 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700 pb-12">
 
-        {/* 1. WELCOME / HERO CARD */}
-        <section className="relative rounded-[2rem] overflow-hidden bg-[#0B1F3A] min-h-[220px] flex flex-col justify-center p-8 shadow-2xl group">
+        {/* PREMIUM HERO HEADER */}
+        <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
           {/* Background Image with Gradient Overlay */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/images/dashboard/cotton_tree.png"
               alt="Cotton Tree Freetown"
               fill
-              className="object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000"
+              className="object-cover opacity-30 group-hover:scale-105 transition-transform duration-[2000ms]"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
           </div>
 
-          <div className="relative z-10 space-y-2">
-            <div className="flex items-center gap-2 text-[#F4C430] font-poppins font-bold text-sm uppercase tracking-[0.2em]">
-              <span className="w-8 h-[2px] bg-[#F4C430]" /> Career Command Center
+          <div className="relative z-20 w-full p-10 md:p-16 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="space-y-6 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-[10px] uppercase tracking-[0.2em]">Career Command Center</span>
+              </div>
+
+              <div className="space-y-2">
+                <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                  Welcome back, <span className="text-[#F4C430]">{profile?.name?.split(' ')[0] || 'Samuel'}</span> 👋🏾
+                </h1>
+                <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-lg leading-relaxed">
+                  Your future in Sierra Leone starts with a single step today. Let's build your path together.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-6 pt-2">
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-white">{roadmapProgress}%</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Roadmap Ready</span>
+                </div>
+                <div className="w-px h-8 bg-white/10" />
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-[#F4C430]">{opportunities.length}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Opportunities</span>
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold font-poppins text-white tracking-tight">
-              Welcome back, <span className="text-[#F4C430]">{profile?.name?.split(' ')[0] || 'Samuel'}</span> 👋🏾
-            </h1>
-            <p className="text-slate-300 font-inter text-lg max-w-md">
-              Your future in Sierra Leone starts with a single step today. Let's plan it.
-            </p>
-          </div>
 
-          <div className="absolute bottom-6 right-8 hidden md:block">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-              <span className="text-xl">🇸🇱</span>
-              <span className="text-white font-bold text-xs uppercase tracking-widest">Salone Proud</span>
+            {/* Glassmorphism badge for Dashboard */}
+            <div className="shrink-0 hidden lg:block">
+              <div className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/10 shadow-2xl flex flex-col items-center gap-4 text-center transform hover:rotate-2 transition-transform cursor-default select-none">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-[#1FA774] to-[#F4C430] p-1 shadow-lg">
+                  <div className="w-full h-full rounded-full bg-[#0B1F3A] flex items-center justify-center text-3xl">🇸🇱</div>
+                </div>
+                <div>
+                  <p className="text-white font-black text-sm uppercase tracking-widest leading-none">Salone Proud</p>
+                  <p className="text-slate-400 text-[10px] font-bold mt-1 uppercase tracking-tighter">Verified Citizen Account</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

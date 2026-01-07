@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, MapPin, Briefcase, Clock, ExternalLink, BookOpen, Bookmark, Loader2, ArrowLeft } from "lucide-react"
+import { Search, MapPin, Briefcase, Clock, ExternalLink, BookOpen, Bookmark, Loader2, ArrowLeft, Sparkles } from "lucide-react"
 import { getJobs } from "@/lib/db"
 import { toast } from "sonner"
 import Link from "next/link"
@@ -74,27 +74,44 @@ export default function JobsPage() {
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Dashboard
         </Link>
-        {/* Header Card with Image */}
-        <Card className="relative overflow-hidden bg-white border border-slate-200 shadow-sm">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="p-8 flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold font-poppins text-gradient-salone mb-4 tracking-tight">Jobs & Training</h1>
-              <p className="text-slate-600 font-inter text-lg max-w-lg">
-                Explore real opportunities in Freetown, Bo, and beyond. Your next big career move starts here in 🇸🇱.
-              </p>
+        {/* PREMIUM HERO HEADER */}
+        <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/dashboard/salone_success.png"
+              alt="Jobs & Training"
+              fill
+              className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+          </div>
+
+          <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+              <Briefcase className="w-4 h-4 text-[#1FA774]" />
+              <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Opportunity Hub</span>
             </div>
-            <div className="relative w-full md:w-80 h-48 md:h-64 shrink-0 bg-slate-100">
-              {/* Use a placeholder or a pattern if the image is missing, but keeping original image for now if it exists */}
-              <Image
-                src="/jobs_african.png"
-                alt="Modern Freetown Office"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent hidden md:block" />
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+              Jobs & <span className="text-[#F4C430]">Training</span> Explorer
+            </h1>
+            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+              Explore real opportunities in Freetown, Bo, and beyond. Your next big career move starts here in 🇸🇱.
+            </p>
+
+            <div className="flex items-center gap-6 pt-2">
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-white">{opportunities.length}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Postings</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-2xl font-black text-[#F4C430]">{opportunities.filter(o => o.type === 'internship').length}</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Internships</span>
+              </div>
             </div>
           </div>
-        </Card>
+        </section>
 
         {/* Search */}
         <div className="relative">

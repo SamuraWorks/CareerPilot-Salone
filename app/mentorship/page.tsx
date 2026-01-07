@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
 import { MOCK_MENTORS, Mentor } from "@/lib/mentors"
+import Image from "next/image"
 
 export default function MentorshipPage() {
     const [searchQuery, setSearchQuery] = React.useState("")
@@ -92,22 +93,53 @@ export default function MentorshipPage() {
 
 
             <main className="flex-1 pb-12">
-                {/* --- PREMIUM HEADER --- */}
-                <section className="relative pt-20 pb-16 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-white/5 overflow-hidden">
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px]" />
-                        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-500/5 rounded-full blur-[100px]" />
+                {/* --- PREMIUM HERO SECTION --- */}
+                <section className="relative min-h-[400px] flex items-center bg-[#0B1F3A] overflow-hidden">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/mentorship/hero.png"
+                            alt="Mentorship Guidance"
+                            fill
+                            className="object-cover opacity-50 transition-transform duration-1000 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/70 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(31,167,116,0.15),transparent)] z-10" />
                     </div>
 
-                    <div className="container mx-auto px-6 relative z-10">
-                        <div className="max-w-4xl mx-auto text-center space-y-4">
-                            <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-bold font-poppins uppercase tracking-[0.2em] text-slate-400 hover:text-primary transition-colors mb-6">
+                    <div className="container mx-auto px-6 relative z-20">
+                        <div className="max-w-3xl space-y-8">
+                            <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-bold font-poppins uppercase tracking-[0.2em] text-[#1FA774] hover:text-white transition-colors">
                                 <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
                             </Link>
-                            <h1 className="text-4xl md:text-6xl font-bold font-poppins text-gradient-salone tracking-tight leading-tight">Career Mentors</h1>
-                            <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 font-medium font-inter max-w-2xl mx-auto">
-                                Learn from professionals who’ve walked the path you’re choosing. Human insight to power your career.
-                            </p>
+                            <div className="space-y-4">
+                                <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
+                                    Career <span className="text-[#F4C430]">Mentors</span>
+                                </h1>
+                                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed">
+                                    Connect with verified Sierra Leonean professionals who have already navigated the path you're on.
+                                    <span className="text-white"> Real people. Real insight.</span>
+                                </p>
+                            </div>
+                            <div className="flex flex-wrap gap-4 pt-4">
+                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3 border border-white/10">
+                                    <div className="w-10 h-10 rounded-xl bg-[#1FA774]/20 flex items-center justify-center text-[#1FA774]">
+                                        <BadgeCheck className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-widest leading-none">50+ Verified</p>
+                                        <p className="text-[10px] text-slate-400">Local Experts</p>
+                                    </div>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3 border border-white/10">
+                                    <div className="w-10 h-10 rounded-xl bg-[#F4C430]/20 flex items-center justify-center text-[#F4C430]">
+                                        <Star className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-widest leading-none">4.9 Rating</p>
+                                        <p className="text-[10px] text-slate-400">Community Trust</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
