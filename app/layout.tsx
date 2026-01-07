@@ -11,7 +11,6 @@ import { AuthProvider } from "@/lib/auth-context"
 import { AuthGuard } from "@/components/auth-guard"
 import { WhatsAppFAB } from "@/components/whatsapp-fab"
 import { Navigation } from "@/components/navigation"
-import { MobileNav } from "@/components/mobile-nav"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const poppins = Poppins({
@@ -92,10 +91,9 @@ export default function RootLayout({
         <AuthProvider>
           <AuthGuard>
             <Navigation />
-            <div className="pt-16 pb-20 md:pb-0">
+            <div className="pt-16">
               {children}
             </div>
-            <MobileNav />
             <WhatsAppFAB />
           </AuthGuard>
           <Toaster richColors position="top-right" />

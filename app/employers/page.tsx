@@ -126,7 +126,7 @@ export default function EmployerPortal() {
                 </div>
 
                 {/* Filters & Content */}
-                <div className="container mx-auto max-w-6xl px-4 -mt-10 relative z-10 pb-20">
+                <div className="container mx-auto max-w-6xl px-4 -mt-10 relative z-10 pb-12">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         {/* Sidebar Filters */}
                         <div className="hidden md:block space-y-6">

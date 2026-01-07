@@ -91,7 +91,7 @@ export default function MentorshipPage() {
         <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 selection:bg-primary/10">
 
 
-            <main className="flex-1 pb-20">
+            <main className="flex-1 pb-12">
                 {/* --- PREMIUM HEADER --- */}
                 <section className="relative pt-20 pb-16 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-white/5 overflow-hidden">
                     <div className="absolute inset-0 pointer-events-none overflow-hidden">

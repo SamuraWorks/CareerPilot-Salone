@@ -131,7 +131,7 @@ export default function MenuPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-6 max-w-2xl mx-auto pb-20">
+            <div className="space-y-6 max-w-2xl mx-auto pb-12">
                 <div>
                     <h1 className="text-2xl font-bold mb-2">Menu</h1>
                     <p className="text-muted-foreground">Access all tools and settings</p>
