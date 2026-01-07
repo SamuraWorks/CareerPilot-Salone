@@ -78,7 +78,7 @@ export const MOCK_MENTORS: Mentor[] = [
         location: 'Sierra Leone',
         education: 'Graduate',
         bio: 'Mayor of Freetown, specializing in urban transformation, job creation, and climate resilience. Dedicated to community empowerment.',
-        image_url: 'https://yvonneakisawyerr.com/wp-content/uploads/2023/12/YAS-Mayor.jpg',
+        image_url: '/images/mentors/yvonne_aki_sawyerr.jpg',
         support_types: ['Leadership', 'Community Impact', 'Entrepreneurship'],
         availability: 'Sponsored',
         credibility: 'Mayor, MSc (LSE)',
