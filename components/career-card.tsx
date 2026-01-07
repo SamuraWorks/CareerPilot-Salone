@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import type { Career } from "@/lib/sample-data"
-import { ArrowRight, TrendingUp, DollarSign } from "lucide-react"
+import { ArrowRight, TrendingUp, DollarSign, Target, Sparkles, MapPin } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 
@@ -17,9 +17,9 @@ export function CareerCard({ career }: CareerCardProps) {
   const [showUsd, setShowUsd] = useState(false)
 
   const demandColor = {
-    High: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
-    Medium: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
-    Low: "bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-500/20",
+    High: "bg-emerald-500/10 text-[#1FA774] border-[#1FA774]/20",
+    Medium: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+    Low: "bg-slate-500/10 text-slate-700 border-slate-500/20",
   }
 
   const demandIcon = {
@@ -28,118 +28,115 @@ export function CareerCard({ career }: CareerCardProps) {
     Low: "📊",
   }
 
-  // Calculate percentage for salary visualization
   const getPercentage = () => {
     if (showUsd && career.salaryMinUsd && career.salaryMaxUsd) {
-      const max = 2000 // Max USD for scale
+      const max = 2000
       return ((career.salaryMaxUsd / max) * 100).toFixed(0)
     } else if (career.salaryMinLe && career.salaryMaxLe) {
-      const max = 40000000 // Max Le for scale (40M)
+      const max = 40000000
       return ((career.salaryMaxLe / max) * 100).toFixed(0)
     }
     return "50"
   }
 
   return (
-    <Card className="group hover:shadow-2xl transition-all duration-300 overflow-hidden h-full flex flex-col border-border/50 hover:border-primary/30 hover:-translate-y-1">
+    <Card className="group hover:shadow-[0_20px_50px_rgba(11,31,58,0.15)] transition-all duration-500 overflow-hidden h-full flex flex-col border-slate-100 rounded-[2.5rem] bg-white hover:-translate-y-2">
       {/* Image with gradient overlay */}
-      <div className="relative h-48 w-full bg-muted overflow-hidden">
+      <div className="relative h-60 w-full bg-slate-100 overflow-hidden">
         <Image
           src={career.imageUrl || "/placeholder.svg"}
           alt={career.title}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/20 to-transparent" />
 
-        {/* Demand badge on image */}
-        <div className="absolute top-3 right-3">
-          <Badge className={`${demandColor[career.demand]} backdrop-blur-sm border shadow-lg`} variant="secondary">
-            <span className="mr-1">{demandIcon[career.demand]}</span>
-            <TrendingUp className="w-3 h-3 mr-1" />
-            {career.demand} Demand
+        {/* Demand badge */}
+        <div className="absolute top-4 right-4">
+          <Badge className={`${demandColor[career.demand]} backdrop-blur-md border shadow-lg font-bold font-poppins py-1 px-3 rounded-full`} variant="secondary">
+            {demandIcon[career.demand]} {career.demand} Demand
           </Badge>
         </div>
 
-        {/* Category badge */}
-        <div className="absolute bottom-3 left-3">
-          <Badge variant="outline" className="bg-background/80 backdrop-blur-sm border-primary/30">
+        {/* Industry Label */}
+        <div className="absolute bottom-4 left-4">
+          <Badge variant="outline" className="bg-white/10 backdrop-blur-md border-white/20 text-white font-bold font-poppins text-[10px] uppercase tracking-[0.2em] px-3 py-1">
             {career.category}
           </Badge>
         </div>
       </div>
 
-      <CardHeader className="pb-3">
-        <CardTitle className="text-xl group-hover:text-primary transition-colors">{career.title}</CardTitle>
-        <CardDescription className="line-clamp-2 text-sm">{career.description}</CardDescription>
+      <CardHeader className="p-6 pb-2 space-y-2">
+        <CardTitle className="text-2xl font-bold font-poppins text-[#0B1F3A] group-hover:text-[#1FA774] transition-colors leading-tight">
+          {career.title}
+        </CardTitle>
+        <CardDescription className="line-clamp-2 text-sm font-medium font-inter text-slate-500 leading-relaxed">
+          {career.description}
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col justify-between space-y-4">
-        <div className="space-y-4">
-          {/* Skills */}
+      <CardContent className="p-6 pt-2 flex-1 flex flex-col justify-between space-y-6">
+        <div className="space-y-6">
+          {/* Key Skills */}
           <div>
-            <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">Key Skills</p>
-            <div className="flex flex-wrap gap-1.5">
-              {career.skills.slice(0, 4).map((skill) => (
-                <Badge key={skill} variant="outline" className="text-xs py-0.5 px-2 bg-secondary/30">
+            <div className="flex items-center gap-2 mb-3">
+              <Target className="w-3.5 h-3.5 text-slate-400" />
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Crucial Skills</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {career.skills.slice(0, 3).map((skill) => (
+                <div key={skill} className="text-[11px] font-bold py-1.5 px-3 bg-slate-50 text-slate-600 rounded-lg border border-slate-100">
                   {skill}
-                </Badge>
+                </div>
               ))}
-              {career.skills.length > 4 && (
-                <Badge variant="outline" className="text-xs py-0.5 px-2 bg-secondary/50">
-                  +{career.skills.length - 4}
-                </Badge>
+              {career.skills.length > 3 && (
+                <div className="text-[11px] font-black py-1.5 px-3 bg-white text-[#1FA774] rounded-lg border border-[#1FA774]/20 shadow-sm">
+                  +{career.skills.length - 3} more
+                </div>
               )}
             </div>
           </div>
 
-          {/* Salary Section with Visualization */}
-          <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg p-3 border border-primary/10">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Salary Range</p>
-              {career.salaryUsd && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 px-2 text-xs"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setShowUsd(!showUsd)
-                  }}
-                >
-                  <DollarSign className="w-3 h-3 mr-1" />
-                  {showUsd ? "Le" : "USD"}
-                </Button>
-              )}
+          {/* New Salary Analysis Visual */}
+          <div className="bg-[#f8fafc] rounded-3xl p-5 border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Monthly Income</span>
+              </div>
+              <button
+                onClick={(e) => { e.preventDefault(); setShowUsd(!showUsd); }}
+                className="text-[10px] font-bold text-[#1FA774] hover:underline"
+              >
+                Switch to {showUsd ? "SLE" : "USD"}
+              </button>
             </div>
 
-            <p className="text-sm font-bold text-foreground mb-2">
-              {showUsd && career.salaryUsd ? career.salaryUsd : career.salary}
-            </p>
+            <div className="space-y-3">
+              <p className="text-lg font-bold font-poppins text-[#0B1F3A]">
+                {showUsd && career.salaryUsd ? career.salaryUsd : career.salary}
+              </p>
 
-            {/* Salary visualization bar */}
-            {((showUsd && career.salaryMinUsd && career.salaryMaxUsd) ||
-              (!showUsd && career.salaryMinLe && career.salaryMaxLe)) && (
-                <div className="space-y-1">
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
-                      style={{ width: `${getPercentage()}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] text-muted-foreground">
-                    <span>Entry</span>
-                    <span>Senior</span>
-                  </div>
+              <div className="space-y-1">
+                <div className="h-2 bg-slate-200 rounded-full overflow-hidden flex">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#1FA774] to-[#F4C430] transition-all duration-1000"
+                    style={{ width: `${getPercentage()}%` }}
+                  />
                 </div>
-              )}
+                <div className="flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                  <span>Junior</span>
+                  <span>Senior Expert</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* View Details Button */}
         <Link href={`/careers/${career.id}`} className="block">
-          <Button className="w-full gap-2 group/btn">
-            <span>View Details</span>
+          <Button className="w-full h-14 bg-[#0B1F3A] hover:bg-[#1A3355] text-white rounded-2xl font-bold font-poppins shadow-lg group/btn gap-3 transition-all">
+            <span>Analyze Details</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
           </Button>
         </Link>

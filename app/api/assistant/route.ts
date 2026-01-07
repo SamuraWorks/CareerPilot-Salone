@@ -60,7 +60,19 @@ GUIDELINES:
             });
         }
         else {
-            throw new Error("AI Credentials not found");
+            // MOCK RESPONSE FOR DEMO/DEVELOPMENT WITHOUT KEYS
+            console.log("Using Mock AI Response (No Keys Found)");
+            const lastMessage = messages[messages.length - 1]?.content || "Hello";
+
+            return new Response(
+                `0:"Kusheh! I'm currently in 'Demo Mode' because AI credentials aren't set up yet. \n\nHowever, I can still see you asked about: '${lastMessage}'. \n\nIn the full version, I provide detailed links to Sierra Leonean universities, salary data for Salone careers, and specific next steps for your profile! Try asking me about 'Engineering' or 'Law' once the keys are connected."\n`,
+                {
+                    headers: {
+                        'Content-Type': 'text/plain; charset=utf-8',
+                        'x-vercel-ai-data-stream': 'v1'
+                    }
+                }
+            );
         }
 
         return result.toTextStreamResponse();
