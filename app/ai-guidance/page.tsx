@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils'
 
 export default function AIChatPage() {
     const [userProfile, setUserProfile] = useState({});
-    const [localInput, setLocalInput] = useState('');
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -27,6 +26,9 @@ export default function AIChatPage() {
 
     const {
         messages = [],
+        input,
+        handleInputChange,
+        handleSubmit,
         isLoading = false,
         append
     } = (useChat as any)({
@@ -59,16 +61,8 @@ export default function AIChatPage() {
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Submitting message:", localInput);
-        if (!localInput.trim() || isLoading || !append) return;
-
-        append({ role: 'user', content: localInput });
-        setLocalInput('');
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("Input changed:", e.target.value);
-        setLocalInput(e.target.value);
+        if (!input?.trim() || isLoading) return;
+        handleSubmit(e);
     };
 
     return (
@@ -177,7 +171,7 @@ export default function AIChatPage() {
                         <form onSubmit={handleFormSubmit} className="flex gap-2">
                             <input
                                 className="flex-1 px-5 py-3.5 rounded-full bg-slate-50 border border-slate-200 focus:border-slate-300 focus:ring-0 outline-none text-sm transition-all font-inter placeholder:text-slate-400"
-                                value={localInput}
+                                value={input}
                                 onChange={handleInputChange}
                                 placeholder="Type your message..."
                                 autoComplete="off"
@@ -186,7 +180,7 @@ export default function AIChatPage() {
                                 type="submit"
                                 size="icon"
                                 className="rounded-full w-12 h-12 shrink-0 bg-[#1F7A4D] hover:bg-[#16643d] shadow-md transition-all"
-                                disabled={!localInput?.trim() || isLoading}
+                                disabled={!input?.trim() || isLoading}
                             >
                                 <Send className="w-5 h-5 text-white" />
                             </Button>

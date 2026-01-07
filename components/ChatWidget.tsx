@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
-    const [localInput, setLocalInput] = useState('');
     const [userProfile, setUserProfile] = useState({});
 
     useEffect(() => {
@@ -26,6 +25,9 @@ export function ChatWidget() {
 
     const {
         messages = [],
+        input,
+        handleInputChange,
+        handleSubmit,
         isLoading,
         append
     } = (useChat as any)({
@@ -35,11 +37,9 @@ export function ChatWidget() {
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!localInput.trim() || isLoading || !append) return;
-
-        append({ role: 'user', content: localInput });
-        setLocalInput('');
+        handleSubmit(e);
     };
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -166,15 +166,15 @@ export function ChatWidget() {
                                 <form onSubmit={handleFormSubmit} className="flex gap-2">
                                     <input
                                         className="flex-1 px-5 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none focus:ring-2 focus:ring-slate-900/5 outline-none text-sm transition-all font-medium"
-                                        value={localInput}
-                                        onChange={(e) => setLocalInput(e.target.value)}
+                                        value={input}
+                                        onChange={handleInputChange}
                                         placeholder="Type your question..."
                                     />
                                     <Button
                                         type="submit"
                                         size="icon"
                                         className="rounded-2xl w-12 h-12 shrink-0 bg-slate-900 hover:bg-slate-800 shadow-lg"
-                                        disabled={!localInput?.trim() || isLoading}
+                                        disabled={!input?.trim() || isLoading}
                                     >
                                         <Send className="w-5 h-5 text-white" />
                                     </Button>
