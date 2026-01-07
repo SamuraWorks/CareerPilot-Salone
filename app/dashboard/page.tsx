@@ -28,7 +28,8 @@ import {
   Users,
   TrendingUp,
   MessageSquare,
-  ChevronRight
+  ChevronRight,
+  Bot
 } from "lucide-react"
 
 interface UserProfile {
