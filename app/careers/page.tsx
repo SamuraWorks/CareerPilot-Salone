@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { CareerCard } from "@/components/career-card"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Briefcase, TrendingUp, Users, Loader2, Filter, Sparkles } from "lucide-react"
@@ -136,8 +137,8 @@ export default function CareersPage() {
             <button
               onClick={() => setSelectedCategory(null)}
               className={`px-6 py-3 rounded-full font-poppins font-bold text-sm tracking-wide transition-all ${selectedCategory === null
-                  ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
-                  : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
+                ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
+                : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
                 }`}
             >
               All Industries
@@ -147,8 +148,8 @@ export default function CareersPage() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-6 py-3 rounded-full font-poppins font-bold text-sm tracking-wide transition-all ${selectedCategory === cat
-                    ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
-                    : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
+                  ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
+                  : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
                   }`}
               >
                 {cat}
