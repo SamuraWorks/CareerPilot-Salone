@@ -29,11 +29,14 @@ export default function AIChatPage() {
         input,
         handleInputChange,
         handleSubmit,
+        setInput,
         isLoading = false,
         append
     } = (useChat as any)({
         api: '/api/assistant',
         body: chatBody,
+        onFinish: () => console.log("Guidance chat finished"),
+        onError: (err: any) => console.error("Guidance chat error:", err)
     });
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -61,8 +64,20 @@ export default function AIChatPage() {
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input?.trim() || isLoading) return;
-        handleSubmit(e);
+        const message = input;
+        if (!message?.trim() || isLoading) return;
+
+        // Clear input immediately for better UX
+        setInput('');
+
+        try {
+            console.log("Sending guidance via append:", message);
+            append({ role: 'user', content: message });
+        } catch (err) {
+            console.error("Error sending guidance message:", err);
+            // Fallback: restore input
+            setInput(message);
+        }
     };
 
     return (

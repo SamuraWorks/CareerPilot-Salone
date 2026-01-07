@@ -28,16 +28,36 @@ export function ChatWidget() {
         input,
         handleInputChange,
         handleSubmit,
+        setInput,
         isLoading,
         append
     } = (useChat as any)({
         api: '/api/assistant',
-        body: { userProfile }
+        body: { userProfile },
+        onFinish: () => {
+            console.log("Chat finished successfully");
+        },
+        onError: (err: any) => {
+            console.error("Chat error:", err);
+        }
     });
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        handleSubmit(e);
+        const message = input;
+        if (!message?.trim() || isLoading) return;
+
+        // Clear input immediately for better UX
+        setInput('');
+
+        try {
+            console.log("Sending via append:", message);
+            append({ role: 'user', content: message });
+        } catch (err) {
+            console.error("Error sending message:", err);
+            // If append fails, restore input so the user doesn't lose their message
+            setInput(message);
+        }
     };
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
