@@ -98,7 +98,7 @@ export async function processWhatsAppMessage(body: string, sender: string): Prom
     }
 
     // 3. Command Routing (Initial Start)
-    if (upperBody === 'CAREER' || upperBody === 'TEST' || upperBody === 'START') {
+    if (upperBody === 'CAREER' || upperBody === 'TEST' || upperBody === 'START' || upperBody === 'KUSHEH') {
         session.step = 'ONBOARDING_AGE';
         session.data = {};
         await updateSession(sender, session);
@@ -107,30 +107,33 @@ export async function processWhatsAppMessage(body: string, sender: string): Prom
 
     switch (upperBody) {
         case 'JOBS':
-            return "💼 *Trending Sectors*\n1. Tech\n2. Finance\n3. Agriculture\n\nTo see list, reply with sector name.";
+            return "💼 *Trending Sectors na Salone*\n1. Digital Technology (High Demand!)\n2. Renewable Energy (Solar)\n3. Modern Agriculture\n4. Healthcare\n\nTo see list, reply with sector name or type START for a full career match.";
         case 'KRIO':
-            return "Kusheh! Ah gladi for help you. Type CAREER for start de career business.";
+            return "Kusheh! Ah gladi for help you build your career. Type *START* for begin de career business or *MENU* for see waitin we get.";
+        case 'ABOUT':
+            return "CareerPilot Salone 🇸🇱 is your #1 mentor for navigating the job market in Sierra Leone. We provide roadmaps, CV help, and job alerts via WhatsApp and Web.";
         default:
             // --- AI ASSISTANT FALLBACK ---
             try {
                 const groundedCareers = SIERRA_LEONE_CAREERS.slice(0, 15).map(c =>
-                    `- ${c.title}: ${c.description}. Education: ${c.requiredEducation[0]}.`
+                    `- ${c.title}: ${c.description}.`
                 ).join('\n');
 
                 const { text } = await generateText({
                     model: openai('gpt-4o-mini'),
                     system: `You are CareerPilot Salone AI on WhatsApp.
-                    ROLE: Personal career mentor for Sierra Leonean youth. Deliver clear, realistic, and actionable guidance.
+                    PERSONALITY: Extremely helpful, encouraging, and knowledgeable about the Sierra Leonean labor market. You speak a mix of English and occasional Krio (like 'Kusheh', 'Gladi', 'Salone').
+                    ROLE: Personal career mentor for Sierra Leonean youth.
                     WHATSAPP MODE: Keep responses very short, professional, and friendly. Use Bullet points.
+                    CONTEXT: Current location is Sierra Leone. Mention local institutions like FBC, IPAM, Njala, or DSTI where relevant.
                     KNOWLEDGE: ${groundedCareers}
-                    CATEGORIES: Summary -> Options -> Steps -> Actions.
-                    RESOURCES: Suggest /roadmap or /cv-builder.`,
+                    ACTIONS: If the user is confused, tell them to type START to begin a career match quiz.`,
                     prompt: body
                 });
                 return text;
             } catch (err) {
                 console.error("WhatsApp AI Error:", err);
-                return "Hello! I am your CareerPilot Mentor. \n\nType *START* to begin your career discovery, or *MENU* for options.";
+                return "Kusheh! I am your CareerPilot Mentor. 🇸🇱\n\nI couldn't process that exactly, but I'm ready to help you!\n\nType *START* to find your dream job, or *MENU* for options.";
             }
     }
 }
