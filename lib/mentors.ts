@@ -96,7 +96,7 @@ export const MOCK_MENTORS: Mentor[] = [
         location: 'Sierra Leone',
         education: 'Graduate',
         bio: 'Commissioner of the Anti-Corruption Commission. Senior Partner at Kaifala, Kanneh & Co. Expert in legal reform and integrity.',
-        image_url: 'https://www.anticorruption.gov.sl/media/img/commissioner.jpg',
+        image_url: '/images/mentors/fbk.jpg',
         support_types: ['Legal Careers', 'Public Integrity', 'Leadership'],
         availability: 'Free',
         credibility: 'ACC Commissioner, LLM (London)',

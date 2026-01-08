@@ -278,8 +278,8 @@ export default function DashboardPage() {
             {/* 6. COMMUNITY & SUCCESS STORIES */}
             <Card className="p-0 border-[#E5E7EB] rounded-[2rem] bg-indigo-900 overflow-hidden relative shadow-lg group">
               <Image
-                src="/images/dashboard/salone_success.png"
-                alt="Salone success"
+                src="/images/mentors/fbk.jpg"
+                alt="Francis Ben Kaifala"
                 fill
                 className="object-cover opacity-60 group-hover:scale-110 transition-transform duration-[3s]"
               />
@@ -287,15 +287,15 @@ export default function DashboardPage() {
               <div className="relative z-10 p-6 flex flex-col h-full justify-end min-h-[250px] space-y-3">
                 <h3 className="text-xl font-bold font-poppins text-white">Salone Success Stories</h3>
                 <p className="text-slate-300 text-sm font-medium leading-relaxed">
-                  "I used CareerPilot to find my first internship at a local tech hub."
+                  "Integrity is the foundation of any successful career. Build your path with character."
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full border-2 border-[#F4C430] bg-white/20 p-1">
-                    <div className="w-full h-full rounded-full bg-slate-200" />
+                  <div className="w-10 h-10 rounded-full border-2 border-[#F4C430] overflow-hidden p-1 bg-white/20">
+                    <Image src="/images/mentors/fbk.jpg" alt="FBK" fill className="object-cover rounded-full" />
                   </div>
                   <div>
-                    <div className="text-white font-bold text-xs">Aminata K.</div>
-                    <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Junior Developer</div>
+                    <div className="text-white font-bold text-xs">Francis Ben Kaifala</div>
+                    <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">ACC Commissioner</div>
                   </div>
                 </div>
               </div>
