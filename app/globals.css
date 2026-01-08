@@ -24,9 +24,10 @@
   /* #1FA774 - Emerald Green */
   --secondary-foreground: 0 0% 100%;
 
-  --accent: 45 91% 57%;
-  /* #F4C430 - Gold */
-  --accent-foreground: 215 68% 14%;
+  --accent: 158 68% 39%;
+  /* #1FA774 - Salone Green */
+  --accent-foreground: 0 0% 100%;
+
 
   --muted: 210 40% 96.1%;
   --muted-foreground: 215 16% 47%;

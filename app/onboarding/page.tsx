@@ -1,18 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ArrowLeft, GraduationCap, Lightbulb, Target, BookOpen, MessageSquare } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ArrowRight, ArrowLeft, GraduationCap, Lightbulb, Target, BookOpen, MessageSquare, User, MapPin, Calendar, Sparkles } from "lucide-react"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
-
+import { supabase } from "@/lib/supabase"
 
 interface OnboardingData {
+  fullName: string
+  age: string
+  location: string
   educationLevel: string
   subjects: string[]
   interests: string[]
@@ -21,11 +27,17 @@ interface OnboardingData {
   whatsappSubscribed: boolean
 }
 
+const DISTRICTS = [
+  "Bo", "Bombali", "Bonthe", "Falaba", "Freetown (Western Area Urban)",
+  "Kailahun", "Kambia", "Karene", "Kenema", "Koinadugu", "Kono",
+  "Moyamba", "Port Loko", "Pujehun", "Tonkolili", "Western Area Rural"
+]
+
 const EDUCATION_LEVELS = [
   { value: "secondary", label: "Secondary School", desc: "WASSCE/BECE or equivalent" },
-  { value: "college", label: "College/University", desc: "Currently enrolled or completed" },
-  { value: "graduate", label: "Graduate", desc: "Bachelor's, Master's, or PhD" },
-  { value: "self-taught", label: "Self-Taught", desc: "Online courses, bootcamps, etc." }
+  { value: "university", label: "University student", desc: "Currently enrolled" },
+  { value: "graduate", label: "Graduate", desc: "Completed degree" },
+  { value: "vocational", label: "Vocational/Technical", desc: "Skills-based training" }
 ]
 
 const SUBJECTS = [
@@ -34,7 +46,7 @@ const SUBJECTS = [
   { value: "tech", label: "Technology & IT", icon: "💻" },
   { value: "business", label: "Business & Economics", icon: "💼" },
   { value: "health", label: "Health & Medicine", icon: "🏥" },
-  { value: "social", label: "Social Sciences", icon: "🌍" }
+  { value: "agriculture", label: "Agriculture", icon: "🌱" }
 ]
 
 const INTERESTS = [
@@ -47,10 +59,10 @@ const INTERESTS = [
 ]
 
 const CAREER_GOALS = [
-  { value: "employment", label: "Find Employment", desc: "Get a job in my field", icon: "💼" },
-  { value: "scholarship", label: "Win a Scholarship", desc: "Continue my education abroad", icon: "🎓" },
-  { value: "skill-building", label: "Build Skills", desc: "Learn new professional skills", icon: "📚" },
-  { value: "career-switch", label: "Switch Careers", desc: "Transition to a new field", icon: "🔄" }
+  { value: "find-job", label: "Find a Job", desc: "Searching for employment in Salone", icon: "💼" },
+  { value: "scholarship", label: "Win a Scholarship", desc: "Funding for further studies", icon: "🎓" },
+  { value: "learn-skills", label: "Learn New Skills", desc: "Upskilling for the future", icon: "📚" },
+  { value: "career-guidance", label: "Career Guidance", desc: "Not sure which path to take", icon: "🤝" }
 ]
 
 export default function OnboardingPage() {
@@ -61,6 +73,9 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false)
 
   const [data, setData] = useState<OnboardingData>({
+    fullName: "",
+    age: "",
+    location: "",
     educationLevel: "",
     subjects: [],
     interests: [],
@@ -69,288 +84,405 @@ export default function OnboardingPage() {
     whatsappSubscribed: true
   })
 
+  // Load initial data if it exists
+  useEffect(() => {
+    const saved = localStorage.getItem("userOnboarding")
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        setData(prev => ({ ...prev, ...parsed }))
+      } catch (e) {
+        console.error("Failed to load onboarding data", e)
+      }
+    }
+  }, [])
+
   const progress = (step / totalSteps) * 100
 
+  const saveToSupabase = async (partialData: Partial<OnboardingData>) => {
+    if (!user) return
+
+    try {
+      // Convert UI data to DB schema
+      const dbData = {
+        id: user.id,
+        full_name: partialData.fullName || data.fullName,
+        age: partialData.age ? parseInt(partialData.age) : (data.age ? parseInt(data.age) : null),
+        location: partialData.location || data.location,
+        education_level: partialData.educationLevel || data.educationLevel,
+        skills: partialData.subjects || data.subjects,
+        interests: partialData.interests || data.interests,
+        career_goal: partialData.careerGoal || data.careerGoal,
+        whatsapp_number: partialData.whatsappNumber || data.whatsappNumber,
+        updated_at: new Date().toISOString()
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(dbData)
+
+      if (error) {
+        console.warn("Supabase upsert error (checking if table exists...):", error.message)
+      } else {
+        console.log("Supabase save successful")
+      }
+    } catch (e) {
+      console.error("Supabase integration error:", e)
+    }
+  }
+
   const handleNext = async () => {
+    // Save current step data to localStorage immediately
+    localStorage.setItem("userOnboarding", JSON.stringify(data))
+
+    // Attempt background save to Supabase
+    saveToSupabase(data)
+
     if (step < totalSteps) {
       setStep(step + 1)
+      window.scrollTo(0, 0)
     } else {
+      setLoading(true)
       try {
-        // Simulate saving to a backend
-        console.log("Saving profile for user:", user?.id || "anonymous", data)
-
-        localStorage.setItem("userOnboarding", JSON.stringify(data))
         localStorage.setItem("onboardingComplete", "true")
 
-        // Store specific career goal if set
-        if (data.careerGoal) {
-          localStorage.setItem("activeCareer", data.careerGoal)
-        }
+        // Final explicit save
+        await saveToSupabase(data)
 
-        toast.success("Profile created successfully!")
+        toast.success("Welcome aboard! Your profile is ready.")
         setTimeout(() => {
           router.push("/dashboard")
-        }, 800)
+        }, 1000)
       } catch (error) {
-        console.error("Save error:", error)
-        toast.error("Failed to save profile. Please try again.")
-        setLoading(false)
+        toast.error("Process interrupted, but your progress is saved locally.")
+        router.push("/dashboard")
       }
     }
   }
 
-
   const handleBack = () => {
-    if (step > 1) setStep(step - 1)
+    if (step > 1) {
+      setStep(step - 1)
+      window.scrollTo(0, 0)
+    }
   }
 
   const toggleSelection = (field: "subjects" | "interests", value: string) => {
     const current = data[field]
+    let newData;
     if (current.includes(value)) {
-      setData({ ...data, [field]: current.filter(v => v !== value) })
+      newData = current.filter(v => v !== value)
     } else {
-      setData({ ...data, [field]: [...current, value] })
+      newData = [...current, value]
     }
+    setData({ ...data, [field]: newData })
   }
 
   const isStepValid = () => {
     switch (step) {
-      case 1: return data.educationLevel !== ""
-      case 2: return data.subjects.length > 0
-      case 3: return data.interests.length > 0
-      case 4: return data.careerGoal !== ""
-      case 5: return data.whatsappNumber !== ""
+      case 1: return data.fullName.trim().length > 2 && data.age !== "" && data.location !== ""
+      case 2: return data.educationLevel !== ""
+      case 3: return data.subjects.length > 0
+      case 4: return data.interests.length > 0 && data.careerGoal !== ""
+      case 5: return data.whatsappNumber.length >= 8
       default: return false
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#3B82F6] via-[#22C55E] to-[#4ADE80]">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B1F3A] via-[#1E5EFF] to-[#1FA774] flex flex-col items-center justify-center p-4">
 
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Let's Get to Know You
+      <div className="max-w-4xl w-full space-y-8 animate-in fade-in duration-700">
+
+        {/* Header Section */}
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full backdrop-blur-md mb-2">
+            <Sparkles className="w-4 h-4 text-[#4ADE80]" />
+            <span className="text-white font-bold text-[10px] uppercase tracking-[0.2em]">Step {step} of {totalSteps}</span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins drop-shadow-lg">
+            Let's Get to <span className="text-[#4ADE80]">Know You</span>
           </h1>
-          <p className="text-white/85 text-lg">
-            Answer a few questions so we can personalize your career guidance
+          <p className="text-xl text-slate-200 font-medium font-inter max-w-2xl mx-auto">
+            Help us build your personalized career path in Sierra Leone.
           </p>
         </div>
 
-        <div className="mb-8">
-          <div className="flex justify-between text-sm text-white/80 mb-2">
-            <span>Step {step} of {totalSteps}</span>
-            <span>{Math.round(progress)}% Complete</span>
+        {/* Progress Bar */}
+        <div className="max-w-md mx-auto">
+          <div className="flex justify-between items-center mb-2 px-1">
+            <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">{Math.round(progress)}% Profile Complete</span>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <div key={s} className={`h-1.5 w-6 rounded-full transition-all duration-500 ${step >= s ? 'bg-[#4ADE80]' : 'bg-white/20'}`} />
+              ))}
+            </div>
           </div>
-          <Progress value={progress} className="h-2 bg-white/20" />
         </div>
 
-        <Card className="p-8 md:p-12 shadow-2xl overflow-hidden relative border-none bg-white/95 backdrop-blur-xl rounded-[3rem]">
-          <div className="relative h-64 -mt-8 -mx-8 md:-mt-12 md:-mx-12 mb-10 group overflow-hidden">
-            <Image
-              src="/images/dashboard/salone_success.png"
-              alt="Sierra Leonean Youth"
-              fill
-              className="object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/40 to-transparent" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.2),transparent)]" />
+        {/* Form Card */}
+        <Card className="bg-white/95 backdrop-blur-2xl border-none shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden relative group">
 
-            <div className="absolute bottom-8 left-10 space-y-2">
-              <Badge className="bg-[#1FA774] text-white border-none font-bold uppercase tracking-[0.2em] text-[10px] px-4 py-1.5">
-                New Journey
-              </Badge>
-              <h2 className="text-white font-black text-4xl leading-tight tracking-tight drop-shadow-2xl">
-                Unlock Your <span className="text-[#F4C430]">Future</span>
-              </h2>
-            </div>
-          </div>
+          <div className="p-8 md:p-12 space-y-8">
 
-          {step === 1 && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <GraduationCap className="w-6 h-6 text-primary" />
+            {/* STEP 1: PERSONAL INFO */}
+            {step === 1 && (
+              <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black text-[#0B1F3A] font-poppins flex items-center gap-3">
+                    <User className="w-8 h-8 text-[#1E5EFF]" /> Who are you?
+                  </h2>
+                  <p className="text-slate-500 font-medium">Tell us your basic details so we can address you correctly.</p>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Education Level</h2>
-                  <p className="text-muted-foreground">What's your current education status?</p>
-                </div>
-              </div>
 
-              <div className="grid gap-4">
-                {EDUCATION_LEVELS.map((level) => (
-                  <button
-                    key={level.value}
-                    onClick={() => setData({ ...data, educationLevel: level.value })}
-                    className={`p-6 rounded-2xl border-2 text-left transition-all ${data.educationLevel === level.value
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
-                      }`}
-                  >
-                    <div className="font-semibold text-lg mb-1">{level.label}</div>
-                    <div className="text-sm text-muted-foreground">{level.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-secondary" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Subjects & Skills</h2>
-                  <p className="text-muted-foreground">What areas do you excel in? (Select all that apply)</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {SUBJECTS.map((subject) => (
-                  <button
-                    key={subject.value}
-                    onClick={() => toggleSelection("subjects", subject.value)}
-                    className={`p-6 rounded-2xl border-2 text-center transition-all ${data.subjects.includes(subject.value)
-                      ? "border-secondary bg-secondary/5 shadow-md"
-                      : "border-border hover:border-secondary/50 hover:bg-muted/50"
-                      }`}
-                  >
-                    <div className="text-3xl mb-2">{subject.icon}</div>
-                    <div className="font-semibold">{subject.label}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                  <Lightbulb className="w-6 h-6 text-accent" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Interests</h2>
-                  <p className="text-muted-foreground">What activities do you enjoy? (Select all that apply)</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {INTERESTS.map((interest) => (
-                  <button
-                    key={interest.value}
-                    onClick={() => toggleSelection("interests", interest.value)}
-                    className={`p-6 rounded-2xl border-2 text-center transition-all ${data.interests.includes(interest.value)
-                      ? "border-accent bg-accent/5 shadow-md"
-                      : "border-border hover:border-accent/50 hover:bg-muted/50"
-                      }`}
-                  >
-                    <div className="text-3xl mb-2">{interest.icon}</div>
-                    <div className="font-semibold text-sm">{interest.label}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">Career Goal</h2>
-                  <p className="text-muted-foreground">What's your main objective right now?</p>
-                </div>
-              </div>
-
-              <div className="grid gap-4">
-                {CAREER_GOALS.map((goal) => (
-                  <button
-                    key={goal.value}
-                    onClick={() => setData({ ...data, careerGoal: goal.value })}
-                    className={`p-6 rounded-2xl border-2 text-left transition-all ${data.careerGoal === goal.value
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border hover:border-primary/50 hover:bg-muted/50"
-                      }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="text-3xl">{goal.icon}</div>
-                      <div>
-                        <div className="font-semibold text-lg mb-1">{goal.label}</div>
-                        <div className="text-sm text-muted-foreground">{goal.desc}</div>
-                      </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Full Name</Label>
+                    <div className="relative">
+                      <Input
+                        placeholder="Enter your full name"
+                        value={data.fullName}
+                        onChange={(e) => setData({ ...data, fullName: e.target.value })}
+                        className="h-14 pl-12 rounded-2xl border-slate-200 focus-visible:ring-[#1E5EFF]/20 bg-slate-50 font-medium text-lg"
+                      />
+                      <User className="absolute left-4 top-4 w-6 h-6 text-slate-400" />
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {step === 5 && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold">WhatsApp Updates</h2>
-                  <p className="text-muted-foreground">Get instant notifications for new jobs & scholarships.</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-semibold mb-2 block">WhatsApp Number (with country code)</label>
-                  <input
-                    type="text"
-                    placeholder="+232 7X XXX XXX"
-                    value={data.whatsappNumber}
-                    onChange={(e) => setData({ ...data, whatsappNumber: e.target.value })}
-                    className="w-full p-4 rounded-xl border-2 border-border focus:border-green-500 outline-none transition-all"
-                  />
-                </div>
-
-                <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-border cursor-pointer hover:bg-muted/50 transition-all">
-                  <input
-                    type="checkbox"
-                    checked={data.whatsappSubscribed}
-                    onChange={(e) => setData({ ...data, whatsappSubscribed: e.target.checked })}
-                    className="w-5 h-5 accent-green-600"
-                  />
-                  <div>
-                    <div className="font-semibold">Subscribe to Job Alerts</div>
-                    <div className="text-xs text-muted-foreground">We'll send you high-priority opportunities via WhatsApp.</div>
                   </div>
-                </label>
-              </div>
-            </div>
-          )}
 
-          <div className="flex justify-between mt-10 pt-8 border-t">
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              disabled={step === 1}
-              className="rounded-full"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <Button
-              onClick={handleNext}
-              disabled={!isStepValid() || loading}
-              className="rounded-full bg-primary hover:bg-primary/90"
-            >
-              {loading ? "Saving..." : step === totalSteps ? "Complete Setup" : "Continue"}
-              {step < totalSteps && <ArrowRight className="w-4 h-4 ml-2" />}
-            </Button>
+                  <div className="space-y-3">
+                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Age</Label>
+                    <div className="relative">
+                      <Input
+                        type="number"
+                        placeholder="Your age"
+                        value={data.age}
+                        onChange={(e) => setData({ ...data, age: e.target.value })}
+                        className="h-14 pl-12 rounded-2xl border-slate-200 focus-visible:ring-[#1E5EFF]/20 bg-slate-50 font-medium text-lg"
+                      />
+                      <Calendar className="absolute left-4 top-4 w-6 h-6 text-slate-400" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 md:col-span-2">
+                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Location (District)</Label>
+                    <div className="relative">
+                      <Select value={data.location} onValueChange={(val) => setData({ ...data, location: val })}>
+                        <SelectTrigger className="h-14 pl-12 rounded-2xl border-slate-200 focus-visible:ring-[#1E5EFF]/20 bg-slate-50 font-medium text-lg">
+                          <SelectValue placeholder="Select your district in Sierra Leone" />
+                        </SelectTrigger>
+                        <SelectContent className="rounded-2xl border-slate-200">
+                          {DISTRICTS.map(d => (
+                            <SelectItem key={d} value={d} className="py-3 rounded-xl">{d}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <MapPin className="absolute left-4 top-4 w-6 h-6 text-slate-400 z-10" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: EDUCATION */}
+            {step === 2 && (
+              <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black text-[#0B1F3A] font-poppins flex items-center gap-3">
+                    <GraduationCap className="w-8 h-8 text-[#1E5EFF]" /> Education
+                  </h2>
+                  <p className="text-slate-500 font-medium">What is your current or highest education level?</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {EDUCATION_LEVELS.map((level) => (
+                    <button
+                      key={level.value}
+                      onClick={() => setData({ ...data, educationLevel: level.value })}
+                      className={`p-6 rounded-3xl border-2 text-left transition-all group/btn ${data.educationLevel === level.value
+                        ? "border-[#1E5EFF] bg-[#1E5EFF]/5 shadow-inner"
+                        : "border-slate-100 hover:border-[#1E5EFF]/50 hover:bg-slate-50 shadow-sm"
+                        }`}
+                    >
+                      <div className={`font-black text-lg mb-1 ${data.educationLevel === level.value ? "text-[#1E5EFF]" : "text-[#0B1F3A]"}`}>
+                        {level.label}
+                      </div>
+                      <div className="text-sm text-slate-500 font-medium">{level.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: SUBJECTS & SKILLS */}
+            {step === 3 && (
+              <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black text-[#0B1F3A] font-poppins flex items-center gap-3">
+                    <BookOpen className="w-8 h-8 text-[#1E5EFF]" /> Expertise
+                  </h2>
+                  <p className="text-slate-500 font-medium">Select the areas you are most skilled in or enjoy studying.</p>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                  {SUBJECTS.map((subject) => (
+                    <button
+                      key={subject.value}
+                      onClick={() => toggleSelection("subjects", subject.value)}
+                      className={`p-6 rounded-3xl border-2 text-center transition-all ${data.subjects.includes(subject.value)
+                        ? "border-[#1FA774] bg-[#1FA774]/5 shadow-inner"
+                        : "border-slate-100 hover:border-[#1FA774]/50 hover:bg-slate-50 shadow-sm"
+                        }`}
+                    >
+                      <div className="text-4xl mb-3 transform transition-transform hover:scale-110">{subject.icon}</div>
+                      <div className={`font-bold text-sm ${data.subjects.includes(subject.value) ? "text-[#1FA774]" : "text-[#0B1F3A]"}`}>
+                        {subject.label}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 4: INTERESTS & GOALS */}
+            {step === 4 && (
+              <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black text-[#0B1F3A] font-poppins flex items-center gap-3">
+                    <Target className="w-8 h-8 text-[#1E5EFF]" /> Direction
+                  </h2>
+                  <p className="text-slate-500 font-medium">Tell us what drives you and what your goal is.</p>
+                </div>
+
+                <div className="space-y-6">
+                  <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Wetin you lek for do? (Interests)</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {INTERESTS.map((interest) => (
+                      <button
+                        key={interest.value}
+                        onClick={() => toggleSelection("interests", interest.value)}
+                        className={`px-6 py-3 rounded-full border-2 font-bold text-sm transition-all flex items-center gap-2 ${data.interests.includes(interest.value)
+                          ? "border-[#1E5EFF] bg-[#1E5EFF] text-white shadow-lg"
+                          : "border-slate-100 text-slate-500 hover:border-slate-300"
+                          }`}
+                      >
+                        <span>{interest.icon}</span>
+                        {interest.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <Label className="text-sm font-bold uppercase tracking-widest text-slate-400 block mt-8">Your Main Goal</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {CAREER_GOALS.map((goal) => (
+                      <button
+                        key={goal.value}
+                        onClick={() => setData({ ...data, careerGoal: goal.value })}
+                        className={`p-6 rounded-3xl border-2 text-left transition-all ${data.careerGoal === goal.value
+                          ? "border-[#1FA774] bg-[#1FA774]/5 shadow-inner"
+                          : "border-slate-100 hover:border-[#1FA774]/50 hover:bg-slate-50 shadow-sm"
+                          }`}
+                      >
+                        <div className="flex gap-4">
+                          <div className="text-3xl">{goal.icon}</div>
+                          <div>
+                            <div className={`font-black text-base ${data.careerGoal === goal.value ? "text-[#1FA774]" : "text-[#0B1F3A]"}`}>
+                              {goal.label}
+                            </div>
+                            <div className="text-[12px] text-slate-500 font-medium">{goal.desc}</div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 5: CONTACT */}
+            {step === 5 && (
+              <div className="space-y-8 animate-in slide-in-from-right-4 duration-500">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-black text-[#0B1F3A] font-poppins flex items-center gap-3">
+                    <MessageSquare className="w-8 h-8 text-[#1E5EFF]" /> Contact
+                  </h2>
+                  <p className="text-slate-500 font-medium">We'll send important updates via WhatsApp.</p>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">WhatsApp Number</Label>
+                    <div className="relative">
+                      <Input
+                        placeholder="+232 7X XXX XXX"
+                        value={data.whatsappNumber}
+                        onChange={(e) => setData({ ...data, whatsappNumber: e.target.value })}
+                        className="h-16 pl-14 rounded-2xl border-slate-200 focus-visible:ring-[#1E5EFF]/20 bg-slate-50 font-black text-xl tracking-widest"
+                      />
+                      <MessageSquare className="absolute left-4 top-5 w-6 h-6 text-[#1FA774]" />
+                    </div>
+                  </div>
+
+                  <div className={`p-6 rounded-[2rem] border-2 transition-all cursor-pointer flex items-center gap-4 ${data.whatsappSubscribed ? 'bg-green-50 border-green-200 shadow-inner' : 'bg-slate-50 border-slate-100'}`} onClick={() => setData({ ...data, whatsappSubscribed: !data.whatsappSubscribed })}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${data.whatsappSubscribed ? 'bg-green-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                      <Target className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-[#0B1F3A] text-sm">Subscribe to AI-Powered Alerts</h4>
+                      <p className="text-xs text-slate-500 font-medium">Get matched with jobs and scholarships as they drop!</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-[#0B1F3A]/5 p-6 rounded-[2rem] border-none flex items-start gap-4">
+                  <div className="p-3 bg-white rounded-2xl shadow-sm text-2xl">🔒</div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1F3A] text-sm mb-1 uppercase tracking-tight">Security & Privacy</h4>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                      Your number is saved securely and used only for career-related updates. We never share your data with third parties.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-between pt-8 border-t border-slate-100">
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                disabled={step === 1 || loading}
+                className="rounded-2xl h-14 px-8 font-bold text-slate-400 hover:text-[#0B1F3A] transition-all"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" /> Back
+              </Button>
+
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid() || loading}
+                className={`rounded-2xl h-14 px-10 font-black text-white shadow-xl transition-all active:scale-95 ${step === totalSteps ? 'bg-[#1FA774] hover:bg-[#1FA774]/90' : 'bg-[#1E5EFF] hover:bg-[#1E5EFF]/90'}`}
+              >
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+                    Saving...
+                  </div>
+                ) : (
+                  <>
+                    {step === totalSteps ? "Finish Setup" : "Next Step"}
+                    {step < totalSteps && <ArrowRight className="w-5 h-5 ml-2" />}
+                  </>
+                )}
+              </Button>
+            </div>
+
           </div>
         </Card>
+
+        {/* Support Text */}
+        <p className="text-center text-white/50 text-[10px] font-bold uppercase tracking-[0.3em] pb-8">
+          Powered by CareerPilot AI & Supabase Salone
+        </p>
+
       </div>
     </div>
   )

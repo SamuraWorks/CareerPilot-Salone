@@ -70,7 +70,23 @@ export const getUniversities = async () => {
     return MOCK_UNIVERSITIES;
 }
 
+import { supabase } from './supabase'
+
 export const getUserProfile = async (userId: string) => {
+    // 1. Try Supabase first
+    try {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        if (data) return { data: data, error: null };
+    } catch (e) {
+        console.warn("Supabase fetch failed, falling back to local storage");
+    }
+
+    // 2. Fallback to Local Storage
     const saved = localStorage.getItem("userOnboarding");
     if (saved) {
         return { data: JSON.parse(saved), error: null };
@@ -79,11 +95,23 @@ export const getUserProfile = async (userId: string) => {
 }
 
 export const updateUserProfile = async (userId: string, profileData: any) => {
+    // 1. Save to Local Storage for instant UI feedback
     const current = localStorage.getItem("userOnboarding");
     const updated = current ? { ...JSON.parse(current), ...profileData } : profileData;
     localStorage.setItem("userOnboarding", JSON.stringify(updated));
+
+    // 2. Background sync to Supabase
+    try {
+        await supabase
+            .from('profiles')
+            .upsert({ id: userId, ...profileData, updated_at: new Date().toISOString() });
+    } catch (e) {
+        console.error("Supabase sync failed:", e);
+    }
+
     return { data: updated, error: null };
 }
+
 
 export const logAIInteraction = async (userId: string | null, prompt: string, response: string, provider: string) => {
     console.log("Logged AI Interaction:", { userId, prompt, provider });

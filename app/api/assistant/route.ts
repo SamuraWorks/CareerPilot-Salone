@@ -60,12 +60,18 @@ GUIDELINES:
             });
         }
         else {
-            // MOCK RESPONSE FOR DEMO/DEVELOPMENT WITHOUT KEYS
-            console.log("Using Mock AI Response (No Keys Found)");
-            const lastMessage = messages[messages.length - 1]?.content || "Hello";
+            // DYNAMIC LOCAL AI RESPONSE FOR DEMO/DEVELOPMENT WITHOUT KEYS
+            console.log("Using Dynamic Local AI Response (No Keys Found)");
+            const { generateChatResponse } = await import('@/lib/local-ai');
 
+            const reply = await generateChatResponse(messages, JSON.stringify(userProfile || {}));
+
+            // Format as a data stream chunk for useChat
+            // The format is {type}:{content}\n
+            // type 0 is for text
+            const serializedReply = JSON.stringify(reply);
             return new Response(
-                `0:"Kusheh! I'm currently in 'Demo Mode' because AI credentials aren't set up yet. \n\nHowever, I can still see you asked about: '${lastMessage}'. \n\nIn the full version, I provide detailed links to Sierra Leonean universities, salary data for Salone careers, and specific next steps for your profile! Try asking me about 'Engineering' or 'Law' once the keys are connected."\n`,
+                `0:${serializedReply}\n`,
                 {
                     headers: {
                         'Content-Type': 'text/plain; charset=utf-8',

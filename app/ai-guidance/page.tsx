@@ -3,7 +3,7 @@
 import { useChat } from '@ai-sdk/react'
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Bot, MessageCircle, Send, User, Sparkles, ArrowLeft } from 'lucide-react'
+import { Bot, MessageCircle, Send, User, Sparkles, ArrowLeft, ShieldCheck } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -23,7 +23,6 @@ export default function AIChatPage() {
         }
     }, []);
 
-    // Memoize body to prevent useChat from re-initializing on every render
     const chatBody = useMemo(() => ({ userProfile }), [userProfile]);
 
     const {
@@ -52,10 +51,10 @@ export default function AIChatPage() {
     }, [messages]);
 
     const quickActions = [
-        "Compare careers",
-        "Next steps",
-        "Learning resources",
-        "Job opportunities"
+        "How to find a job in Salone?",
+        "Universities for Tech",
+        "How to build a CV?",
+        "Scholarships available"
     ];
 
     const handleQuickAction = (action: string) => {
@@ -69,15 +68,12 @@ export default function AIChatPage() {
         const message = input;
         if (!message?.trim() || isLoading) return;
 
-        // Clear input immediately for better UX
         setInput('');
 
         try {
-            console.log("Sending guidance via append:", message);
             append({ role: 'user', content: message });
         } catch (err) {
             console.error("Error sending guidance message:", err);
-            // Fallback: restore input
             setInput(message);
         }
     };
@@ -86,56 +82,68 @@ export default function AIChatPage() {
         <DashboardLayout>
             <div className="flex flex-col h-[calc(100vh-14rem)] md:h-[calc(100vh-12rem)] max-w-5xl mx-auto md:pb-0 space-y-6">
 
-                {/* PREMIUM HERO HEADER */}
+                {/* PREMIUM HERO HEADER - Green-Blue Theme */}
                 <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] min-h-[220px] flex items-center shadow-2xl group shrink-0">
                     <div className="absolute inset-0 z-0">
                         <Image
                             src="/images/dashboard/salone_success.png"
                             alt="AI Guidance"
                             fill
-                            className="object-cover opacity-30 transition-transform duration-1000 group-hover:scale-105"
+                            className="object-cover opacity-20 transition-transform duration-1000 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/60 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#1E5EFF]/60 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.2),transparent)] z-10" />
                     </div>
 
                     <div className="relative z-20 p-8 md:p-12 space-y-4">
-                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1FA774] hover:text-white transition-colors">
+                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-colors">
                             <ArrowLeft className="w-4 h-4" /> Go Back
                         </Link>
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-[#1FA774]/20 flex items-center justify-center text-[#1FA774] border border-[#1FA774]/20">
-                                <Sparkles className="w-6 h-6" />
+                        <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 rounded-[1.5rem] bg-gradient-to-br from-[#1E5EFF] to-[#1FA774] flex items-center justify-center text-white shadow-xl">
+                                <Bot className="w-8 h-8" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-black text-white tracking-tight">AI Career <span className="text-[#F4C430]">Mentor</span></h1>
-                                <p className="text-sm text-slate-400 font-medium">Built for the Sierra Leonean professional landscape.</p>
+                                <h1 className="text-4xl font-black text-white tracking-tight font-poppins">AI Career <span className="text-gradient-salone brightness-150">Mentor</span></h1>
+                                <p className="text-sm text-slate-300 font-medium font-inter">Personalized coaching for the Sierra Leonean professional landscape.</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Chat Container */}
-                <div className="flex-1 bg-white border border-slate-200 rounded-[2rem] shadow-sm flex flex-col overflow-hidden">
+                <div className="flex-1 bg-white border border-slate-100 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
 
                     {/* Header Bar */}
-                    <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                            <Bot className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                            <div className="font-bold text-slate-900 text-sm">CareerPilot Assistant</div>
-                            <div className="text-xs text-green-600 font-medium flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> Online
+                    <div className="p-5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm text-[#1E5EFF]">
+                                <Bot className="w-6 h-6" />
                             </div>
+                            <div>
+                                <div className="font-black text-[#0B1F3A] text-sm uppercase tracking-tight">CareerPilot Assistant</div>
+                                <div className="text-[10px] text-[#1FA774] font-black flex items-center gap-1 uppercase tracking-widest">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1FA774] animate-pulse" /> Live Now
+                                </div>
+                            </div>
+                        </div>
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full border border-blue-100">
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#1E5EFF]" />
+                            <span className="text-[9px] font-black text-[#1E5EFF] uppercase tracking-widest">Secure Session</span>
                         </div>
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+                    <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-gradient-to-b from-white to-slate-50/30">
                         {messages.length === 0 && (
-                            <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-4 opacity-50">
-                                <Bot className="w-12 h-12 text-slate-300" />
-                                <p className="text-sm font-medium text-slate-400">Type a message below to start chatting</p>
+                            <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-6 opacity-40">
+                                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center">
+                                    <MessageCircle className="w-10 h-10 text-slate-300" />
+                                </div>
+                                <div className="space-y-1">
+                                    <h3 className="font-black text-[#0B1F3A] text-lg uppercase tracking-tight">Kusheh! I'm ready.</h3>
+                                    <p className="text-sm font-medium text-slate-400">Type a message below to start your career session</p>
+                                </div>
                             </div>
                         )}
 
@@ -143,26 +151,26 @@ export default function AIChatPage() {
                             <div
                                 key={m.id}
                                 className={cn(
-                                    "flex w-full mb-4 animate-in fade-in slide-in-from-bottom-2",
+                                    "flex w-full mb-2 animate-in fade-in slide-in-from-bottom-4 duration-500",
                                     m.role === 'user' ? "justify-end" : "justify-start"
                                 )}
                             >
                                 <div className={cn(
-                                    "flex max-w-[85%] sm:max-w-[75%] items-end gap-2",
+                                    "flex max-w-[85%] sm:max-w-[80%] items-start gap-3",
                                     m.role === 'user' ? "flex-row-reverse" : "flex-row"
                                 )}>
                                     <div className={cn(
-                                        "w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white",
-                                        m.role === 'user' ? "bg-slate-900" : "bg-blue-600"
+                                        "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-white shadow-md mt-1",
+                                        m.role === 'user' ? "bg-[#1E5EFF]" : "bg-[#0B1F3A]"
                                     )}>
-                                        {m.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                                        {m.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                                     </div>
                                     <div
                                         className={cn(
-                                            "px-5 py-3.5 text-sm font-medium leading-relaxed shadow-sm font-inter",
+                                            "px-6 py-4 text-sm font-medium leading-relaxed shadow-sm font-inter",
                                             m.role === 'user'
-                                                ? "bg-slate-900 text-white rounded-[1.5rem] rounded-br-none"
-                                                : "bg-[#F0F2F5] text-slate-900 rounded-[1.5rem] rounded-bl-none"
+                                                ? "bg-[#1E5EFF] text-white rounded-[1.8rem] rounded-tr-none"
+                                                : "bg-white text-slate-800 rounded-[1.8rem] rounded-tl-none border border-slate-100"
                                         )}
                                     >
                                         <div className="whitespace-pre-wrap">{m.content}</div>
@@ -172,17 +180,18 @@ export default function AIChatPage() {
                         ))}
 
                         {isLoading && (
-                            <div className="flex w-full justify-start mb-4">
-                                <div className="flex items-end gap-2">
-                                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 text-white">
-                                        <Bot className="w-4 h-4" />
+                            <div className="flex w-full justify-start mb-4 animate-in fade-in">
+                                <div className="flex items-start gap-3">
+                                    <div className="w-9 h-9 rounded-xl bg-[#0B1F3A] flex items-center justify-center shrink-0 text-white shadow-md mt-1">
+                                        <Bot className="w-5 h-5" />
                                     </div>
-                                    <div className="bg-[#F0F2F5] rounded-[1.5rem] rounded-bl-none px-5 py-4 border border-slate-100 shadow-sm">
-                                        <div className="flex gap-1.5">
-                                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+                                    <div className="bg-white rounded-[1.8rem] rounded-tl-none px-6 py-5 border border-slate-100 shadow-sm">
+                                        <div className="flex gap-1.5 mb-2">
+                                            <span className="w-1.5 h-1.5 bg-[#4ADE80] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                                            <span className="w-1.5 h-1.5 bg-[#4ADE80] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                                            <span className="w-1.5 h-1.5 bg-[#4ADE80] rounded-full animate-bounce"></span>
                                         </div>
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Analyzing Salone market data...</p>
                                     </div>
                                 </div>
                             </div>
@@ -191,15 +200,15 @@ export default function AIChatPage() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 bg-white border-t border-slate-100">
-                        {/* Quick Actions (Only show if empty or last message was bot) */}
+                    <div className="p-6 bg-white border-t border-slate-100">
+                        {/* Quick Actions */}
                         {(!messages.length || messages[messages.length - 1].role !== 'user') && (
-                            <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
+                            <div className="flex gap-3 mb-6 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
                                 {quickActions.map((action, i) => (
                                     <button
                                         key={i}
                                         onClick={() => handleQuickAction(action)}
-                                        className="whitespace-nowrap px-4 py-2 rounded-full bg-slate-50 hover:bg-slate-100 text-xs font-bold font-poppins text-slate-600 transition-colors border border-slate-200"
+                                        className="whitespace-nowrap px-5 py-2.5 rounded-full bg-slate-50 hover:bg-[#1E5EFF]/5 text-xs font-bold font-poppins text-[#0B1F3A] transition-all border border-slate-200 hover:border-[#1E5EFF]/20 shadow-sm active:scale-95"
                                     >
                                         {action}
                                     </button>
@@ -207,23 +216,26 @@ export default function AIChatPage() {
                             </div>
                         )}
 
-                        <form onSubmit={handleFormSubmit} className="flex gap-2">
+                        <form onSubmit={handleFormSubmit} className="flex gap-3 relative max-w-4xl mx-auto">
                             <input
-                                className="flex-1 px-5 py-3.5 rounded-full bg-slate-50 border border-slate-200 focus:border-slate-300 focus:ring-0 outline-none text-sm transition-all font-inter placeholder:text-slate-400"
+                                className="flex-1 px-8 py-5 rounded-3xl bg-slate-50 border border-slate-100 focus:border-[#1E5EFF]/30 focus:ring-0 outline-none text-base transition-all font-inter placeholder:text-slate-400 shadow-inner"
                                 value={input}
                                 onChange={handleInputChange}
-                                placeholder="Type your message..."
+                                placeholder="Wetin you wan for know about jobs na Salone?"
                                 autoComplete="off"
                             />
                             <Button
                                 type="submit"
                                 size="icon"
-                                className="rounded-full w-12 h-12 shrink-0 bg-[#1F7A4D] hover:bg-[#16643d] shadow-md transition-all"
+                                className="rounded-2xl w-14 h-14 shrink-0 bg-[#1FA774] hover:bg-[#1E5EFF] shadow-xl transition-all active:scale-90"
                                 disabled={!input?.trim() || isLoading}
                             >
-                                <Send className="w-5 h-5 text-white" />
+                                <Send className="w-6 h-6 text-white" />
                             </Button>
                         </form>
+                        <p className="text-center mt-4 text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">
+                            Secured by CareerPilot Privacy Shield &bull; Sierra Leone Standard
+                        </p>
                     </div>
                 </div>
             </div>

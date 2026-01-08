@@ -18,4 +18,11 @@ export type Profile = {
     avatar_url: string | null;
     skills: string[] | null;
     location: string | null;
+    age: number | null;
+    whatsapp_number: string | null;
+    education_level: string | null;
+    interests: string[] | null;
+    career_goal: string | null;
+    updated_at: string | null;
 };
+
