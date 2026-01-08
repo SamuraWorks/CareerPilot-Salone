@@ -93,40 +93,55 @@ export default function EmployerPortal() {
 
 
             <main>
-                {/* Header */}
-                <div className="bg-slate-900 text-white pt-20 pb-24 px-4">
-                    <div className="container mx-auto max-w-5xl text-center">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider mb-6 border border-blue-500/30">
-                            <Star className="w-3 h-3 fill-current" />
-                            B2B Portal
-                        </div>
-                        <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-6">
-                            Hire <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">Verified Talent</span> in Sierra Leone
-                        </h1>
-                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
-                            Skip the pile of unverified CVs. Access our database of pre-screened candidates with confirmed skills in Excel, English, and IT.
-                        </p>
+                {/* PREMIUM HERO HEADER */}
+                <section className="relative rounded-b-[4rem] overflow-hidden bg-[#0B1F3A] min-h-[500px] flex items-center shadow-2xl group">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Employer Portal"
+                            fill
+                            className="object-cover opacity-30 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+                    </div>
 
-                        <div className="max-w-2xl mx-auto relative group">
+                    <div className="relative z-20 container mx-auto max-w-5xl px-6 py-20 text-center space-y-8">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-md mx-auto">
+                            <Star className="w-4 h-4 text-[#F4C430] fill-[#F4C430]" />
+                            <span className="text-blue-300 font-bold text-xs uppercase tracking-widest">B2B Premium Portal</span>
+                        </div>
+
+                        <div className="space-y-4">
+                            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                                Hire <span className="text-[#F4C430]">Verified</span> Talent <br />
+                                <span className="text-slate-400">In Sierra Leone</span>
+                            </h1>
+                            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-3xl mx-auto leading-relaxed">
+                                Skip the pile of unverified CVs. Access our database of pre-screened candidates with confirmed skills in Excel, English, and IT.
+                            </p>
+                        </div>
+
+                        <div className="max-w-2xl mx-auto relative group pt-4">
                             <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-xl group-hover:bg-blue-500/30 transition-all" />
-                            <div className="relative flex items-center bg-white rounded-xl shadow-2xl p-2 transition-transform hover:scale-[1.01]">
+                            <div className="relative flex items-center bg-white rounded-2xl shadow-2xl p-2 transition-transform hover:scale-[1.01]">
                                 <Search className="w-6 h-6 text-slate-400 ml-4 shrink-0" />
                                 <Input
-                                    className="border-none shadow-none text-slate-900 placeholder:text-slate-400 h-12 text-lg focus-visible:ring-0"
+                                    className="border-none shadow-none text-slate-900 placeholder:text-slate-400 h-14 md:h-16 text-lg focus-visible:ring-0 rounded-xl"
                                     placeholder="Search by skill (e.g., 'Excel') or job title..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <Button className="h-12 px-8 rounded-lg bg-blue-600 hover:bg-blue-700 font-bold shrink-0">
+                                <Button className="h-14 md:h-16 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 font-black uppercase tracking-widest text-xs shrink-0">
                                     Find Talent
                                 </Button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
 
                 {/* Filters & Content */}
-                <div className="container mx-auto max-w-6xl px-4 -mt-10 relative z-10 pb-12">
+                < div className="container mx-auto max-w-6xl px-4 -mt-10 relative z-10 pb-12" >
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         {/* Sidebar Filters */}
                         <div className="hidden md:block space-y-6">
@@ -252,10 +267,10 @@ export default function EmployerPortal() {
                             )}
                         </div>
                     </div>
-                </div>
-            </main>
+                </div >
+            </main >
 
             <Footer />
-        </div>
+        </div >
     )
 }

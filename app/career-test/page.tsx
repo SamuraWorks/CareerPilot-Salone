@@ -46,6 +46,10 @@ interface StepProps {
     placeholder: string;
 }
 
+import { DashboardLayout } from "@/components/dashboard-layout";
+import { Compass, Sparkles } from "lucide-react";
+import Image from "next/image";
+
 export default function CareerTestPage() {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -84,70 +88,99 @@ export default function CareerTestPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4">
-            <div className="max-w-2xl mx-auto">
-                <div className="mb-8">
-                    <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-blue-600 transition-all duration-500"
-                            style={{ width: `${(step / 4) * 100}%` }}
-                        />
-                    </div>
-                    <p className="text-right text-sm text-slate-500 mt-2">Step {step} of 4</p>
-                </div>
+        <DashboardLayout>
+            <div className="space-y-12 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
-                <Card className="p-8 shadow-xl border-0">
-                    <AnimatePresence mode="wait">
-                        {step === 1 && (
-                            <Step
-                                key="step1"
-                                title="What are you good at?"
-                                desc="List your skills, talents, or subjects you excel in."
-                                value={formData.skills}
-                                onChange={(v) => setFormData({ ...formData, skills: v })}
-                                onNext={handleNext}
-                                placeholder="e.g. Mathematics, Fixing Electronics, Writing, Persuading people..."
+                {/* PREMIUM HERO HEADER */}
+                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Career Test"
+                            fill
+                            className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                    </div>
+
+                    <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                            <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Psychometric Engine</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
+                            Discover Your <span className="text-[#F4C430]">Path</span>
+                        </h1>
+                        <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                            Complete our 4-step analysis to match your skills and interests with real opportunities in Salone.
+                        </p>
+                    </div>
+                </section>
+
+                <div className="max-w-2xl mx-auto">
+                    <div className="mb-8">
+                        <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-blue-600 transition-all duration-500"
+                                style={{ width: `${(step / 4) * 100}%` }}
                             />
-                        )}
-                        {step === 2 && (
-                            <Step
-                                key="step2"
-                                title="What do you enjoy?"
-                                desc="What hobbies or activities make you lose track of time?"
-                                value={formData.interests}
-                                onChange={(v) => setFormData({ ...formData, interests: v })}
-                                onNext={handleNext}
-                                placeholder="e.g. Gaming, helping friends with problems, cooking, coding..."
-                            />
-                        )}
-                        {step === 3 && (
-                            <Step
-                                key="step3"
-                                title="Current Education"
-                                desc="What is your highest level of education or current status?"
-                                value={formData.education}
-                                onChange={(v) => setFormData({ ...formData, education: v })}
-                                onNext={handleNext}
-                                placeholder="e.g. SSS3 Graduate, University Student, JSS..."
-                            />
-                        )}
-                        {step === 4 && (
-                            <Step
-                                key="step4"
-                                title="Career Goals"
-                                desc="Do you have any specific dreams or salary expectations?"
-                                value={formData.goals}
-                                onChange={(v) => setFormData({ ...formData, goals: v })}
-                                onNext={handleSubmit}
-                                loading={loading}
-                                isLast
-                                placeholder="e.g. I want to work in technology and earn enough to support family..."
-                            />
-                        )}
-                    </AnimatePresence>
-                </Card>
+                        </div>
+                        <p className="text-right text-sm text-slate-500 mt-2 font-bold uppercase tracking-widest">Step {step} of 4</p>
+                    </div>
+
+                    <Card className="p-8 shadow-2xl border-0 rounded-[2.5rem]">
+                        <AnimatePresence mode="wait">
+                            {step === 1 && (
+                                <Step
+                                    key="step1"
+                                    title="What are you good at?"
+                                    desc="List your skills, talents, or subjects you excel in."
+                                    value={formData.skills}
+                                    onChange={(v) => setFormData({ ...formData, skills: v })}
+                                    onNext={handleNext}
+                                    placeholder="e.g. Mathematics, Fixing Electronics, Writing, Persuading people..."
+                                />
+                            )}
+                            {step === 2 && (
+                                <Step
+                                    key="step2"
+                                    title="What do you enjoy?"
+                                    desc="What hobbies or activities make you lose track of time?"
+                                    value={formData.interests}
+                                    onChange={(v) => setFormData({ ...formData, interests: v })}
+                                    onNext={handleNext}
+                                    placeholder="e.g. Gaming, helping friends with problems, cooking, coding..."
+                                />
+                            )}
+                            {step === 3 && (
+                                <Step
+                                    key="step3"
+                                    title="Current Education"
+                                    desc="What is your highest level of education or current status?"
+                                    value={formData.education}
+                                    onChange={(v) => setFormData({ ...formData, education: v })}
+                                    onNext={handleNext}
+                                    placeholder="e.g. SSS3 Graduate, University Student, JSS..."
+                                />
+                            )}
+                            {step === 4 && (
+                                <Step
+                                    key="step4"
+                                    title="Career Goals"
+                                    desc="Do you have any specific dreams or salary expectations?"
+                                    value={formData.goals}
+                                    onChange={(v) => setFormData({ ...formData, goals: v })}
+                                    onNext={handleSubmit}
+                                    loading={loading}
+                                    isLast
+                                    placeholder="e.g. I want to work in technology and earn enough to support family..."
+                                />
+                            )}
+                        </AnimatePresence>
+                    </Card>
+                </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }
 

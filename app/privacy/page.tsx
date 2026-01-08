@@ -1,14 +1,37 @@
 import { Footer } from "@/components/footer"
+import { Shield, Sparkles } from "lucide-react"
+import Image from "next/image"
 
 export default function PrivacyPage() {
   return (
     <div className="flex flex-col min-h-screen">
-
-
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4">Privacy Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: December 2024</p>
+          {/* PREMIUM HERO HEADER */}
+          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/images/dashboard/salone_success.png"
+                alt="Privacy Policy"
+                fill
+                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+            </div>
+
+            <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                <Shield className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Trust Center</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
+                Privacy <span className="text-[#F4C430]">Policy</span>
+              </h1>
+              <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                Last updated December 2024 • Our commitment to protecting your professional data.
+              </p>
+            </div>
+          </section>
 
           <div className="prose prose-slate max-w-none space-y-6">
             <section>

@@ -312,33 +312,63 @@ export default function RoadmapPage() {
 
           <TabsContent value="generator" className="space-y-8 animate-in fade-in duration-500">
 
-            {/* SEARCH INPUT */}
+            {/* PREMIUM HERO SEARCH */}
             {!displayedRoadmap && (
-              <div className="flex flex-col items-center justify-center py-12 sm:py-16 md:py-20 bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm text-center px-4 sm:px-6">
-                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4 sm:mb-6">
-                  <MapIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
-                </div>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-3 tracking-tight">Where do you want to go?</h1>
-                <p className="text-sm sm:text-base text-slate-500 mb-6 sm:mb-8 max-w-md mx-auto">Enter a career name (e.g. "Mining Engineer", "Nurse", "Accountant") and get a focused, step-by-step 12-week plan.</p>
-
-                <div className="flex flex-col sm:flex-row w-full max-w-md gap-3">
-                  <Input
-                    placeholder="E.g. Civil Engineer..."
-                    className="h-11 sm:h-12 text-base sm:text-lg bg-slate-50 border-slate-200 focus:bg-white transition-all"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+              <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[400px] flex items-center shadow-2xl group">
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src="/images/dashboard/salone_success.png"
+                    alt="Roadmap Discovery"
+                    fill
+                    className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
                   />
-                  <Button
-                    size="lg"
-                    onClick={handleGenerate}
-                    disabled={isLoading || !query}
-                    className="h-11 sm:h-12 w-full sm:w-auto px-6 sm:px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-md hover:shadow-lg shadow-blue-200"
-                  >
-                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
-                  </Button>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
                 </div>
-              </div>
+
+                <div className="relative z-20 w-full p-10 md:p-16 space-y-8">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                    <MapIcon className="w-4 h-4 text-[#1FA774]" />
+                    <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Navigator</span>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                      Where do you <span className="text-[#F4C430]">Want</span> to go?
+                    </h1>
+                    <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                      Enter a career name and get a focused, step-by-step 12-week roadmap tailored for the Sierra Leonean market.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row w-full max-w-xl gap-3">
+                    <div className="relative flex-1">
+                      <Input
+                        placeholder="E.g. Mining Engineer, Nurse, Accountant..."
+                        className="h-14 md:h-16 text-lg bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:bg-white/20 focus:border-[#F4C430] rounded-2xl transition-all pl-6"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+                      />
+                    </div>
+                    <Button
+                      size="lg"
+                      onClick={handleGenerate}
+                      disabled={isLoading || !query}
+                      className="h-14 md:h-16 px-8 bg-[#F4C430] hover:bg-[#F4C430]/90 text-slate-900 font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-[#F4C430]/20 group/btn"
+                    >
+                      {isLoading ? (
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                      ) : (
+                        <>
+                          Generate Roadmap
+                          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </section>
             )}
 
             {/* LOADING STATE - SKELETON */}
@@ -370,35 +400,52 @@ export default function RoadmapPage() {
                   <Progress value={calculateProgress()} className="h-2 bg-white/10" />
                 </Card>
 
-                {/* 1. HEADER (Detailed) */}
-                <div className="bg-white border text-center p-8 sm:p-12 rounded-3xl shadow-sm space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 font-poppins">
-                    <MapIcon className="w-3 h-3" /> Career Pathway
+                {/* PREMIUM HERO HEADER (Detailed) */}
+                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[360px] flex items-center shadow-2xl group">
+                  <div className="absolute inset-0 z-0">
+                    <Image
+                      src="/images/dashboard/salone_success.png"
+                      alt={displayedRoadmap.title}
+                      fill
+                      className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
                   </div>
-                  <h1 className="text-3xl sm:text-5xl font-bold tracking-tight pb-1 font-poppins text-gradient-salone">
-                    {displayedRoadmap.title}
-                  </h1>
 
-                  {/* Location Tag */}
-                  <div className="flex justify-center mb-2">
-                    <span className="text-slate-500 text-sm font-medium font-inter">Sierra Leone (National)</span>
-                  </div>
+                  <div className="relative z-20 w-full p-10 md:p-16 space-y-6 text-center md:text-left">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#F4C430]/10 border border-[#F4C430]/20 rounded-full backdrop-blur-md mx-auto md:mx-0">
+                      <MapIcon className="w-4 h-4 text-[#F4C430]" />
+                      <span className="text-[#F4C430] font-bold text-xs uppercase tracking-widest">Active Roadmap</span>
+                    </div>
 
-                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-slate-500 font-inter">
-                    <span className="flex items-center gap-1"><User className="w-4 h-4" /> Beginner Level</span>
-                    <span className="hidden sm:inline text-slate-300">•</span>
-                    <span className="flex items-center gap-1"><Loader2 className="w-4 h-4" /> 12-Week Plan</span>
+                    <div className="space-y-4">
+                      <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                        {displayedRoadmap.title}
+                      </h1>
+                      <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-3xl mx-auto md:mx-0 leading-relaxed">
+                        {displayedRoadmap.short_explanation}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4">
+                      <Button
+                        onClick={handleDownloadPDF}
+                        className="bg-[#F4C430] hover:bg-[#F4C430]/90 text-slate-900 font-black uppercase tracking-widest text-xs h-12 px-8 rounded-xl shadow-xl shadow-[#F4C430]/20"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Save as PDF
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setDisplayedRoadmap(null)}
+                        className="border-white/20 text-white hover:bg-white/10 h-12 px-8 rounded-xl backdrop-blur-md font-bold uppercase tracking-widest text-xs"
+                      >
+                        New Roadmap
+                      </Button>
+                    </div>
                   </div>
-                  <div className="max-w-3xl mx-auto pt-6 border-t border-slate-100 mt-6 space-y-4">
-                    <p className="text-lg text-slate-700 font-medium leading-relaxed font-inter">
-                      {displayedRoadmap.short_explanation}
-                    </p>
-                    {/* Career Details Summary */}
-                    <p className="text-sm text-slate-500 leading-relaxed italic font-inter">
-                      {displayedRoadmap.career_details.description}
-                    </p>
-                  </div>
-                </div>
+                </section>
 
                 {/* 2. CAREER METRICS (Salary & Demand) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -4,6 +4,7 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
 import {
     ArrowLeft,
@@ -133,16 +134,27 @@ export default function MenuPage() {
     return (
         <DashboardLayout>
             <div className="max-w-2xl mx-auto pb-12 space-y-8">
-                <div className="bg-[#0B1F3A] rounded-[2.5rem] p-10 mb-10 shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all" />
-                    <div className="relative z-10 space-y-2">
-                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1FA774] hover:text-white transition-colors mb-4">
+                <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] min-h-[200px] flex items-center shadow-2xl group mb-10">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Menu Background"
+                            fill
+                            className="object-cover opacity-20 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                    </div>
+
+                    <div className="relative z-10 p-10 space-y-4">
+                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#1FA774] hover:text-white transition-colors mb-2">
                             <ArrowLeft className="w-4 h-4" /> Go Back
                         </Link>
-                        <h1 className="text-4xl font-black text-white tracking-tight">App <span className="text-[#F4C430]">Menu</span></h1>
-                        <p className="text-slate-400 font-medium">Access all CareerPilot tools and ecosystem settings.</p>
+                        <h1 className="text-4xl font-black text-white tracking-tight leading-none">
+                            App <span className="text-[#F4C430]">Menu</span> Hub
+                        </h1>
+                        <p className="text-slate-400 font-medium text-sm">Access all CareerPilot tools and ecosystem settings.</p>
                     </div>
-                </div>
+                </section>
 
                 {menuItems.map((section, idx) => (
                     <div key={idx} className="space-y-3">

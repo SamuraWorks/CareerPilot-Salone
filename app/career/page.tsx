@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Compass, Target, MessageSquare, Sparkles, GraduationCap, ChevronRight, Brain } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 export default function CareerHubPage() {
     const [activeTab, setActiveTab] = useState<'test' | 'ai' | 'recommended' | 'unis'>('test')
@@ -20,14 +21,44 @@ export default function CareerHubPage() {
     return (
         <DashboardLayout>
             <div className="space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                        <Compass className="w-6 h-6 text-primary" />
-                        <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Career Hub</h1>
+                {/* PREMIUM HERO HEADER */}
+                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
+                    <div className="absolute inset-0 z-0">
+                        <Image
+                            src="/images/dashboard/salone_success.png"
+                            alt="Career Hub"
+                            fill
+                            className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
                     </div>
-                    <p className="text-slate-500 font-medium text-lg">Your path from discovery to university and beyond.</p>
-                </div>
+
+                    <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
+                            <Compass className="w-4 h-4 text-[#1FA774]" />
+                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Navigation Center</span>
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                            Career <span className="text-[#F4C430]">Hub</span> Express
+                        </h1>
+                        <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
+                            Your complete path from self-discovery to university and professional success in Sierra Leone.
+                        </p>
+
+                        <div className="flex items-center gap-6 pt-2">
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black text-white">50+</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Career Paths</span>
+                            </div>
+                            <div className="w-px h-8 bg-white/10" />
+                            <div className="flex flex-col">
+                                <span className="text-2xl font-black text-[#F4C430]">AI</span>
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mentor Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Tab Switcher */}
                 <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-3xl w-fit">
@@ -36,8 +67,8 @@ export default function CareerHubPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
                             className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === tab.id
-                                    ? 'bg-white dark:bg-slate-900 text-primary shadow-xl'
-                                    : 'text-slate-400 hover:text-slate-600'
+                                ? 'bg-white dark:bg-slate-900 text-primary shadow-xl'
+                                : 'text-slate-400 hover:text-slate-600'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
