@@ -1,0 +1,38 @@
+﻿   Γû▓ Next.js 15.1.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+node.exe :  ΓÜá Attempted to load C:\
+Users\User\.gemini\antigravity\scratc
+h\CareerPilot-Salone\node_modules\nex
+t\next-swc-fallback\@next\swc-win32-x
+64-msvc\next-swc.win32-x64-msvc.node,
+ but it was not installed
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe 
+   cified: ( ΓÜá Attempted ...s not  
+   installed:String) [], RemoteExc   
+ eption
+    + FullyQualifiedErrorId : Native 
+   CommandError
+ 
+ ΓÜá Attempted to load 
+@next/swc-win32-x64-msvc, but it was 
+not installed
+ ΓÜá Attempted to load 
+@next/swc-wasm-nodejs, but it was 
+not installed
+ ΓÜá Attempted to load 
+@next/swc-wasm-web, but it was not 
+installed
+ Γ¿» Failed to load SWC binary for 
+win32/x64, see more info here: https:
+//nextjs.org/docs/messages/failed-loa
+ding-swc
+Static worker exited with code: 1 
+and signal: null

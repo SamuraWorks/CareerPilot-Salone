@@ -1,0 +1,146 @@
+import { MENU_TEXT, getMessage } from './strings';
+import { getSession, updateSession, clearSession } from './session';
+import { matchCareers } from '@/lib/local-ai';
+import { SIERRA_LEONE_CAREERS, INSTITUTIONS, ONLINE_RESOURCES } from '@/lib/career-data';
+import { generateText } from 'ai';
+import { openai } from '@ai-sdk/openai';
+
+const ONBOARDING_QUESTIONS = [
+    { key: 'age', text: "Welcome to CareerPilot Salone! 🇸🇱\n\nI'm your AI Career Mentor. Let's start by getting to know you. \n\n*What is your age?*" },
+    { key: 'location', text: "*Where are you located?* (e.g. Freetown, Bo, Makeni, Kenema)" },
+    { key: 'education', text: "*What is your highest level of education?*\n(e.g. WASSCE, Diploma, Bachelor's, Masters)" },
+    { key: 'subjects', text: "*What subjects did you study or what skills do you already have?* (e.g. Math, Biology, Sewing, Coding)" },
+    { key: 'goal', text: "*What is your main career goal?* (e.g. Find a job, choose a course, start a business)" }
+];
+
+const RIASEC_QUESTIONS = [
+    { type: 'R', text: "1. I enjoy building or repairing things with my hands. (Reply 1-4, where 4 is Absolutely True)" },
+    { type: 'I', text: "2. I love solving complex math or logic puzzles. (Reply 1-4)" },
+    { type: 'A', text: "3. I enjoy drawing, designing creative visuals or writing stories. (Reply 1-4)" },
+    { type: 'S', text: "4. I enjoy helping people solve their problems or teaching. (Reply 1-4)" },
+    { type: 'E', text: "5. I enjoy leading a team or starting a small project. (Reply 1-4)" },
+    { type: 'C', text: "6. I like keeping accurate records and documents organized. (Reply 1-4)" }
+];
+
+export async function processWhatsAppMessage(body: string, sender: string): Promise<string> {
+    const cleanBody = body.trim();
+    const upperBody = cleanBody.toUpperCase();
+    const session = await getSession(sender);
+
+    // Global Commands
+    if (['MENU', 'HELP', 'EXIT', 'RESET'].includes(upperBody)) {
+        if (upperBody === 'RESET') await clearSession(sender);
+        return MENU_TEXT;
+    }
+
+    // 1. Handle Onboarding Flow
+    if (session.step.startsWith('ONBOARDING_')) {
+        const currentStepIndex = ONBOARDING_QUESTIONS.findIndex(q => `ONBOARDING_${q.key.toUpperCase()}` === session.step);
+
+        // Save answer
+        const currentQuestion = ONBOARDING_QUESTIONS[currentStepIndex];
+        session.data[currentQuestion.key] = cleanBody;
+
+        // Move to next or start Quiz
+        if (currentStepIndex < ONBOARDING_QUESTIONS.length - 1) {
+            const nextQuestion = ONBOARDING_QUESTIONS[currentStepIndex + 1];
+            session.step = `ONBOARDING_${nextQuestion.key.toUpperCase()}` as any;
+            await updateSession(sender, session);
+            return nextQuestion.text;
+        } else {
+            session.step = 'RIASEC_QUIZ';
+            session.quizIndex = 0;
+            session.scores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+            await updateSession(sender, session);
+            return "Great! Now let's find your career match with 6 quick questions.\n\n" + RIASEC_QUESTIONS[0].text;
+        }
+    }
+
+    // 2. Handle RIASEC Quiz Flow
+    if (session.step === 'RIASEC_QUIZ') {
+        const currentIdx = session.quizIndex || 0;
+        const answer = parseInt(cleanBody);
+
+        if (isNaN(answer) || answer < 1 || answer > 4) {
+            return "Please reply with a number between 1 and 4.\n\n" + RIASEC_QUESTIONS[currentIdx].text;
+        }
+
+        const question = RIASEC_QUESTIONS[currentIdx];
+        session.scores = session.scores || { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+        session.scores[question.type] += answer;
+
+        if (currentIdx < RIASEC_QUESTIONS.length - 1) {
+            session.quizIndex = currentIdx + 1;
+            await updateSession(sender, session);
+            return RIASEC_QUESTIONS[currentIdx + 1].text;
+        } else {
+            // Generate Results
+            session.step = 'START';
+            const quizResults = await matchCareers([
+                { question: 'riasec', answer: Object.entries(session.scores).map(([k, v]) => `${k}:${v}`).join(',') },
+                { question: 'education', answer: session.data.education },
+                { question: 'interest', answer: session.data.subjects }
+            ]);
+
+            // Mock Profile Update
+            console.log(`WhatsApp Profile sync for ${sender}:`, session.data);
+
+            await clearSession(sender);
+
+            let resultMsg = `🎯 *Career Analysis Complete*\n\n${quizResults.summary}\n\n`;
+            quizResults.recommendations.forEach((rec, i) => {
+                resultMsg += `*${i + 1}. ${rec.title}*\n- Demand: ${rec.demand}\n- Why: ${rec.whyFits}\n\n`;
+            });
+            resultMsg += `Visit our website for your full 3-month roadmap: https://careerpilot-salone.vercel.app/dashboard`;
+
+            return resultMsg;
+        }
+    }
+
+    // 3. Command Routing (Initial Start)
+    if (upperBody === 'CAREER' || upperBody === 'TEST' || upperBody === 'START' || upperBody === 'KUSHEH') {
+        session.step = 'ONBOARDING_AGE';
+        session.data = {};
+        await updateSession(sender, session);
+        return ONBOARDING_QUESTIONS[0].text;
+    }
+
+    switch (upperBody) {
+        case 'JOBS':
+            return "💼 *Trending Sectors na Salone*\n1. Digital Technology (High Demand!)\n2. Renewable Energy (Solar)\n3. Modern Agriculture\n4. Healthcare\n\nTo see list, reply with sector name or type START for a full career match.";
+        case 'KRIO':
+            session.language = 'krio';
+            await updateSession(sender, session);
+            return "Kusheh! Ah gladi for help you build your career. Type *START* for begin de career business or *MENU* for see waitin we get.";
+        case 'ENGLISH':
+            session.language = 'en';
+            await updateSession(sender, session);
+            return "Hello! I've switched your language to English. Type *START* to begin or *MENU* for options.";
+        case 'ABOUT':
+            return "CareerPilot Salone 🇸🇱 is your #1 mentor for navigating the job market in Sierra Leone. We provide roadmaps, CV help, and job alerts via WhatsApp and Web.";
+        default:
+            // --- AI ASSISTANT FALLBACK ---
+            try {
+                const groundedCareers = SIERRA_LEONE_CAREERS.slice(0, 15).map(c =>
+                    `- ${c.title}: ${c.description}.`
+                ).join('\n');
+
+                const { text } = await generateText({
+                    model: openai('gpt-4o-mini'),
+                    system: `You are CareerPilot Salone AI on WhatsApp.
+                    PERSONALITY: Extremely helpful, encouraging, and knowledgeable about the Sierra Leonean labor market. You speak a mix of English and occasional Krio (like 'Kusheh', 'Gladi', 'Salone').
+                    ROLE: Personal career mentor for Sierra Leonean youth.
+                    WHATSAPP MODE: Keep responses very short, professional, and friendly. Use Bullet points.
+                    LANGUAGE: The user prefers ${session.language === 'krio' ? 'Krio' : 'English'}. Respond in their preferred language.
+                    CONTEXT: Current location is Sierra Leone. Mention local institutions like FBC, IPAM, Njala, or DSTI where relevant.
+                    KNOWLEDGE: ${groundedCareers}
+                    ACTIONS: If the user is confused, tell them to type START to begin a career match quiz.`,
+                    prompt: body
+                });
+                return text;
+            } catch (err) {
+                console.error("WhatsApp AI Error:", err);
+                return "Kusheh! I am your CareerPilot Mentor. 🇸🇱\n\nI couldn't process that exactly, but I'm ready to help you!\n\nType *START* to find your dream job, or *MENU* for options.";
+            }
+    }
+}
