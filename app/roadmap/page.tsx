@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { toPng } from "html-to-image"
 import jsPDF from "jspdf"
-import { DashboardLayout } from "@/components/dashboard-layout"
+import { Footer } from "@/components/footer"
+import { AuthGuard } from "@/components/auth-guard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
@@ -22,16 +23,33 @@ import {
   ChevronRight,
   Download,
   ArrowLeft,
+  Calendar,
+  Clock,
   TrendingUp,
-  Zap
+  Zap,
+  Wrench,
+  ShieldCheck,
+  BarChart3,
+  Search,
+  Lock,
+  MessageSquare,
+  GraduationCap,
+  Users,
+  Briefcase,
+  Sparkles,
+  ListChecks
 } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
+import Link from "next/link"
+
+import { DashboardLayout } from "@/components/dashboard-layout"
 
 interface DetailedRoadmapData {
   id: string;
@@ -41,7 +59,19 @@ interface DetailedRoadmapData {
     description: string;
     salary_range: string;
     market_demand: 'High' | 'Medium' | 'Low';
+    demand_explanation: string;
     responsibilities: string[];
+    work_environment?: string;
+    career_levels?: string[];
+    required_tools: string[];
+    certifications: string[];
+    skill_gap_analysis: string;
+    market_reality: string;
+  };
+  learning_resources?: {
+    free: string[];
+    paid: string[];
+    local: string[];
   };
   why_this_career: {
     reason: string;
@@ -74,7 +104,7 @@ interface DetailedRoadmapData {
 
 export default function RoadmapPage() {
   const router = useRouter()
-  const { user, session } = useAuth()
+  const { user, session, profile } = useAuth()
   const [query, setQuery] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [displayedRoadmap, setDisplayedRoadmap] = useState<DetailedRoadmapData | null>(null)
@@ -84,14 +114,41 @@ export default function RoadmapPage() {
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const roadmapRef = useRef<HTMLDivElement>(null)
 
+  const calculateProgress = (tasksSet = completedTasks) => {
+    if (!displayedRoadmap) return 0
+    let totalTasks = 0
+    let doneTasks = 0
+    displayedRoadmap.phases.forEach(phase => {
+      phase.what_you_must_do.forEach(task => {
+        totalTasks++
+        if (tasksSet.has(task.id)) doneTasks++
+      })
+    })
+    return totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0
+  }
+
+  const isPhaseComplete = (phase: DetailedRoadmapData['phases'][0]) => {
+    return phase.what_you_must_do.every(task => completedTasks.has(task.id))
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined' && displayedRoadmap?.id) {
       const storageKey = `roadmap_progress_${displayedRoadmap.id}`;
       const saved = localStorage.getItem(storageKey);
       if (saved) {
-        setCompletedTasks(new Set(JSON.parse(saved)));
+        const loadedTasks = JSON.parse(saved);
+        const loadedSet = new Set<string>(loadedTasks);
+        setCompletedTasks(loadedSet);
+
+        // Sync global progress immediately upon load
+        const prog = calculateProgress(loadedSet);
+        localStorage.setItem("roadmapPercent", Math.round(prog).toString());
+        localStorage.setItem("roadmapProgress", JSON.stringify(loadedTasks));
       } else {
         setCompletedTasks(new Set());
+        // Reset global if new/empty
+        localStorage.setItem("roadmapPercent", "0");
+        localStorage.setItem("roadmapProgress", "[]");
       }
     }
   }, [displayedRoadmap]);
@@ -112,21 +169,10 @@ export default function RoadmapPage() {
     // Update global dashboard progress key
     const currentProg = calculateProgress(newCompleted)
     localStorage.setItem("roadmapProgress", JSON.stringify(Array.from(newCompleted)))
-    // Note: Dashboard expects the ARRAY of completed task IDs to calculate percentage
+    localStorage.setItem("roadmapPercent", Math.round(currentProg).toString())
   }
 
-  const calculateProgress = (tasksSet = completedTasks) => {
-    if (!displayedRoadmap) return 0
-    let totalTasks = 0
-    let doneTasks = 0
-    displayedRoadmap.phases.forEach(phase => {
-      phase.what_you_must_do.forEach(task => {
-        totalTasks++
-        if (tasksSet.has(task.id)) doneTasks++
-      })
-    })
-    return totalTasks > 0 ? (doneTasks / totalTasks) * 100 : 0
-  }
+
 
   useEffect(() => {
     if (user) loadHistory();
@@ -150,11 +196,19 @@ export default function RoadmapPage() {
       const res = await fetch('/api/generate-roadmap', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ career: query })
+        body: JSON.stringify({
+          career: query,
+          // Include user profile for personalization
+          educationLevel: profile?.educationLevel || 'secondary',
+          location: profile?.location || 'Freetown',
+          skillLevel: 'beginner', // Could be determined from profile or aptitude test
+          userType: profile?.careerGoal ? 'student' : 'career_seeker'
+        })
       })
       if (!res.ok) throw new Error("Generation failed");
       const data = await res.json()
       setDisplayedRoadmap(data)
+      toast.success("Roadmap generated successfully!")
     } catch (e: any) {
       toast.error(`Generation Failed: ${e.message}`);
     } finally {
@@ -238,183 +292,281 @@ export default function RoadmapPage() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-8 min-h-screen">
+      <div className="space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-700">
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push('/dashboard')}
-          className="mb-4 hover:text-[#1E5EFF] transition-colors group p-0"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Back to Dashboard
-        </Button>
+        {/* --- PREMIUM DYNAMIC HERO --- */}
+        <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/salone_digital_market.png"
+              alt="Roadmap Hub"
+              fill
+              className="object-cover brightness-75 group-hover:scale-105 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-[#0B1F3A]/80" />
+          </div>
+
+          <div className="relative z-20 w-full p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="space-y-6 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FA774]/20 border border-[#1FA774]/30 rounded-full backdrop-blur-md">
+                <MapIcon className="w-4 h-4 text-[#4ADE80]" />
+                <span className="text-[#4ADE80] font-black text-[10px] uppercase tracking-[0.2em]">Strategy Hub: Roadmap Engine</span>
+              </div>
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
+                Career <br /> <span className="text-gradient-salone brightness-150 uppercase italic">Trajectory</span> Simulator
+              </h1>
+              <p className="text-lg text-slate-300 font-medium font-inter max-w-lg leading-relaxed italic border-l-4 border-[#1FA774] pl-6">
+                Synthesize high-precision career pathways tailored for the modern Sierra Leonean professional.
+              </p>
+            </div>
+
+            <Link href="/dashboard" className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-[10px] font-black uppercase tracking-widest group">
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Base
+            </Link>
+          </div>
+        </section>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="flex w-fit mx-auto mb-10 bg-slate-100 rounded-2xl p-1.5 h-14 shadow-inner">
-            <TabsTrigger value="generator" className="rounded-xl px-8 data-[state=active]:bg-white data-[state=active]:text-[#1E5EFF] data-[state=active]:shadow-sm font-black text-xs uppercase tracking-[0.2em]">New Roadmap</TabsTrigger>
-            <TabsTrigger value="history" className="rounded-xl px-8 data-[state=active]:bg-white data-[state=active]:text-[#1E5EFF] data-[state=active]:shadow-sm font-black text-xs uppercase tracking-[0.2em]">Saved Plans</TabsTrigger>
+            <TabsTrigger value="generator" className="rounded-xl px-8 data-[state=active]:bg-white data-[state=active]:text-[#1E5EFF] data-[state=active]:shadow-sm font-black text-xs uppercase tracking-[0.2em]">Live Generator</TabsTrigger>
+            <TabsTrigger value="history" className="rounded-xl px-8 data-[state=active]:bg-white data-[state=active]:text-[#1E5EFF] data-[state=active]:shadow-sm font-black text-xs uppercase tracking-[0.2em]">Mission Archive</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="generator" className="space-y-8 animate-in fade-in duration-700">
-
-            {!displayedRoadmap && (
-              <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[450px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
-                <div className="absolute inset-0 z-0">
-                  <Image
-                    src="/images/dashboard/salone_success.png"
-                    alt="Roadmap"
-                    fill
-                    className="object-cover opacity-20 transition-transform duration-[3s] group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#0B1F3A] via-[#1E5EFF]/40 to-transparent z-10" />
+          <TabsContent value="generator" className="space-y-12 outline-none">
+            {!displayedRoadmap ? (
+              <div className="bg-white rounded-[3rem] p-12 md:p-20 border-2 border-dashed border-slate-100 text-center space-y-8 animate-in zoom-in duration-500 shadow-sm">
+                <div className="w-20 h-20 rounded-3xl bg-slate-50 border border-slate-100 shadow-xl flex items-center justify-center mx-auto mb-6 text-[#1E5EFF]">
+                  <Sparkles className="w-10 h-10" />
+                </div>
+                <div className="space-y-4 max-w-xl mx-auto">
+                  <h3 className="text-3xl font-black text-[#0B1F3A] uppercase tracking-tighter italic">Define Destination</h3>
+                  <p className="text-slate-500 font-medium font-inter text-lg">Enter a career field to generate a localized 12-week strategic roadmap.</p>
                 </div>
 
-                <div className="relative z-20 w-full p-10 md:p-20 space-y-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-                    <MapIcon className="w-4 h-4 text-[#4ADE80]" />
-                    <span className="text-[#4ADE80] font-black text-[10px] uppercase tracking-[0.2em]">AI Career Navigator</span>
+                <div className="flex flex-col sm:flex-row w-full max-w-2xl mx-auto gap-4 pt-4">
+                  <div className="relative flex-1">
+                    <Input
+                      placeholder="E.g. Petroleum Engineer, Data Analyst, Farmer..."
+                      className="h-16 text-lg bg-slate-50 border-slate-200 text-[#0B1F3A] placeholder:text-slate-400 focus:border-[#1E5EFF] rounded-2xl transition-all px-8 w-full shadow-sm"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+                    />
                   </div>
-
-                  <div className="space-y-4 max-w-2xl">
-                    <h1 className="text-4xl md:text-7xl font-black text-white leading-tight tracking-tight font-poppins">
-                      Discover your <span className="text-gradient-salone brightness-150">Path</span>
-                    </h1>
-                    <p className="text-lg md:text-xl text-slate-300 font-medium font-inter leading-relaxed">
-                      Enter any career and get a realistic 12-week roadmap tailored for the Sierra Leonean context.
-                    </p>
+                  <Button
+                    size="lg"
+                    onClick={handleGenerate}
+                    disabled={isLoading || !query}
+                    className="h-16 px-10 bg-[#0B1F3A] hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all shadow-xl active:scale-95"
+                  >
+                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Zap className="w-5 h-5 mr-2" />}
+                    {isLoading ? "Simulating..." : "Generate Path"}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div ref={roadmapRef} className="space-y-12 animate-in slide-in-from-bottom-8 duration-700">
+                {/* TOOLBAR */}
+                <div className="flex flex-wrap items-center justify-between gap-6 px-4">
+                  <div className="flex items-center gap-4">
+                    <Button variant="outline" onClick={() => setDisplayedRoadmap(null)} className="rounded-xl border-slate-200 hover:bg-slate-50 font-black uppercase tracking-widest text-[10px] gap-2">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Reset Generator
+                    </Button>
+                    <div className="h-6 w-px bg-slate-200" />
+                    <p className="text-slate-400 font-black uppercase tracking-widest text-[9px]">Analyzing trajectory for: <span className="text-[#0B1F3A]">{displayedRoadmap.title}</span></p>
                   </div>
-
-                  <div className="flex flex-col sm:flex-row w-full max-w-2xl gap-4">
-                    <div className="relative flex-1">
-                      <Input
-                        placeholder="E.g. Fullstack Developer, Nurse, Farmer..."
-                        className="h-16 text-lg bg-white/5 border-white/20 text-white placeholder:text-slate-500 focus:bg-white/10 focus:border-[#1E5EFF] rounded-2xl transition-all pl-8 w-full shadow-2xl"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-                      />
-                    </div>
-                    <Button
-                      size="lg"
-                      onClick={handleGenerate}
-                      disabled={isLoading || !query}
-                      className="h-16 px-10 bg-[#1E5EFF] hover:bg-[#1E5EFF]/90 text-white font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-blue-500/20"
-                    >
-                      {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Plan My Path"}
+                  <div className="flex items-center gap-3">
+                    <Button onClick={handleSave} disabled={isSaving} className="rounded-xl bg-white text-[#0B1F3A] border border-slate-200 hover:bg-slate-50 font-black uppercase tracking-widest text-[10px] gap-2 shadow-sm">
+                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                      Sync to Profile
+                    </Button>
+                    <Button onClick={handleDownloadPDF} className="rounded-xl bg-[#0B1F3A] text-white hover:bg-[#1E5EFF] font-black uppercase tracking-widest text-[10px] gap-2 shadow-lg shadow-blue-500/10">
+                      <Download className="w-4 h-4" /> Tactical Export (PDF)
                     </Button>
                   </div>
                 </div>
-              </section>
-            )}
 
-            {displayedRoadmap && (
-              <div ref={roadmapRef} className="space-y-10 pb-32 animate-in slide-in-from-bottom-8 duration-1000">
+                {/* HERO DATA CARD */}
+                <Card className="rounded-[4rem] p-10 md:p-14 bg-white border border-slate-100 shadow-2xl relative overflow-hidden">
+                  <div className="space-y-12">
+                    <div className="space-y-6">
+                      <Badge className="bg-[#1E5EFF]/10 text-[#1E5EFF] border-none font-black px-4 py-1.5 uppercase tracking-[0.2em] text-[10px]">High Value Path</Badge>
+                      <h1 className="text-4xl md:text-7xl font-black text-[#0B1F3A] font-poppins leading-none tracking-tighter uppercase italic">{displayedRoadmap.title}</h1>
+                      <p className="text-xl text-slate-500 font-medium font-inter max-w-4xl border-l-8 border-[#1FA774] pl-8 leading-relaxed italic">{displayedRoadmap.short_explanation}</p>
+                    </div>
 
-                {/* 1. PROGRESS WIDGET */}
-                <Card className="p-8 bg-[#0B1F3A] text-white rounded-[2.5rem] border-none shadow-2xl sticky top-6 z-50 border-t-2 border-t-[#1E5EFF]">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-[#1E5EFF]/20 flex items-center justify-center text-[#1E5EFF]">
-                        <Zap className="w-7 h-7" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                      <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 flex flex-col justify-between group hover:bg-white hover:shadow-xl transition-all duration-500">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4">Market Potential (SLE)</p>
+                        <p className="text-emerald-600 font-black text-2xl tracking-tighter group-hover:scale-105 transition-transform origin-left">{displayedRoadmap.career_details.salary_range}</p>
                       </div>
-                      <div>
-                        <h3 className="font-black text-xs uppercase tracking-[0.2em] text-slate-400">Roadmap Progress</h3>
-                        <p className="text-lg font-black">{Math.round(calculateProgress())}% Complete</p>
+                      <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4">Economic Demand</p>
+                        <Badge className={cn("text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full",
+                          displayedRoadmap.career_details.market_demand === 'High' ? "bg-emerald-500 text-white" : "bg-amber-500 text-white")}>
+                          {displayedRoadmap.career_details.market_demand} Criticality
+                        </Badge>
+                      </div>
+                      <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4">Environment</p>
+                        <p className="text-[#0B1F3A] font-black text-sm uppercase tracking-tight">{displayedRoadmap.career_details.work_environment || "Enterprise/Field"}</p>
+                      </div>
+                      <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 group hover:bg-white hover:shadow-xl transition-all duration-500">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4">Progression</p>
+                        <div className="flex flex-wrap gap-2">
+                          {(displayedRoadmap.career_details.career_levels || ["Standard"]).slice(0, 2).map((l: string, i: number) => (
+                            <span key={i} className="text-[9px] font-black bg-blue-50 text-[#1E5EFF] px-3 py-1.5 rounded-lg uppercase tracking-widest">{l}</span>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                    <Button onClick={handleSave} disabled={isSaving} size="sm" className="bg-[#1FA774] hover:bg-[#1FA774]/80 text-white rounded-xl font-black text-[10px] uppercase tracking-widest px-6 h-10">
-                      {isSaving ? "Saving..." : "Save Progress"}
-                    </Button>
                   </div>
-                  <Progress value={calculateProgress()} className="h-3 bg-white/10 [&>div]:bg-[#1FA774]" />
                 </Card>
 
-                {/* 2. HERO DISPLAY */}
-                <section className="relative rounded-[3.5rem] overflow-hidden bg-white min-h-[300px] flex items-center shadow-xl border border-slate-100">
-                  <div className="absolute right-0 top-0 w-1/3 h-full opacity-5 bg-gradient-to-l from-[#1E5EFF] to-transparent pointer-events-none" />
-                  <div className="p-10 md:p-16 space-y-6 w-full">
-                    <Badge className="bg-[#1E5EFF]/10 text-[#1E5EFF] border-none font-black px-4 py-1 uppercase tracking-widest text-[10px]">Active Path</Badge>
-                    <h1 className="text-4xl md:text-6xl font-black text-[#0B1F3A] font-poppins leading-tight">{displayedRoadmap.title}</h1>
-                    <p className="text-lg text-slate-500 font-medium font-inter max-w-3xl border-l-4 border-l-[#1E5EFF] pl-6 py-2">{displayedRoadmap.short_explanation}</p>
-
-                    <div className="flex flex-wrap gap-4 pt-4">
-                      <div className="px-6 py-4 bg-slate-50 rounded-2xl border border-slate-100 min-w-[200px]">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Average Salary</p>
-                        <p className="text-xl font-black text-[#0B1F3A]">{displayedRoadmap.career_details.salary_range}</p>
-                      </div>
-                      <div className="px-6 py-4 bg-slate-50 rounded-2xl border border-slate-100 min-w-[200px]">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Market Demand</p>
-                        <p className="text-xl font-black text-[#1FA774]">{displayedRoadmap.career_details.market_demand}</p>
-                      </div>
-                    </div>
+                {/* MISSION PHASES */}
+                <div className="space-y-12">
+                  <div className="flex items-center gap-4 px-4 overflow-hidden">
+                    <div className="h-px flex-1 bg-slate-100" />
+                    <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-[0.3em] px-6 whitespace-nowrap">Tactical Milestones</h2>
+                    <div className="h-px flex-1 bg-slate-100" />
                   </div>
-                </section>
 
-                {/* 3. PHASES GRID */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  {displayedRoadmap.phases.map((phase, i) => (
-                    <Card key={i} className="flex flex-col rounded-[2.5rem] overflow-hidden border-none shadow-xl hover:shadow-2xl transition-all h-full group">
-                      <div className={cn("p-8 text-white", i === 0 ? "bg-[#1E5EFF]" : i === 1 ? "bg-slate-800" : "bg-[#1FA774]")}>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mb-2">{phase.duration}</p>
-                        <h3 className="text-2xl font-black font-poppins">{phase.name}</h3>
-                        <div className="mt-4 pt-4 border-t border-white/10 text-xs font-bold leading-relaxed opacity-80">Goal: {phase.goal}</div>
-                      </div>
-                      <div className="p-8 space-y-8 flex-1 bg-white">
-                        <div>
-                          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1E5EFF] mb-4">Must-Do Tasks</h4>
-                          <div className="space-y-3">
-                            {phase.what_you_must_do.map((item) => (
-                              <div
-                                key={item.id}
-                                onClick={() => toggleTask(item.id)}
-                                className={cn(
-                                  "flex items-start gap-3 p-4 rounded-2xl border-2 transition-all cursor-pointer",
-                                  completedTasks.has(item.id) ? "bg-emerald-50 border-emerald-100 opacity-60" : "bg-slate-50 border-slate-100 hover:border-[#1E5EFF]/20"
-                                )}
-                              >
-                                <div className={cn("w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center shrink-0", completedTasks.has(item.id) ? "bg-[#1FA774] border-[#1FA774] text-white" : "border-slate-300")}>
-                                  {completedTasks.has(item.id) && <CheckCircle2 className="w-3.5 h-3.5" />}
+                  <div className="grid grid-cols-1 gap-12">
+                    {displayedRoadmap.phases.map((phase, idx) => {
+                      const complete = isPhaseComplete(phase)
+                      return (
+                        <div key={phase.id} className="relative group/phase">
+                          {/* CONNECTOR LINE */}
+                          {idx !== displayedRoadmap.phases.length - 1 && (
+                            <div className="absolute left-[39px] top-20 bottom-[-48px] w-1 bg-slate-100 z-0 group-hover/phase:bg-[#1FA774]/20 transition-colors" />
+                          )}
+
+                          <div className="relative z-10 flex gap-10 items-start">
+                            {/* PHASE STEP COUNTER */}
+                            <div className={cn(
+                              "w-20 h-20 rounded-[2.5rem] shrink-0 flex items-center justify-center font-black text-xl shadow-2xl transition-all duration-500 border-4 border-white",
+                              complete ? "bg-[#1FA774] text-white" : "bg-white text-slate-200 border-slate-50"
+                            )}>
+                              {complete ? <CheckCircle2 className="w-10 h-10" /> : `0${idx + 1}`}
+                            </div>
+
+                            {/* PHASE CARD */}
+                            <Card className={cn(
+                              "flex-1 rounded-[3.5rem] p-10 md:p-14 border border-slate-50 shadow-xl transition-all duration-500 overflow-hidden relative",
+                              complete ? "bg-emerald-50/30 border-emerald-100 shadow-emerald-500/5 group/card" : "bg-white hover:bg-slate-50/50 hover:shadow-2xl"
+                            )}>
+                              {complete && <div className="absolute top-0 right-0 w-32 h-32 bg-[#1FA774]/5 rounded-bl-[4rem] group-hover/card:scale-110 transition-transform" />}
+
+                              <div className="space-y-8">
+                                <div className="space-y-4">
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#1E5EFF]">Window: {phase.duration}</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 italic">Objective: {phase.goal}</span>
+                                  </div>
+                                  <h3 className="text-3xl font-black text-[#0B1F3A] font-poppins">{phase.name}</h3>
                                 </div>
-                                <span className={cn("text-xs font-bold leading-tight", completedTasks.has(item.id) ? "line-through text-slate-400" : "text-[#0B1F3A]")}>{item.task}</span>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {phase.what_you_must_do.map((task) => (
+                                    <div
+                                      key={task.id}
+                                      onClick={() => toggleTask(task.id)}
+                                      className={cn(
+                                        "flex items-center gap-4 p-5 rounded-2xl cursor-pointer transition-all border group/task",
+                                        completedTasks.has(task.id)
+                                          ? "bg-white border-[#1FA774]/50 shadow-sm"
+                                          : "bg-slate-50 border-slate-100 hover:border-[#1E5EFF]/30 hover:bg-white"
+                                      )}
+                                    >
+                                      <div className={cn(
+                                        "w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all",
+                                        completedTasks.has(task.id) ? "bg-[#1FA774] text-white" : "bg-white text-slate-200 border border-slate-200"
+                                      )}>
+                                        {completedTasks.has(task.id) && <CheckCircle2 className="w-4 h-4" />}
+                                      </div>
+                                      <span className={cn(
+                                        "text-sm font-bold transition-all",
+                                        completedTasks.has(task.id) ? "text-[#065F46] line-through opacity-60" : "text-slate-600"
+                                      )}>
+                                        {task.task}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            ))}
+                            </Card>
                           </div>
                         </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* SECONDARY INFO GRID */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  {/* Knowledge Vault */}
+                  <Card className="rounded-[3.5rem] p-12 bg-white border border-slate-100 shadow-xl space-y-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1E5EFF] shadow-sm">
+                        <BookOpen className="w-7 h-7" />
                       </div>
-                    </Card>
-                  ))}
-                </div>
-
-                {/* 4. LOCAL CONTEXT (Unis & Mentors) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <Card className="p-8 rounded-[3rem] border-none bg-white shadow-xl">
-                    <div className="flex items-center gap-3 mb-8">
-                      <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-[#1E5EFF]"><BookOpen className="w-6 h-6" /></div>
-                      <h3 className="text-xl font-black font-poppins text-[#0B1F3A]">Where to Study</h3>
+                      <div>
+                        <h3 className="text-2xl font-black text-[#0B1F3A] font-poppins capitalize">Knowledge Vault</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Training Infrastructure</p>
+                      </div>
                     </div>
-                    <div className="space-y-4">
-                      {displayedRoadmap.universities.map((uni, i) => (
-                        <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-[#1E5EFF]/20 transition-all">
-                          <h4 className="font-black text-[#0B1F3A] mb-1">{uni.name}</h4>
-                          <p className="text-xs text-slate-500 font-medium">{uni.focus}</p>
-                        </div>
-                      ))}
+
+                    <div className="space-y-8">
+                      {displayedRoadmap.learning_resources && (
+                        <>
+                          <div className="space-y-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1FA774] pl-1">Localized Ecosystem (Salone)</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {displayedRoadmap.learning_resources.local.map((r, i) => (
+                                <Badge key={i} className="bg-emerald-50 text-emerald-700 border border-emerald-100/50 hover:bg-emerald-100 px-4 py-2 rounded-xl text-[11px] font-bold">{r}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="space-y-4">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1E5EFF] pl-1">Global Intelligence Base</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {displayedRoadmap.learning_resources.free.map((r, i) => (
+                                <Badge key={i} className="bg-blue-50 text-blue-700 border border-blue-100/50 hover:bg-blue-100 px-4 py-2 rounded-xl text-[11px] font-bold">{r}</Badge>
+                              ))}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </Card>
 
-                  <Card className="p-8 rounded-[3rem] border-none bg-white shadow-xl">
-                    <div className="flex items-center gap-3 mb-8">
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-[#1FA774]"><User className="w-6 h-6" /></div>
-                      <h3 className="text-xl font-black font-poppins text-[#0B1F3A]">Contact Mentors</h3>
+                  {/* Mentor Network */}
+                  <Card className="rounded-[3.5rem] p-12 bg-white border border-slate-100 shadow-xl space-y-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                        <Users className="w-7 h-7" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-black text-[#0B1F3A] font-poppins capitalize">Advisory Network</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Industry Vetted Mentors</p>
+                      </div>
                     </div>
-                    <div className="space-y-4">
-                      {displayedRoadmap.mentors.map((m, i) => (
-                        <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-[#1FA774]/20 transition-all">
-                          <h4 className="font-black text-[#0B1F3A] mb-1">{m.name}</h4>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-[#1FA774] mb-3">{m.role}</p>
-                          <div className="pt-3 border-t border-slate-200 text-xs font-bold text-slate-400">
-                            Expertise: <span className="text-slate-600">{m.help_with}</span>
+                    <div className="grid grid-cols-1 gap-4">
+                      {displayedRoadmap.mentors.map((mentor, i) => (
+                        <div key={i} className="p-6 rounded-3xl bg-slate-50 border border-slate-100 flex flex-col gap-4 group hover:bg-white hover:shadow-lg transition-all">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-black text-[#0B1F3A] text-base">{mentor.name}</p>
+                              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{mentor.role}</p>
+                            </div>
+                            <Button size="sm" variant="outline" className="h-9 rounded-xl text-[9px] font-black uppercase tracking-widest bg-white hover:bg-[#0B1F3A] hover:text-white transition-all">Connect</Button>
+                          </div>
+                          <div className="pt-4 border-t border-slate-200/50 flex items-start gap-3">
+                            <div className="w-6 h-6 rounded-lg bg-[#1E5EFF]/10 flex items-center justify-center shrink-0">
+                              <MessageSquare className="w-3 h-3 text-[#1E5EFF]" />
+                            </div>
+                            <p className="text-[11px] text-slate-500 font-medium leading-relaxed italic">Help with: {mentor.help_with}</p>
                           </div>
                         </div>
                       ))}
@@ -422,39 +574,38 @@ export default function RoadmapPage() {
                   </Card>
                 </div>
 
-                {/* 5. NEXT STEPS & CTAs */}
-                <div className="bg-[#0B1F3A] text-white rounded-[3.5rem] p-12 text-center space-y-8 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E5EFF]/10 rounded-full blur-3xl" />
-                  <div className="relative z-10 space-y-6">
-                    <h2 className="text-3xl md:text-5xl font-black font-poppins">Ready for the transformation?</h2>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {displayedRoadmap.next_steps.map((s, i) => (
-                        <Badge key={i} className="bg-white/10 text-white border-none px-6 py-2 rounded-full font-bold uppercase tracking-widest text-[9px]">{s}</Badge>
-                      ))}
-                    </div>
-                    <div className="flex justify-center gap-4 pt-4">
-                      <Button size="lg" onClick={handleDownloadPDF} className="bg-white text-[#0B1F3A] hover:bg-slate-100 rounded-2xl px-10 font-black uppercase tracking-widest text-xs h-15 shadow-xl">
-                        <Download className="w-4 h-4 mr-2" /> Download PDF
+                {/* CALL TO ACTION */}
+                <div className="bg-[#0B1F3A] text-white rounded-[4rem] p-12 md:p-20 text-center space-y-10 relative overflow-hidden group border-b-8 border-b-[#1E5EFF]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1E5EFF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                  <div className="relative z-10 space-y-8 max-w-2xl mx-auto">
+                    <h2 className="text-4xl md:text-7xl font-black font-poppins italic leading-none uppercase tracking-tighter">Ready for the <br /><span className="text-gradient-salone brightness-150">Ascension?</span></h2>
+                    <p className="text-lg text-slate-400 font-medium font-inter italic leading-relaxed">Your professional transformation in the Sierra Leonean marketplace begins now. Execute Phase 01 immediately.</p>
+                    <div className="flex justify-center gap-6 pt-4">
+                      <Button size="lg" onClick={handleDownloadPDF} className="bg-white text-[#0B1F3A] hover:bg-[#1FA774] hover:text-white rounded-2xl px-12 h-16 font-black uppercase tracking-widest text-[11px] shadow-2xl transition-all active:scale-95">
+                        <Download className="w-5 h-5 mr-3" /> Get Tactical Copy (PDF)
                       </Button>
                     </div>
                   </div>
                 </div>
-
               </div>
             )}
-
           </TabsContent>
 
-          <TabsContent value="history">
-            <RoadmapHistory
-              roadmaps={savedRoadmaps}
-              isLoading={false}
-              onLoad={handleLoadHistory}
-              onDelete={handleDeleteHistory}
-            />
+          <TabsContent value="history" className="outline-none">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <RoadmapHistory
+                roadmaps={savedRoadmaps}
+                isLoading={false}
+                onLoad={handleLoadHistory}
+                onDelete={handleDeleteHistory}
+              />
+            </div>
           </TabsContent>
         </Tabs>
+
+        <Footer />
       </div>
     </DashboardLayout>
   )
 }
+

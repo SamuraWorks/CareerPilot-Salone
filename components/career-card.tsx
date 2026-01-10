@@ -18,7 +18,7 @@ export function CareerCard({ career }: CareerCardProps) {
 
   const demandColor = {
     High: "bg-emerald-500/10 text-[#1FA774] border-[#1FA774]/20",
-    Medium: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+    Medium: "bg-blue-500/10 text-blue-700 border-blue-500/20",
     Low: "bg-slate-500/10 text-slate-700 border-slate-500/20",
   }
 
@@ -49,7 +49,7 @@ export function CareerCard({ career }: CareerCardProps) {
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/20 to-transparent" />
+        <div className="absolute inset-0 bg-[#0B1F3A]/90" />
 
         {/* Demand badge */}
         <div className="absolute top-4 right-4">
@@ -120,7 +120,7 @@ export function CareerCard({ career }: CareerCardProps) {
               <div className="space-y-1">
                 <div className="h-2 bg-slate-200 rounded-full overflow-hidden flex">
                   <div
-                    className="h-full bg-gradient-to-r from-[#1FA774] to-[#F4C430] transition-all duration-1000"
+                    className="h-full bg-[#1FA774] transition-all duration-1000"
                     style={{ width: `${getPercentage()}%` }}
                   />
                 </div>

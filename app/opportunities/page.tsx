@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Briefcase, GraduationCap, Zap, Users, MapPin, ArrowRight, Loader2, Search, Sparkles } from "lucide-react"
@@ -53,16 +54,6 @@ export default function OpportunitiesPage() {
             <div className="space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-700">
                 {/* HERO HEADER - Green-Blue Theme */}
                 <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/images/dashboard/salone_success.png"
-                            alt="Opportunities"
-                            fill
-                            className="object-cover opacity-20 transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#1E5EFF]/40 to-transparent z-10" />
-                    </div>
-
                     <div className="relative z-20 max-w-2xl p-10 md:p-16 space-y-6">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FA774]/10 border border-[#1FA774]/20 rounded-full backdrop-blur-md">
                             <Sparkles className="w-4 h-4 text-[#4ADE80]" />
@@ -154,21 +145,21 @@ export default function OpportunitiesPage() {
                     </div>
                 )}
 
-                {/* CTA */}
-                <Card className="p-12 rounded-[3.5rem] bg-gradient-to-br from-[#0B1F3A] to-[#1E5EFF] text-white border-none shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-[100px] group-hover:scale-110 transition-transform" />
+                {/* CTA Banner - DARK PREMIUM */}
+                <section className="bg-gradient-to-r from-[#1E5EFF] to-[#1FA774] rounded-[4rem] p-12 md:p-20 text-white shadow-2xl relative overflow-hidden group">
+                    <div className="absolute inset-0 z-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
                         <div className="space-y-4 text-center md:text-left max-w-xl">
-                            <h3 className="text-3xl md:text-5xl font-black tracking-tight font-poppins leading-none">Need a better <span className="text-[#4ADE80]">Match</span>?</h3>
-                            <p className="text-slate-300 font-medium font-inter leading-relaxed">Our AI Mentor analyzes your profile to find specific internships and grants that don't always appear in public boards.</p>
+                            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic leading-none">Need a <br /> better <span className="text-[#4ADE80]">Match?</span></h2>
+                            <p className="text-lg text-white/80 font-medium font-inter italic leading-relaxed">Our AI Mentor analyzes your profile to find specific internships and grants that don't always appear in public boards.</p>
                         </div>
                         <Link href="/guidance">
-                            <button className="h-16 px-12 rounded-2xl bg-white text-[#0B1F3A] font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#4ADE80] hover:text-white transition-all shadow-2xl active:scale-95">
-                                Talk to AI Mentor
-                            </button>
+                            <Button size="lg" className="h-[72px] px-12 rounded-[2rem] bg-white text-[#0B1F3A] font-black uppercase tracking-[0.2em] text-[11px] hover:bg-[#0B1F3A] hover:text-white transition-all shadow-2xl active:scale-95 border-none">
+                                Start AI Consultation
+                            </Button>
                         </Link>
                     </div>
-                </Card>
+                </section>
             </div>
         </DashboardLayout>
     )

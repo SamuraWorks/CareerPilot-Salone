@@ -25,6 +25,7 @@ interface OnboardingData {
   careerGoal: string
   whatsappNumber: string
   whatsappSubscribed: boolean
+  preferredLanguage: string
 }
 
 const DISTRICTS = [
@@ -67,76 +68,29 @@ const CAREER_GOALS = [
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const { user } = useAuth()
+  const { profile, updateProfile } = useAuth()
   const [step, setStep] = useState(1)
   const totalSteps = 5
   const [loading, setLoading] = useState(false)
 
-  const [data, setData] = useState<OnboardingData>({
-    fullName: "",
-    age: "",
-    location: "",
-    educationLevel: "",
-    subjects: [],
-    interests: [],
-    careerGoal: "",
-    whatsappNumber: "",
-    whatsappSubscribed: true
-  })
+  const [data, setData] = useState<OnboardingData>(profile)
 
-  // Load initial data if it exists
+  // Sync with global profile on mount
   useEffect(() => {
-    const saved = localStorage.getItem("userOnboarding")
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        setData(prev => ({ ...prev, ...parsed }))
-      } catch (e) {
-        console.error("Failed to load onboarding data", e)
-      }
-    }
-  }, [])
+    setData(profile)
+  }, [profile])
 
   const progress = (step / totalSteps) * 100
 
-  const saveToSupabase = async (partialData: Partial<OnboardingData>) => {
-    if (!user) return
-
-    try {
-      // Convert UI data to DB schema
-      const dbData = {
-        id: user.id,
-        full_name: partialData.fullName || data.fullName,
-        age: partialData.age ? parseInt(partialData.age) : (data.age ? parseInt(data.age) : null),
-        location: partialData.location || data.location,
-        education_level: partialData.educationLevel || data.educationLevel,
-        skills: partialData.subjects || data.subjects,
-        interests: partialData.interests || data.interests,
-        career_goal: partialData.careerGoal || data.careerGoal,
-        whatsapp_number: partialData.whatsappNumber || data.whatsappNumber,
-        updated_at: new Date().toISOString()
-      }
-
-      const { error } = await supabase
-        .from('profiles')
-        .upsert(dbData)
-
-      if (error) {
-        console.warn("Supabase upsert error (checking if table exists...):", error.message)
-      } else {
-        console.log("Supabase save successful")
-      }
-    } catch (e) {
-      console.error("Supabase integration error:", e)
-    }
-  }
-
   const handleNext = async () => {
-    // Save current step data to localStorage immediately
-    localStorage.setItem("userOnboarding", JSON.stringify(data))
+    // Validate current step
+    if (!isStepValid()) {
+      toast.error("Please fill in all required fields.")
+      return
+    }
 
-    // Attempt background save to Supabase
-    saveToSupabase(data)
+    // Update global state immediately
+    updateProfile(data)
 
     if (step < totalSteps) {
       setStep(step + 1)
@@ -146,15 +100,12 @@ export default function OnboardingPage() {
       try {
         localStorage.setItem("onboardingComplete", "true")
 
-        // Final explicit save
-        await saveToSupabase(data)
-
         toast.success("Welcome aboard! Your profile is ready.")
         setTimeout(() => {
           router.push("/dashboard")
         }, 1000)
       } catch (error) {
-        toast.error("Process interrupted, but your progress is saved locally.")
+        toast.error("Something went wrong, but your progress is saved.")
         router.push("/dashboard")
       }
     }
@@ -190,38 +141,37 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0B1F3A] via-[#1E5EFF] to-[#1FA774] flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4">
 
-      <div className="max-w-4xl w-full space-y-8 animate-in fade-in duration-700">
+      <div className="max-w-4xl w-full space-y-12 animate-in fade-in duration-700">
 
         {/* Header Section */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-white/20 rounded-full backdrop-blur-md mb-2">
-            <Sparkles className="w-4 h-4 text-[#4ADE80]" />
-            <span className="text-white font-bold text-[10px] uppercase tracking-[0.2em]">Step {step} of {totalSteps}</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B1F3A]/5 border border-[#0B1F3A]/10 rounded-full mb-2">
+            <Sparkles className="w-4 h-4 text-[#1FA774]" />
+            <span className="text-[#0B1F3A] font-black text-[10px] uppercase tracking-[0.2em]">Step {step} of {totalSteps}</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins drop-shadow-lg">
-            Let's Get to <span className="text-[#4ADE80]">Know You</span>
+          <h1 className="text-4xl md:text-5xl font-black text-[#0B1F3A] leading-tight tracking-tight font-poppins">
+            Let's Get to <span className="text-[#1FA774]">Know You</span>
           </h1>
-          <p className="text-xl text-slate-200 font-medium font-inter max-w-2xl mx-auto">
+          <p className="text-lg text-slate-500 font-medium font-inter max-w-xl mx-auto leading-relaxed">
             Help us build your personalized career path in Sierra Leone.
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="max-w-md mx-auto">
-          <div className="flex justify-between items-center mb-2 px-1">
-            <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">{Math.round(progress)}% Profile Complete</span>
-            <div className="flex gap-1">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <div key={s} className={`h-1.5 w-6 rounded-full transition-all duration-500 ${step >= s ? 'bg-[#4ADE80]' : 'bg-white/20'}`} />
-              ))}
-            </div>
+        {/* Progress Bar - Simplified */}
+        <div className="max-w-md mx-auto space-y-3">
+          <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-slate-50 transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
           </div>
+          <p className="text-center text-[9px] font-black text-slate-400 uppercase tracking-widest">{Math.round(progress)}% Profile Synthesized</p>
         </div>
 
-        {/* Form Card */}
-        <Card className="bg-white/95 backdrop-blur-2xl border-none shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[3rem] overflow-hidden relative group">
+        {/* Form Card - CLEAN WHITE */}
+        <Card className="bg-white border-slate-100 shadow-2xl shadow-blue-500/5 rounded-[3rem] overflow-hidden relative">
 
           <div className="p-8 md:p-12 space-y-8">
 
@@ -260,6 +210,25 @@ export default function OnboardingPage() {
                         className="h-14 pl-12 rounded-2xl border-slate-200 focus-visible:ring-[#1E5EFF]/20 bg-slate-50 font-medium text-lg"
                       />
                       <Calendar className="absolute left-4 top-4 w-6 h-6 text-slate-400" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 md:col-span-2">
+                    <Label className="text-sm font-bold uppercase tracking-widest text-slate-400">Preferred Language</Label>
+                    <div className="flex gap-4">
+                      {["English", "Krio"].map((lang) => (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => setData({ ...data, preferredLanguage: lang })}
+                          className={`flex-1 h-14 rounded-2xl border-2 font-black uppercase tracking-widest text-xs transition-all ${data.preferredLanguage === lang
+                            ? "border-[#1E5EFF] bg-[#1E5EFF] text-white shadow-lg"
+                            : "border-slate-100 text-slate-400 hover:border-slate-200 bg-slate-50"
+                            }`}
+                        >
+                          {lang}
+                        </button>
+                      ))}
                     </div>
                   </div>
 

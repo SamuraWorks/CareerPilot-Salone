@@ -4,7 +4,7 @@ import { useState } from "react"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Compass, Target, MessageSquare, Sparkles, GraduationCap, ChevronRight, Brain } from "lucide-react"
+import { Compass, Target, MessageSquare, Sparkles, GraduationCap, ChevronRight, Brain, ArrowLeft, ArrowUpRight, Zap } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -20,55 +20,52 @@ export default function CareerHubPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* PREMIUM HERO HEADER */}
-                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/images/dashboard/salone_success.png"
-                            alt="Career Hub"
-                            fill
-                            className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
-                    </div>
-
-                    <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-                            <Compass className="w-4 h-4 text-[#1FA774]" />
-                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Navigation Center</span>
-                        </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
-                            Career <span className="text-[#F4C430]">Hub</span> Express
-                        </h1>
-                        <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-                            Your complete path from self-discovery to university and professional success in Sierra Leone.
-                        </p>
-
-                        <div className="flex items-center gap-6 pt-2">
-                            <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">50+</span>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Career Paths</span>
+            <div className="space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                {/* --- PREMIUM HERO SECTION --- */}
+                <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[360px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
+                                        <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
+                        <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group mb-2 italic">
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             </div>
-                            <div className="w-px h-8 bg-white/10" />
+                            Return to Base
+                        </Link>
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FA774]/10 border border-[#1FA774]/20 rounded-full backdrop-blur-md">
+                                <Compass className="w-4 h-4 text-[#1FA774]" />
+                                <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Strategic Navigation Center</span>
+                            </div>
+                            <h1 className="text-5xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase italic">
+                                Career <span className="text-gradient-salone brightness-125">Hub</span> Terminal
+                            </h1>
+                            <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6 italic">
+                                Your mission control for professional development. From self-discovery to sector dominance na Sierra Leone.
+                            </p>
+                        </div>
+
+                        <div className="flex items-center gap-10 pt-4">
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-[#F4C430]">AI</span>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mentor Support</span>
+                                <span className="text-4xl font-black text-white">50+</span>
+                                <span className="text-[10px] font-black text-[#1FA774] uppercase tracking-widest italic">Vector Paths</span>
+                            </div>
+                            <div className="w-px h-12 bg-white/10" />
+                            <div className="flex flex-col">
+                                <span className="text-4xl font-black text-[#1E5EFF]">AI</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Nexus Mentor</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Tab Switcher */}
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-3xl w-fit">
+                <div className="flex bg-slate-100 p-2 rounded-[2rem] w-fit shadow-inner">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === tab.id
-                                ? 'bg-white dark:bg-slate-900 text-primary shadow-xl'
-                                : 'text-slate-400 hover:text-slate-600'
+                            className={`flex items-center gap-3 px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] transition-all italic ${activeTab === tab.id
+                                ? 'bg-white text-[#1E5EFF] shadow-xl scale-105'
+                                : 'text-slate-400 hover:text-[#0B1F3A]'
                                 }`}
                         >
                             <tab.icon className="w-4 h-4" />
@@ -78,41 +75,47 @@ export default function CareerHubPage() {
                 </div>
 
                 {/* Tab Content */}
-                <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
+                <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
                     {activeTab === 'test' && (
-                        <div className="grid md:grid-cols-2 gap-10 items-center">
-                            <div className="space-y-6">
-                                <Badge className="bg-primary/10 text-primary border-none font-black text-[10px] tracking-widest px-4 py-1.5 rounded-xl uppercase">Start Here</Badge>
-                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">Identify Your Talent with our RIASEC Analysis</h2>
-                                <p className="text-slate-500 text-lg leading-relaxed">Our advanced career assessment takes only 5 minutes and uses the Holland Codes methodology to find where you truly belong in the workforce.</p>
-                                <Link href="/career-test">
-                                    <button className="h-16 px-10 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs shadow-2xl shadow-primary/20 hover:-translate-y-1 transition-all active:scale-95">
-                                        Launch Career Test
+                        <div className="grid md:grid-cols-2 gap-16 items-center">
+                            <div className="space-y-8">
+                                <div className="inline-block px-4 py-1 bg-[#1FA774]/10 text-[#1FA774] rounded-full text-[10px] font-black uppercase tracking-widest italic border border-[#1FA774]/10">
+                                    Primary Objective
+                                </div>
+                                <h2 className="text-4xl md:text-6xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic leading-[0.9]">Identify Your <span className="text-[#1FA774]">Neural</span> Talent</h2>
+                                <p className="text-slate-400 font-medium italic text-xl border-l-4 border-[#1FA774] pl-6">Our tactical RIASEC assessment maps your core personality to the Sierra Leonean workforce in under 5 minutes.</p>
+                                <Link href="/career-test" className="block">
+                                    <button className="h-20 px-12 rounded-[2.5rem] bg-[#0B1F3A] text-white font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-[#1E5EFF] hover:-translate-y-2 transition-all active:scale-95 gap-4 flex items-center group">
+                                        Initialize Discovery Protocol
+                                        <Zap className="h-5 w-5 group-hover:rotate-12 transition-transform text-[#4ADE80]" />
                                     </button>
                                 </Link>
                             </div>
-                            <div className="relative aspect-square bg-slate-50 dark:bg-slate-900 rounded-[3rem] p-10 flex items-center justify-center overflow-hidden group">
-                                <Sparkles className="w-64 h-64 text-primary opacity-5 animate-pulse" />
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
-                                <Target className="w-32 h-32 text-primary relative z-10 group-hover:scale-110 transition-transform duration-700" />
+                            <div className="relative aspect-square bg-[#0B1F3A] rounded-[4rem] p-16 flex items-center justify-center overflow-hidden group shadow-2xl">
+                                <div className="absolute inset-0 bg-slate-50" />
+                                <Sparkles className="w-64 h-64 text-[#1FA774] opacity-10 animate-pulse absolute" />
+                                <Target className="w-40 h-40 text-white relative z-10 group-hover:scale-110 transition-transform duration-1000 group-hover:rotate-12" />
                             </div>
                         </div>
                     )}
 
                     {activeTab === 'ai' && (
-                        <div className="grid md:grid-cols-2 gap-10 items-center">
-                            <div className="relative aspect-square bg-slate-950 rounded-[3rem] p-10 flex flex-col justify-center gap-6 overflow-hidden">
-                                <div className="p-4 bg-white/10 rounded-2xl rounded-bl-none text-white text-sm max-w-[80%]">How do I become a Data Scientist in Freetown?</div>
-                                <div className="p-4 bg-primary/20 rounded-2xl rounded-br-none text-primary-foreground text-sm max-w-[80%] self-end">Great choice! You should focus on Math at FBC and take Python courses online...</div>
-                                <div className="absolute bottom-[-10%] left-[-10%] w-40 h-40 bg-primary/20 rounded-full blur-[100px]" />
+                        <div className="grid md:grid-cols-2 gap-16 items-center">
+                            <div className="relative aspect-square bg-slate-900 rounded-[4rem] p-12 flex flex-col justify-center gap-8 overflow-hidden shadow-2xl order-2 md:order-1 group">
+                                <div className="p-6 bg-white/5 border border-white/10 rounded-[2rem] rounded-bl-none text-white text-sm font-bold italic max-w-[85%] backdrop-blur-md group-hover:translate-x-2 transition-transform">"Wetin you think about mining engineering na Salone?"</div>
+                                <div className="p-6 bg-[#1FA774] rounded-[2rem] rounded-br-none text-white text-sm font-bold italic max-w-[85%] self-end shadow-xl group-hover:-translate-x-2 transition-transform">"Excellent sector. High demand na Kono and Lunsar. You need strong science background and we get roadmaps for that..."</div>
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-[#1E5EFF]/10 rounded-full blur-[120px] -z-10" />
                             </div>
-                            <div className="space-y-6">
-                                <Badge className="bg-green-100 text-green-700 border-none font-black text-[10px] tracking-widest px-4 py-1.5 rounded-xl uppercase">24/7 Mentor</Badge>
-                                <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">Chat with CareerPilot AI Counselor</h2>
-                                <p className="text-slate-500 text-lg leading-relaxed">Ask any question about courses, salaries, or companies in Salone. Our AI understands the local market context better than anyone.</p>
-                                <Link href="/guidance">
-                                    <button className="h-16 px-10 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs shadow-2xl hover:-translate-y-1 transition-all active:scale-95">
-                                        Start Conversation
+                            <div className="space-y-8 order-1 md:order-2">
+                                <div className="inline-block px-4 py-1 bg-[#1E5EFF]/10 text-[#1E5EFF] rounded-full text-[10px] font-black uppercase tracking-widest italic border border-[#1E5EFF]/10">
+                                    Technical Advisory
+                                </div>
+                                <h2 className="text-4xl md:text-6xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic leading-[0.9]">AI Tactical <br /><span className="text-[#1E5EFF]">Mentor</span> Nexus</h2>
+                                <p className="text-slate-400 font-medium italic text-xl border-l-4 border-[#1E5EFF] pl-6">Real-time intelligence on sector growth, salary transparency, and educational requirements.</p>
+                                <Link href="/ai-guidance" className="block">
+                                    <button className="h-20 px-12 rounded-[2.5rem] bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-[#0B1F3A] hover:-translate-y-2 transition-all active:scale-95 gap-4 flex items-center group">
+                                        Open Comms Channel
+                                        <MessageSquare className="h-5 w-5 group-hover:scale-110 transition-transform" />
                                     </button>
                                 </Link>
                             </div>
@@ -120,67 +123,88 @@ export default function CareerHubPage() {
                     )}
 
                     {activeTab === 'recommended' && (
-                        <div className="space-y-8">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="space-y-12">
+                            <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                                <div className="space-y-2">
+                                    <h2 className="text-4xl md:text-6xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic">High-Impact <br /><span className="text-[#1FA774]">Vectors</span></h2>
+                                    <p className="text-slate-400 font-bold italic uppercase text-xs tracking-[0.4em]">Proprietary market-demand analysis</p>
+                                </div>
+                                <Link href="/careers">
+                                    <button className="text-[10px] font-black uppercase tracking-[0.3em] text-[#1E5EFF] hover:text-[#0B1F3A] transition-all flex items-center gap-2 group italic">
+                                        View Full Sector Matrix <ChevronRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                                    </button>
+                                </Link>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                                 {[
-                                    { title: 'Software Developer', industry: 'Tech', salary: 'NLE 4,000+', demand: 'Very High' },
-                                    { title: 'Mine Engineer', industry: 'Mining', salary: 'NLE 8,000+', demand: 'Steady' },
-                                    { title: 'Fisheries Specialist', industry: 'Agriculture', salary: 'NLE 3,500+', demand: 'High' }
+                                    { title: 'Software Developer', industry: 'Tech Ecosystem', salary: 'NLE 4,500+', demand: 'Critical' },
+                                    { title: 'Strategic Engineer', industry: 'Industrial/Mining', salary: 'NLE 9,000+', demand: 'High' },
+                                    { title: 'Agri-Tech Lead', industry: 'Modern Agriculture', salary: 'NLE 3,800+', demand: 'Surging' }
                                 ].map((career, i) => (
                                     <Link key={i} href="/careers">
-                                        <Card className="p-8 rounded-[2.5rem] border-2 border-slate-50 dark:border-slate-800 hover:border-primary/20 hover:shadow-2xl transition-all cursor-pointer group">
-                                            <div className="space-y-6">
-                                                <Badge className="bg-slate-100 dark:bg-slate-800 text-slate-500 border-none font-black text-[9px] uppercase tracking-widest px-3 py-1">{career.industry}</Badge>
-                                                <h4 className="text-2xl font-black text-slate-900 dark:text-white group-hover:text-primary transition-colors">{career.title}</h4>
-                                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                                    <span>Entry: {career.salary}</span>
-                                                    <span className="text-green-500">Demand: {career.demand}</span>
+                                        <Card className="p-10 rounded-[3.5rem] border-none bg-slate-50 hover:bg-white hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-[#1FA774]/5 rounded-bl-[4rem] group-hover:scale-150 transition-transform" />
+                                            <div className="space-y-8 relative z-10">
+                                                <Badge className="bg-[#1E5EFF]/10 text-[#1E5EFF] border-none font-black text-[9px] uppercase tracking-widest px-4 py-2 italic rounded-full">{career.industry}</Badge>
+                                                <h4 className="text-3xl font-black text-[#0B1F3A] font-poppins uppercase tracking-tighter leading-tight italic group-hover:text-[#1E5EFF] transition-colors">{career.title}</h4>
+                                                <div className="flex flex-col gap-3 pt-4 border-t border-slate-200/50 italic">
+                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                                        <span>Entry Payload: <span className="text-[#0B1F3A]">{career.salary}</span></span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                                                        <span className="text-[#1FA774]">Market Demand: {career.demand}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </Card>
                                     </Link>
                                 ))}
                             </div>
-                            <div className="text-center">
-                                <Link href="/careers">
-                                    <button className="text-sm font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors flex items-center mx-auto gap-2">
-                                        Browse all 50+ career paths <ChevronRight className="w-4 h-4" />
-                                    </button>
-                                </Link>
-                            </div>
                         </div>
                     )}
 
                     {activeTab === 'unis' && (
-                        <div className="grid md:grid-cols-2 gap-12">
-                            <div className="space-y-6">
+                        <div className="grid md:grid-cols-2 gap-16 items-center">
+                            <div className="space-y-10">
+                                <div className="space-y-4">
+                                    <div className="inline-block px-4 py-1 bg-[#4ADE80]/10 text-[#1FA774] rounded-full text-[10px] font-black uppercase tracking-widest italic border border-[#1FA774]/10">
+                                        Academic Deployment
+                                    </div>
+                                    <h2 className="text-4xl md:text-6xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic leading-[0.9]">Target <br /><span className="text-[#1FA774]">Institutions</span></h2>
+                                    <p className="text-slate-400 font-medium italic text-xl border-l-4 border-[#1FA774] pl-6">Verified university nodes matched to professional roadmaps.</p>
+                                </div>
                                 <div className="space-y-4">
                                     {[
-                                        { name: 'Fourah Bay College (FBC)', location: 'Freetown' },
-                                        { name: 'Njala University', location: 'Bo / Njala' },
-                                        { name: 'University of Makeni (UNIMAK)', location: 'Makeni' }
+                                        { name: 'Fourah Bay College (FBC)', location: 'Mount Aureol' },
+                                        { name: 'Njala University', location: 'Bo / Njala Synthesis' },
+                                        { name: 'University of Makeni', location: 'Makeni Northern Node' }
                                     ].map((uni, i) => (
-                                        <div key={i} className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex justify-between items-center group cursor-pointer hover:bg-slate-50">
+                                        <div key={i} className="p-8 rounded-[2.5rem] bg-white border border-slate-100 flex justify-between items-center group cursor-pointer hover:shadow-xl transition-all">
                                             <div>
-                                                <div className="font-black text-slate-900 dark:text-white">{uni.name}</div>
-                                                <div className="text-xs font-bold text-slate-400 uppercase tracking-tight">{uni.location}</div>
+                                                <div className="font-black text-[#0B1F3A] uppercase tracking-tighter text-lg italic">{uni.name}</div>
+                                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1 italic">{uni.location}</div>
                                             </div>
-                                            <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-colors" />
+                                            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:text-[#1FA774] group-hover:scale-110 transition-all">
+                                                <ArrowUpRight className="w-5 h-5" />
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
-                                <Link href="/universities">
-                                    <button className="w-full h-16 rounded-2xl border-2 border-slate-100 dark:border-slate-800 font-black uppercase tracking-widest text-xs hover:bg-slate-50 transition-all">
-                                        Explore All Institutions
+                                <Link href="/universities" className="block">
+                                    <button className="w-full h-20 rounded-[2.5rem] border-4 border-slate-100 font-black uppercase tracking-widest text-[10px] hover:bg-[#0B1F3A] hover:text-white hover:border-[#0B1F3A] transition-all italic">
+                                        Scan Full Educational Grid
                                     </button>
                                 </Link>
                             </div>
-                            <div className="p-10 rounded-[3rem] bg-slate-50 dark:bg-slate-900 space-y-6">
-                                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">University Matcher</h3>
-                                <p className="text-slate-500 leading-relaxed font-medium">We map your RIASEC results to specific faculties in Sierra Leonean universities. Know where to apply before the deadline.</p>
-                                <div className="p-6 bg-white dark:bg-slate-950 rounded-2xl border-l-4 border-primary">
-                                    <div className="text-xs font-black text-primary uppercase tracking-widest mb-1">Expert Advice</div>
-                                    <div className="text-sm font-medium text-slate-700 dark:text-slate-300">FBC is the leading institution for Engineering students with Realistic/Investigative profiles.</div>
+                            <div className="p-16 rounded-[4rem] bg-[#0B1F3A] space-y-10 relative overflow-hidden group shadow-2xl">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 grayscale">
+                                    <GraduationCap className="w-48 h-48 text-white" />
+                                </div>
+                                <h3 className="text-3xl font-black text-white uppercase tracking-tighter font-poppins italic relative z-10 leading-none">University <br /><span className="text-gradient-salone">Synthesis</span></h3>
+                                <p className="text-slate-400 font-medium italic text-lg leading-relaxed relative z-10">We translate your RIASEC personality vectors into faculty-specific enrollment targets. Precision guidance for higher education.</p>
+                                <div className="p-8 bg-white/5 border-l-8 border-[#1FA774] rounded-[2rem] relative z-10 backdrop-blur-md">
+                                    <div className="text-[10px] font-black text-[#1FA774] uppercase tracking-[0.2em] mb-2 italic">Intelligence Insight</div>
+                                    <div className="text-white font-bold italic text-sm">FBC is the primary cluster for Engineering applicants with High Investigative scores. Enrollment begins October cycle.</div>
                                 </div>
                             </div>
                         </div>
@@ -190,3 +214,4 @@ export default function CareerHubPage() {
         </DashboardLayout>
     )
 }
+

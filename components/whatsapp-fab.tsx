@@ -6,7 +6,7 @@ import { FaWhatsapp } from "react-icons/fa"
 import { cn } from "@/lib/utils"
 
 export function WhatsAppFAB() {
-    const whatsappNumber = "23275977351" // Official Sierra Leone Bot Number
+    const whatsappNumber = "23275668258" // Official Sierra Leone Bot Number
     const message = "Hi CareerPilot! I need help with my career."
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`
 

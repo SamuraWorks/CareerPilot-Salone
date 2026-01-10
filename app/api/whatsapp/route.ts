@@ -1,34 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
-import MessagingResponse from 'twilio/lib/twiml/MessagingResponse';
 import { processWhatsAppMessage } from '@/lib/whatsapp/bot';
+import { sendWhatsAppMessage } from '@/lib/whatsapp/green-api';
 
 export async function POST(req: NextRequest) {
     try {
-        // 1. Parse Form Data (Twilio sends application/x-www-form-urlencoded)
-        const formData = await req.formData();
-        const body = formData.get('Body') as string;
-        const from = formData.get('From') as string;
+        const body = await req.json();
+        console.log("GREEN-API Webhook received:", JSON.stringify(body, null, 2));
 
-        if (!body) {
-            return NextResponse.json({ error: 'No body provided' }, { status: 400 });
+        // 1. Verify this is an incoming message
+        if (body.typeWebhook !== 'incomingMessageReceived' && body.typeWebhook !== 'incomingTextMessageReceived') {
+            return NextResponse.json({ status: 'ignored', type: body.typeWebhook });
         }
 
-        // 2. Process Logic
-        const responseText = await processWhatsAppMessage(body, from);
+        // 2. Extract Message & Sender
+        const sender = body.senderData?.chatId;
+        const text = body.messageData?.textMessageData?.textMessage || body.messageData?.extendedTextMessageData?.text || "";
 
-        // 3. Generate TwiML
-        const twiml = new MessagingResponse();
-        twiml.message(responseText);
+        if (!sender || !text) {
+            return NextResponse.json({ error: 'Incomplete data' }, { status: 400 });
+        }
 
-        // 4. Return XML
-        return new NextResponse(twiml.toString(), {
-            headers: {
-                'Content-Type': 'text/xml',
-            },
-        });
+        // 3. Process with AI/Bot Logic
+        const responseText = await processWhatsAppMessage(text, sender);
+
+        // 4. Send Response via GREEN-API
+        await sendWhatsAppMessage(sender, responseText);
+
+        return NextResponse.json({ success: true });
 
     } catch (error) {
-        console.error("WhatsApp Error:", error);
+        console.error("WhatsApp Webhook Error:", error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

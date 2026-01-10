@@ -1,197 +1,170 @@
+"use client"
+
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { BookOpen, MessageCircle, Mail, Video, HelpCircle, Sparkles, Search, MapPin, Briefcase, Clock, ExternalLink, Bookmark, Loader2, ArrowLeft } from "lucide-react"
+import {
+  BookOpen,
+  MessageCircle,
+  Mail,
+  Video,
+  HelpCircle,
+  Sparkles,
+  ArrowLeft,
+  CheckCircle2,
+  Play,
+  Info,
+  Smartphone,
+  ArrowRight
+} from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa"
 import Image from "next/image"
 
 export default function HelpPage() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
+      <main className="flex-1 pb-32">
+        {/* --- PREMIUM HERO SECTION --- */}
+        <section className="relative min-h-[400px] flex items-center bg-[#0B1F3A] overflow-hidden border-b-8 border-b-[#1FA774]">
+                    <div className="container mx-auto px-6 relative z-20 pt-10">
+            <div className="max-w-4xl space-y-10">
+              <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group">
+                <div className="p-2 rounded-lg bg-[#4ADE80]/10 border border-[#4ADE80]/20 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                  <ArrowLeft className="w-4 h-4" />
+                </div>
+                Back to Control Center
+              </Link>
 
-
-      <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          {/* PREMIUM HERO HEADER */}
-          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
-            <div className="absolute inset-0 z-0">
-              <Image
-                src="/images/dashboard/salone_success.png"
-                alt="Help Center"
-                fill
-                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-            </div>
-
-            <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-                <Sparkles className="w-4 h-4 text-[#1FA774]" />
-                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Resource Hub</span>
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FA774]/10 border border-[#1FA774]/20 rounded-full backdrop-blur-md">
+                  <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                  <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Platform Intelligence Hub</span>
+                </div>
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                  Operational <br /> <span className="text-gradient-salone brightness-125">Support Center</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6 italic">
+                  Everything you need to master the CareerPilot ecosystem. From technical dossiers to direct tactical assistance.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
-                How can we <span className="text-[#F4C430]">Help</span> you?
-              </h1>
-              <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-                Access guides, tutorials, and support to help you navigate your career path with confidence.
-              </p>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Quick Links */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <Link href="/faq">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <HelpCircle className="w-6 h-6 text-primary" />
+        <div className="max-w-7xl mx-auto px-6 mt-20 space-y-20">
+          {/* Quick Tactical Links */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Master FAQ",
+                desc: "Verified solutions for common platform queries.",
+                icon: HelpCircle,
+                href: "/faq",
+                color: "text-[#1E5EFF]",
+                bgColor: "bg-[#1E5EFF]/10"
+              },
+              {
+                title: "User Protocol",
+                desc: "Step-by-step tactical guide for all features.",
+                icon: BookOpen,
+                href: "/user-guide",
+                color: "text-[#1FA774]",
+                bgColor: "bg-[#1FA774]/10"
+              },
+              {
+                title: "Neutral Briefing",
+                desc: "Visual walkthroughs and tactical video guides.",
+                icon: Video,
+                href: "https://youtu.be/SMkLYy0U_60?si=2ADARDhfnPzcTby3",
+                external: true,
+                color: "text-slate-600",
+                bgColor: "bg-slate-100"
+              }
+            ].map((item, i) => (
+              <Link href={item.href} key={i} target={item.external ? "_blank" : undefined} rel={item.external ? "noopener noreferrer" : undefined}>
+                <Card className="p-8 rounded-[3rem] border-none bg-slate-50 hover:bg-white hover:shadow-2xl transition-all h-full group">
+                  <div className={`w-14 h-14 rounded-2xl ${item.bgColor} flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform`}>
+                    <item.icon className={`w-7 h-7 ${item.color}`} />
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">FAQ</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Find answers to frequently asked questions about our platform
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link href="/user-guide">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mb-4">
-                    <BookOpen className="w-6 h-6 text-secondary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">User Guide</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Step-by-step instructions on using CareerPilot features
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-
-            <Link href="https://youtu.be/SMkLYy0U_60?si=2ADARDhfnPzcTby3" target="_blank" rel="noopener noreferrer">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                    <Video className="w-6 h-6 text-accent" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Video Tutorials</h3>
-                  <p className="text-muted-foreground text-sm">Watch video guides to learn how to use the platform</p>
-                </CardContent>
-              </Card>
-            </Link>
+                  <h3 className="text-2xl font-black font-poppins text-[#0B1F3A] uppercase tracking-tighter italic mb-2">{item.title}</h3>
+                  <p className="text-slate-400 font-medium italic text-sm">{item.desc}</p>
+                </Card>
+              </Link>
+            ))}
           </div>
 
-          {/* Getting Started */}
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Getting Started</CardTitle>
-              <CardDescription>New to CareerPilot Salone? Here's how to begin your career journey</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold">
-                    1
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Create Your Account</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Sign up with your email address to access all features of the platform.
-                    </p>
-                  </div>
-                </div>
+          {/* Platform Activation Steps */}
+          <div className="space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-4xl md:text-6xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic">Platform <span className="text-[#1FA774]">Activation</span></h2>
+              <p className="text-slate-400 font-bold italic uppercase text-xs tracking-[0.4em]">Master the ecosystem in 5 tactical phases</p>
+            </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold">
-                    2
+            <div className="relative">
+              <div className="absolute top-0 bottom-0 left-[2.25rem] w-1 bg-slate-100 hidden md:block" />
+              <div className="grid gap-10">
+                {[
+                  { title: "Initialize Identity", desc: () => "Secure your operative credentials by establishing a verified sign-up protocol." },
+                  { title: "Vector Analysis", desc: () => "Complete your professional dossier to enable high-accuracy AI recommendations." },
+                  { title: "Strategic Discovery", desc: () => "Navigate the career database and identify prime opportunities na Salone." },
+                  { title: "Dossier Synthesis", desc: () => "Utilize the CV Builder to manufacture high-impact professional documentation." },
+                  { title: "Roadmap Execution", desc: () => "Activate your 12-week tactical path and track development metrics." }
+                ].map((step, i) => (
+                  <div key={i} className="flex gap-10 items-start relative group">
+                    <div className="w-18 h-18 rounded-[2rem] bg-[#0B1F3A] flex items-center justify-center text-white text-3xl font-black z-10 shrink-0 shadow-xl group-hover:bg-[#1FA774] transition-colors font-poppins italic">
+                      {i + 1}
+                    </div>
+                    <div className="flex-1 p-8 rounded-[3rem] bg-white border border-slate-100 hover:shadow-xl transition-all">
+                      <h4 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic mb-2">{step.title}</h4>
+                      <p className="text-slate-400 font-medium italic text-lg">{step.desc()}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Complete Your Profile</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Add your skills, interests, and career preferences to get personalized recommendations.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold">
-                    3
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Explore Careers</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Browse through our career database and discover opportunities that match your profile.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold">
-                    4
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Build Your CV</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Use our CV builder to create a professional resume that stands out to employers.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold">
-                    5
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Follow Your Roadmap</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Start working through your personalized career roadmap to reach your goals.
-                    </p>
-                  </div>
-                </div>
+                ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Contact Support */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Need More Help?</CardTitle>
-              <CardDescription>Our support team is here to assist you</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Email Support</h4>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Send us an email and we'll respond within 24-48 hours
-                    </p>
-                    <a href="mailto:info@careerpilot.sl" className="text-sm text-primary hover:underline">
-                      info@careerpilot.sl
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <MessageCircle className="w-5 h-5 text-secondary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Live Chat</h4>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Chat with our support team during business hours
-                    </p>
-                    <Button size="sm" variant="outline">
-                      Start Chat
-                    </Button>
-                  </div>
-                </div>
+          {/* Direct Tactical Channels */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <Card className="p-10 rounded-[3.5rem] bg-[#0B1F3A] text-white overflow-hidden relative group">
+              <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12 group-hover:rotate-0 transition-transform">
+                <Mail className="w-32 h-32" />
               </div>
-            </CardContent>
-          </Card>
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 rounded-[1.5rem] bg-white/10 flex items-center justify-center border border-white/20">
+                  <Mail className="w-8 h-8 text-[#4ADE80]" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-black font-poppins uppercase tracking-tighter italic">Intelligence Link</h3>
+                  <p className="text-slate-400 font-medium italic mt-2 uppercase text-xs tracking-widest">Formal inquiry channel • 24h response time</p>
+                </div>
+                <a href="mailto:info@careerpilot.sl" className="text-2xl font-black text-[#1E5EFF] hover:underline block truncate">
+                  info@careerpilot.sl
+                </a>
+              </div>
+            </Card>
+
+            <Card className="p-10 rounded-[3.5rem] bg-[#25D366] text-white overflow-hidden relative group">
+              <div className="absolute top-0 right-0 p-8 opacity-20 rotate-12 group-hover:rotate-0 transition-transform">
+                <FaWhatsapp className="w-32 h-32" />
+              </div>
+              <div className="relative z-10 space-y-6">
+                <div className="w-16 h-16 rounded-[1.5rem] bg-white/20 flex items-center justify-center border border-white/40">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-black font-poppins uppercase tracking-tighter italic">Tactical Nexus</h3>
+                  <p className="text-emerald-100 font-medium italic mt-2 uppercase text-xs tracking-widest">Immediate field assistance • +232 75 668258</p>
+                </div>
+                <Link href="https://wa.me/23275668258" target="_blank">
+                  <Button className="w-full h-16 rounded-3xl bg-white text-[#25D366] hover:bg-emerald-50 font-black uppercase text-xs tracking-widest shadow-2xl gap-3">
+                    Initialize WhatsApp Chat <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          </div>
         </div>
       </main>
 

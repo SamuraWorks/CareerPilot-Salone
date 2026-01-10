@@ -1,124 +1,87 @@
+"use client"
+
 import { Footer } from "@/components/footer"
-import { FileText, Sparkles } from "lucide-react"
+import { FileText, Sparkles, ArrowLeft, Zap } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function TermsPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {/* PREMIUM HERO HEADER */}
-          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[300px] flex items-center shadow-2xl group mb-12">
-            <div className="absolute inset-0 z-0">
-              <Image
-                src="/images/dashboard/salone_success.png"
-                alt="Terms of Service"
-                fill
-                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-            </div>
+    <div className="flex flex-col min-h-screen bg-white">
+      <main className="flex-1 pb-32">
+        {/* --- PREMIUM HERO SECTION --- */}
+        <section className="relative min-h-[400px] flex items-center bg-[#0B1F3A] overflow-hidden border-b-8 border-b-[#1FA774]">
+                    <div className="container mx-auto px-6 relative z-20 pt-10">
+            <div className="max-w-4xl space-y-10">
+              <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group">
+                <div className="p-2 rounded-lg bg-[#4ADE80]/10 border border-[#4ADE80]/20 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                  <ArrowLeft className="w-4 h-4" />
+                </div>
+                Back to Control Center
+              </Link>
 
-            <div className="relative z-20 max-w-4xl p-10 md:p-12 space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-                <FileText className="w-4 h-4 text-[#1FA774]" />
-                <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Legal Portal</span>
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-md">
+                  <FileText className="w-4 h-4 text-[#1FA774]" />
+                  <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Operational Framework</span>
+                </div>
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                  Terms of <br /> <span className="text-gradient-salone brightness-125">Engagement</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6 italic">
+                  Last updated December 2024 • The strategic rules for interacting with the CareerPilot platform na Sierra Leone.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight font-poppins">
-                Terms of <span className="text-[#F4C430]">Service</span>
-              </h1>
-              <p className="text-lg text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-                Last updated December 2024 • The rules of engagement for the CareerPilot platform.
-              </p>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <div className="prose prose-slate max-w-none space-y-6">
-            <section>
-              <h2 className="text-2xl font-bold mb-4">1. Acceptance of Terms</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                By accessing and using CareerPilot Salone, you accept and agree to be bound by the terms and provisions
-                of this agreement. If you do not agree to abide by these Terms of Service, please do not use this
-                platform.
-              </p>
+        <div className="max-w-4xl mx-auto px-6 mt-20 space-y-20">
+          {[
+            {
+              title: "01. Acceptance of Protocol",
+              content: "By accessing and utilizing CareerPilot Salone, you acknowledge and agree to be bound by the operational protocols of this agreement. Use of this platform constitutes a binding strategic commitment to these terms."
+            },
+            {
+              title: "02. Usage License",
+              content: "Permission is granted to utilize the assets on CareerPilot Salone for personal, non-commercial professional development only. This is a strategic license grant, not a transfer of intellectual property.",
+              list: ["No unauthorized replication of materials", "No commercial exploitation of data sets", "No reverse-engineering of AI core", "Retention of proprietary markers"]
+            },
+            {
+              title: "03. Account Integrity",
+              content: "To unlock high-tier platform nodes, a validated account is required. Users maintain absolute responsibility for credential security and all analytical activity recorded under their identity."
+            },
+            {
+              title: "04. Content Sovereignty",
+              content: "Users retain sovereignty over submitted data assets (CVs, profiles). By providing data, you grant CareerPilot a functional license to process and display said assets for service delivery."
+            },
+            {
+              title: "05. Operational Disclaimers",
+              content: "Platform materials are provided on an 'as is' operational basis. CareerPilot Salone disclaims all warranties, including implied conditions of marketability or fitness for specific career trajectories."
+            },
+            {
+              title: "06. Jurisdictional Mandate",
+              content: "These engagement terms are governed by the sovereign laws of Sierra Leone. All analytical disputes are subject to the exclusive jurisdiction of the judicial nodes in that location."
+            }
+          ].map((section, i) => (
+            <section key={i} className="space-y-6">
+              <h2 className="text-2xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins italic border-b-2 border-slate-50 pb-4 inline-block">{section.title}</h2>
+              <p className="text-slate-400 font-medium text-lg leading-relaxed italic">{section.content}</p>
+              {section.list && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                  {section.list.map((item, j) => (
+                    <div key={j} className="flex items-center gap-4 bg-slate-50 p-6 rounded-[1.5rem] border border-transparent hover:border-[#1FA774]/20 transition-all">
+                      <div className="w-2 h-2 rounded-full bg-[#1FA774]" />
+                      <span className="text-sm font-black text-[#0B1F3A] uppercase tracking-widest">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
+          ))}
 
-            <section>
-              <h2 className="text-2xl font-bold mb-4">2. Use License</h2>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Permission is granted to temporarily access the materials on CareerPilot Salone for personal,
-                non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and
-                under this license you may not:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li>Modify or copy the materials</li>
-                <li>Use the materials for any commercial purpose or public display</li>
-                <li>Attempt to decompile or reverse engineer any software contained on CareerPilot Salone</li>
-                <li>Remove any copyright or proprietary notations from the materials</li>
-                <li>Transfer the materials to another person or mirror the materials on any other server</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">3. User Account</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                To access certain features of the platform, you must create an account. You are responsible for
-                maintaining the confidentiality of your account credentials and for all activities that occur under your
-                account. You agree to immediately notify us of any unauthorized use of your account.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">4. User Content</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                You retain ownership of any content you submit to CareerPilot Salone, including your CV, profile
-                information, and other materials. By submitting content, you grant us a license to use, store, and
-                display that content solely for the purpose of providing our services to you.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">5. Disclaimer</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                The materials on CareerPilot Salone are provided on an 'as is' basis. CareerPilot Salone makes no
-                warranties, expressed or implied, and hereby disclaims and negates all other warranties including,
-                without limitation, implied warranties or conditions of merchantability, fitness for a particular
-                purpose, or non-infringement of intellectual property or other violation of rights.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">6. Limitations</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                In no event shall CareerPilot Salone or its suppliers be liable for any damages (including, without
-                limitation, damages for loss of data or profit, or due to business interruption) arising out of the use
-                or inability to use the materials on CareerPilot Salone.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">7. Revisions and Errata</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                The materials appearing on CareerPilot Salone could include technical, typographical, or photographic
-                errors. CareerPilot Salone does not warrant that any of the materials on its website are accurate,
-                complete, or current. We may make changes to the materials at any time without notice.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">8. Governing Law</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                These terms and conditions are governed by and construed in accordance with the laws of Sierra Leone,
-                and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-bold mb-4">9. Contact Information</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                If you have any questions about these Terms of Service, please contact us at info@careerpilot.sl.
-              </p>
-            </section>
+          <div className="p-12 bg-slate-50 rounded-[3.5rem] border border-slate-100 italic font-medium text-slate-400 text-center">
+            Inquiries regarding the Operational Framework should be channeled through <span className="text-[#1E5EFF] font-black underline">legal@careerpilot.sl</span>
           </div>
         </div>
       </main>

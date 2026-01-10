@@ -6,7 +6,6 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Bot, MessageCircle, X, Send, Loader2, Minimize2, AlertCircle } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
@@ -37,23 +36,6 @@ export function ChatWidget() {
         }
     });
 
-    const handleFormSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const message = input;
-        if (!message?.trim() || isLoading) return;
-
-        // Clear input immediately for better UX
-        setInput('');
-
-        try {
-            console.log("Sending via append:", message);
-            append({ role: 'user', content: message });
-        } catch (err) {
-            console.error("Error sending message:", err);
-            // If append fails, restore input so the user doesn't lose their message
-            setInput(message);
-        }
-    };
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -103,43 +85,35 @@ export function ChatWidget() {
                     >
                         <Card className="w-[350px] sm:w-[400px] h-[550px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] flex flex-col border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden rounded-[2rem]">
                             {/* Header */}
-                            <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10 rounded-t-[2rem]">
+                            <div className="p-5 bg-slate-900 text-white flex justify-between items-center shrink-0">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
-                                        <Bot className="w-5 h-5 text-[#0B1F3A]" />
+                                    <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center">
+                                        <Bot className="w-6 h-6 text-blue-400" />
                                     </div>
                                     <div>
-                                        <div className="font-bold text-sm text-[#0B1F3A]">Career Assistant</div>
-                                        <div className="text-[10px] text-slate-400 font-medium">AI Career Pilot Salone</div>
+                                        <div className="font-black text-sm uppercase tracking-widest">Career Advisor</div>
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Decision Support Active</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                    <a
-                                        href="https://wa.me/23275668258?text=Hello%20CareerPilot"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 hover:bg-green-50 rounded-full transition-colors text-[#25D366] hover:text-[#128C7E]"
-                                        title="Chat on WhatsApp"
-                                    >
-                                        <FaWhatsapp className="w-5 h-5" />
-                                    </a>
-                                    <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-slate-50 rounded-full transition-colors text-slate-400 hover:text-slate-600">
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                </div>
+                                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
                             </div>
 
                             {/* Messages Area */}
-                            <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-white">
+                            <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/50 dark:bg-slate-900/50 relative">
                                 {!isProfileComplete && (
-                                    <div className="absolute inset-0 z-50 backdrop-blur-sm bg-white/80 flex flex-col items-center justify-center p-8 text-center space-y-4">
-                                        <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-                                            <AlertCircle className="w-6 h-6 text-red-500" />
+                                    <div className="absolute inset-0 z-50 backdrop-blur-md bg-white/60 dark:bg-slate-950/60 flex flex-col items-center justify-center p-8 text-center space-y-6">
+                                        <div className="w-16 h-16 rounded-[2rem] bg-[#0B1F3A] flex items-center justify-center text-white shadow-xl">
+                                            <AlertCircle className="w-8 h-8 text-blue-400" />
                                         </div>
-                                        <div className="space-y-1">
-                                            <h3 className="font-bold text-[#0B1F3A]">Complete Profile</h3>
-                                            <p className="text-sm text-slate-500">
-                                                I need to know your background to help you.
+                                        <div className="space-y-2">
+                                            <h3 className="text-xl font-black text-[#0B1F3A] dark:text-white uppercase tracking-tighter italic">Identity Missing</h3>
+                                            <p className="text-sm text-slate-500 font-medium italic">
+                                                I cannot provide strategic guidance without knowing your background.
                                             </p>
                                         </div>
                                         <Button
@@ -147,18 +121,19 @@ export function ChatWidget() {
                                                 setIsOpen(false);
                                                 router.push('/onboarding');
                                             }}
-                                            className="w-full bg-[#0B1F3A] text-white rounded-lg hover:bg-[#1E5EFF] transition-colors"
+                                            className="w-full h-14 bg-[#1FA774] hover:bg-[#1E5EFF] text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-lg"
                                         >
-                                            Go to Profile
+                                            Complete Profile
                                         </Button>
                                     </div>
                                 )}
 
                                 {messages.length === 0 && (
-                                    <div className="flex justify-start">
-                                        <div className="max-w-[90%] rounded-2xl rounded-tl-sm px-4 py-3 text-sm bg-white border border-slate-100 text-slate-600 shadow-sm leading-relaxed">
-                                            Hello {profile.fullName?.split(' ')[0] || "Scholar"}! 👋<br /><br />
-                                            I'm your personal career assistant. ask me about jobs, university requirements, or how to build your CV in Sierra Leone.
+                                    <div className="space-y-4 pt-4">
+                                        <div className="flex justify-start">
+                                            <div className="max-w-[85%] rounded-[1.5rem] rounded-tl-none px-5 py-4 text-sm bg-white border border-slate-100 shadow-sm text-slate-800 font-medium leading-relaxed">
+                                                Kusheh {profile.fullName?.split(' ')[0] || "Scholar"}! I’ve reviewed your background. How can I help you advance your career in Salone today?
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -168,9 +143,9 @@ export function ChatWidget() {
                                         className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
                                     >
                                         <div
-                                            className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${m.role === 'user'
-                                                ? 'bg-[#0B1F3A] text-white rounded-tr-sm'
-                                                : 'bg-white border border-slate-100 text-slate-700 shadow-sm rounded-tl-sm'
+                                            className={`max-w-[85%] rounded-[1.5rem] px-5 py-4 text-sm shadow-sm font-medium leading-relaxed ${m.role === 'user'
+                                                ? 'bg-[#0B1F3A] text-white rounded-br-none'
+                                                : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'
                                                 }`}
                                         >
                                             <div className="whitespace-pre-wrap">{m.content}</div>
@@ -207,7 +182,7 @@ export function ChatWidget() {
                                     ))}
                                 </div>
 
-                                <form onSubmit={handleFormSubmit} className="flex gap-2">
+                                <form onSubmit={handleSubmit} className="flex gap-2">
                                     <input
                                         disabled={!isProfileComplete}
                                         className="flex-1 px-5 py-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border-none focus:ring-2 focus:ring-[#1E5EFF]/10 outline-none text-sm transition-all font-medium disabled:opacity-50"

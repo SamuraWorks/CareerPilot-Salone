@@ -11,10 +11,10 @@ export default function NotFound() {
             <Card className="max-w-2xl w-full p-12 text-center space-y-8">
                 {/* 404 Illustration */}
                 <div className="relative">
-                    <h1 className="text-9xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                    <h1 className="text-9xl font-bold bg-slate-50">
                         404
                     </h1>
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 blur-3xl -z-10" />
+                    <div className="absolute inset-0 bg-slate-50" />
                 </div>
 
                 {/* Message */}
@@ -56,3 +56,4 @@ export default function NotFound() {
         </div>
     )
 }
+

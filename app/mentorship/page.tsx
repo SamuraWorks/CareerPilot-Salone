@@ -24,7 +24,9 @@ import {
     Info,
     Calendar,
     Clock,
-    Smile
+    Smile,
+    Zap,
+    Sparkles
 } from "lucide-react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
@@ -51,7 +53,7 @@ export default function MentorshipPage() {
     const [isProfileOpen, setIsProfileOpen] = React.useState(false)
 
     // Booking Flow State
-    const [bookingStep, setBookingStep] = React.useState(1) // 1: Profile, 2: Topic, 3: Success
+    const [bookingStep, setBookingStep] = React.useState(1)
     const [selectedTopic, setSelectedTopic] = React.useState("")
 
     const categories = ["All", "Technology", "Healthcare", "Agriculture", "Mining", "Finance", "Law", "Media", "Public Service", "Entrepreneurship"]
@@ -89,54 +91,55 @@ export default function MentorshipPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 selection:bg-primary/10">
+        <div className="flex flex-col min-h-screen bg-white selection:bg-primary/20 overflow-x-hidden pt-0 md:pt-0">
 
-
-            <main className="flex-1 pb-12">
+            <main className="flex-1 pb-24">
                 {/* --- PREMIUM HERO SECTION --- */}
-                <section className="relative min-h-[400px] flex items-center bg-[#0B1F3A] overflow-hidden">
+                <section className="relative min-h-[450px] flex items-center overflow-hidden border-b-8 border-b-[#1FA774]">
                     <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/images/mentorship/hero.png"
-                            alt="Mentorship Guidance"
-                            fill
-                            className="object-cover opacity-50 transition-transform duration-1000 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/70 to-transparent z-10" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(31,167,116,0.15),transparent)] z-10" />
+                        <Image src="/school-counselor-student.jpg" alt="Mentorship Hero" fill className="object-cover brightness-75 group-hover:scale-105 transition-transform duration-700" />
+                        <div className="absolute inset-0 bg-[#0B1F3A]/80" />
                     </div>
 
-                    <div className="container mx-auto px-6 relative z-20">
-                        <div className="max-w-3xl space-y-8">
-                            <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-bold font-poppins uppercase tracking-[0.2em] text-[#1FA774] hover:text-white transition-colors">
-                                <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+                    <div className="container mx-auto px-6 relative z-20 pt-10">
+                        <div className="max-w-4xl space-y-10">
+                            <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group">
+                                <div className="p-2 rounded-lg bg-[#4ADE80]/10 border border-[#4ADE80]/20 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                                    <ArrowLeft className="w-4 h-4" />
+                                </div>
+                                Back to Control Center
                             </Link>
-                            <div className="space-y-4">
-                                <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
-                                    Career <span className="text-[#F4C430]">Mentors</span>
+
+                            <div className="space-y-6">
+                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-md">
+                                    <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                                    <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Verified Experts Only</span>
+                                </div>
+                                <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                                    Strategic <br /> <span className="text-gradient-salone brightness-125">Mentorship</span>
                                 </h1>
-                                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed">
-                                    Connect with verified Sierra Leonean professionals who have already navigated the path you're on.
-                                    <span className="text-white"> Real people. Real insight.</span>
+                                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6">
+                                    Connect with verified professionals who have already navigated the path you're on.
                                 </p>
                             </div>
-                            <div className="flex flex-wrap gap-4 pt-4">
-                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3 border border-white/10">
-                                    <div className="w-10 h-10 rounded-xl bg-[#1FA774]/20 flex items-center justify-center text-[#1FA774]">
-                                        <BadgeCheck className="w-6 h-6" />
+
+                            <div className="flex flex-wrap gap-6 pt-4">
+                                <div className="bg-white/5 backdrop-blur-xl rounded-[1.5rem] p-6 flex items-center gap-6 border border-white/10 shadow-2xl">
+                                    <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center text-white shadow-lg">
+                                        <BadgeCheck className="w-8 h-8" />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-black text-white uppercase tracking-widest leading-none">50+ Verified</p>
-                                        <p className="text-[10px] text-slate-400">Local Experts</p>
+                                        <p className="text-2xl font-black text-white leading-none">50+</p>
+                                        <p className="text-[10px] font-black text-[#1FA774] uppercase tracking-widest mt-1 italic">Verified Leaders</p>
                                     </div>
                                 </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex items-center gap-3 border border-white/10">
-                                    <div className="w-10 h-10 rounded-xl bg-[#F4C430]/20 flex items-center justify-center text-[#F4C430]">
-                                        <Star className="w-6 h-6" />
+                                <div className="bg-white/5 backdrop-blur-xl rounded-[1.5rem] p-6 flex items-center gap-6 border border-white/10 shadow-2xl">
+                                    <div className="w-14 h-14 rounded-2xl bg-[#0B1F3A] flex items-center justify-center text-[#1FA774] border border-[#1FA774]/20">
+                                        <Star className="w-8 h-8" />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-black text-white uppercase tracking-widest leading-none">4.9 Rating</p>
-                                        <p className="text-[10px] text-slate-400">Community Trust</p>
+                                        <p className="text-2xl font-black text-white leading-none">4.9</p>
+                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mt-1 italic">Avg. Member Rating</p>
                                     </div>
                                 </div>
                             </div>
@@ -144,271 +147,209 @@ export default function MentorshipPage() {
                     </div>
                 </section>
 
-                <div className="container mx-auto px-6 -mt-8 relative z-20">
+                <div className="container mx-auto px-6 -mt-10 relative z-20">
                     {/* --- SMART FILTERS --- */}
-                    <Card className="p-4 md:p-6 shadow-2xl shadow-slate-200/50 dark:shadow-none bg-white dark:bg-slate-900 border-none rounded-[2.5rem]">
-                        <div className="flex flex-col md:flex-row gap-4 items-center">
-                            <div className="relative flex-1 w-full">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                <Input
-                                    className="pl-12 h-14 rounded-2xl border-slate-100 bg-slate-50 focus:ring-primary focus:border-primary w-full text-sm font-bold font-poppins"
-                                    placeholder="Search by name or role..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                            <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-                                {categories.map(cat => (
-                                    <Button
-                                        key={cat}
-                                        variant={selectedCategory === cat ? "default" : "ghost"}
-                                        onClick={() => setSelectedCategory(cat)}
-                                        className={cn(
-                                            "rounded-xl h-12 font-bold text-[11px] uppercase tracking-widest whitespace-nowrap px-6 font-poppins",
-                                            selectedCategory === cat ? "bg-slate-900 text-white shadow-lg" : "text-slate-500 bg-slate-50 hover:bg-slate-100"
-                                        )}
-                                    >
-                                        {cat}
-                                    </Button>
-                                ))}
-                            </div>
+                    <Card className="p-6 md:p-8 shadow-2xl bg-white border-none rounded-[3.5rem] flex flex-col md:flex-row gap-8 items-center border-b-4 border-slate-100">
+                        <div className="relative flex-1 w-full group">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-[#1E5EFF] transition-colors" />
+                            <Input
+                                className="pl-16 h-16 rounded-2xl border-slate-50 bg-slate-50 focus:bg-white focus:ring-[#1E5EFF]/20 focus:border-[#1E5EFF] w-full text-base font-bold font-poppins shadow-inner"
+                                placeholder="Search by name, role, or company..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex gap-3 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+                            {categories.map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className={cn(
+                                        "rounded-[1.2rem] h-14 font-black text-[10px] uppercase tracking-widest whitespace-nowrap px-8 font-poppins transition-all active:scale-95",
+                                        selectedCategory === cat
+                                            ? "bg-[#0B1F3A] text-white shadow-xl shadow-[#0B1F3A]/20"
+                                            : "text-slate-400 bg-slate-50 hover:bg-slate-100 border border-transparent hover:border-slate-200"
+                                    )}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
                         </div>
                     </Card>
 
-                    {/* --- AI INTELLIGENT MATCHING --- */}
-                    <div className="mt-12 mb-16">
-                        <div className="flex items-center gap-3 mb-6 bg-primary/5 p-4 rounded-3xl border border-primary/10 inline-flex">
-                            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                                <Brain className="w-5 h-5 text-white" />
-                            </div>
+                    {/* --- MENTORS GRID --- */}
+                    <div className="mt-20">
+                        <div className="flex items-center gap-4 mb-10 pl-2">
+                            <div className="w-2 h-10 bg-slate-50 rounded-full" />
                             <div>
-                                <h3 className="font-bold font-poppins text-slate-900 dark:text-white uppercase tracking-widest text-[10px]">AI Strategic Match</h3>
-                                <p className="text-xs text-slate-500 font-bold font-inter">Recommended for your "{selectedCategory === "All" ? "Career Path" : selectedCategory}" interest</p>
+                                <h2 className="text-3xl font-black text-[#0B1F3A] tracking-tight font-poppins uppercase">Expert Network</h2>
+                                <p className="text-sm font-bold text-slate-400 font-inter italic">Showing {filteredMentors.length} mentors matching your criteria</p>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                             {filteredMentors.length > 0 ? (
                                 filteredMentors.map((mentor) => (
                                     <motion.div
                                         key={mentor.id}
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 30 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        whileHover={{ y: -8 }}
+                                        whileHover={{ y: -12 }}
                                         onClick={() => handleMentorClick(mentor)}
                                         className="group cursor-pointer"
                                     >
-                                        <Card className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border-none shadow-xl shadow-slate-200/50 dark:shadow-none hover:shadow-2xl transition-all relative overflow-hidden">
+                                        <Card className="p-10 rounded-[3.5rem] bg-white border-8 border-slate-50 hover:border-[#1FA774]/10 shadow-sm hover:shadow-2xl transition-all relative overflow-hidden group">
                                             {/* Status Badge */}
-                                            <div className="absolute top-6 right-6">
+                                            <div className="absolute top-8 right-8 z-10">
                                                 <Badge className={cn(
-                                                    "rounded-full px-4 py-1.5 font-bold font-poppins text-[9px] uppercase tracking-widest border-none",
-                                                    mentor.availability === "Free" ? "bg-emerald-500 text-white" :
-                                                        mentor.availability === "Sponsored" ? "bg-blue-500 text-white" : "bg-slate-900 text-white"
+                                                    "rounded-full px-5 py-2 font-black font-poppins text-[9px] uppercase tracking-[0.2em] border-none shadow-sm",
+                                                    mentor.availability === "Free" ? "bg-[#1FA774] text-white" : "bg-[#0B1F3A] text-white"
                                                 )}>
-                                                    {mentor.availability === "Free" ? <Unlock className="w-3 h-3 mr-1.5 inline" /> : <Lock className="w-3 h-3 mr-1.5 inline" />}
                                                     {mentor.availability}
                                                 </Badge>
                                             </div>
 
-                                            <div className="flex flex-col items-center text-center">
-                                                <div className="relative mb-6">
-                                                    <Avatar className="w-24 h-24 border-[6px] border-slate-50 dark:border-slate-800 shadow-xl group-hover:scale-110 transition-transform">
+                                            <div className="flex flex-col items-center text-center relative z-10">
+                                                <div className="relative mb-8">
+                                                    <Avatar className="w-32 h-32 border-[8px] border-white shadow-2xl group-hover:scale-105 transition-transform duration-500">
                                                         <AvatarImage src={mentor.image_url} className="object-cover" />
-                                                        <AvatarFallback className="font-bold font-poppins text-xl">{mentor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                                        <AvatarFallback className="font-black font-poppins text-2xl bg-slate-100 text-[#0B1F3A]">{mentor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                                                     </Avatar>
-                                                    <div className="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-2 border-4 border-white dark:border-slate-900 shadow-lg">
-                                                        <BadgeCheck className="w-5 h-5 text-white" />
+                                                    <div className="absolute -bottom-2 -right-2 bg-[#1FA774] rounded-2xl p-2.5 border-[5px] border-white shadow-xl">
+                                                        <BadgeCheck className="w-6 h-6 text-white" />
                                                     </div>
                                                 </div>
 
-                                                <h3 className="text-xl font-bold font-poppins text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">{mentor.name}</h3>
-                                                <p className="text-[10px] font-bold font-poppins text-slate-400 uppercase tracking-[0.2em] mb-4">{mentor.role}</p>
+                                                <h3 className="text-2xl font-black font-poppins text-[#0B1F3A] mb-1 group-hover:text-[#1E5EFF] transition-colors leading-tight">{mentor.name}</h3>
+                                                <p className="text-[10px] font-black font-poppins text-slate-400 uppercase tracking-[0.2em] mb-6">{mentor.role}</p>
 
-                                                <div className="flex items-center gap-3 mb-6 bg-slate-50 dark:bg-slate-800 px-4 py-2 rounded-2xl w-full justify-center">
-                                                    <div className="flex items-center gap-1.5">
-                                                        <Briefcase className="w-3.5 h-3.5 text-slate-400" />
-                                                        <span className="text-[11px] font-bold font-inter text-slate-600 dark:text-slate-300">{mentor.experience}</span>
+                                                <div className="flex items-center gap-4 mb-8 bg-slate-50 px-6 py-3 rounded-2xl w-full justify-center">
+                                                    <div className="flex items-center gap-2">
+                                                        <Zap className="w-4 h-4 text-[#1FA774]" />
+                                                        <span className="text-xs font-black font-inter text-[#0B1F3A]">{mentor.experience}</span>
                                                     </div>
-                                                    <div className="w-1 h-1 rounded-full bg-slate-200" />
-                                                    <div className="flex items-center gap-1.5">
-                                                        <Globe className="w-3.5 h-3.5 text-slate-400" />
-                                                        <span className="text-[11px] font-bold font-inter text-slate-600 dark:text-slate-300">{mentor.location}</span>
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                                                    <div className="flex items-center gap-2">
+                                                        <Globe className="w-4 h-4 text-[#1E5EFF]" />
+                                                        <span className="text-xs font-black font-inter text-[#0B1F3A]">{mentor.location}</span>
                                                     </div>
                                                 </div>
 
-                                                <div className="w-full space-y-2 mb-8 text-left">
+                                                <div className="w-full space-y-3 mb-10 text-left">
                                                     {mentor.support_types.slice(0, 2).map((type, i) => (
-                                                        <div key={i} className="px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-[10px] font-bold font-inter text-slate-500 dark:text-slate-400 flex items-center gap-2">
-                                                            <CheckCircle2 className="w-3 h-3 text-emerald-500 flex-shrink-0" /> {type}
+                                                        <div key={i} className="px-5 py-2.5 rounded-2xl bg-slate-50 text-[10px] font-black font-inter text-slate-500 flex items-center gap-3 border border-transparent group-hover:border-slate-100 transition-all">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-[#1FA774]" /> {type}
                                                         </div>
                                                     ))}
                                                 </div>
 
-                                                <Button className="w-full h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-primary hover:text-white font-bold font-poppins uppercase tracking-widest text-[11px] transition-all border-none">
-                                                    View Profile & Book
+                                                <Button className="w-full h-16 rounded-[2rem] bg-slate-900 hover:bg-[#1E5EFF] text-white font-black font-poppins uppercase tracking-widest text-[11px] transition-all border-none shadow-xl active:scale-95">
+                                                    Book Strategic Session
                                                 </Button>
                                             </div>
                                         </Card>
                                     </motion.div>
                                 ))
                             ) : (
-                                <div className="col-span-full py-20 text-center space-y-4">
-                                    <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6">
-                                        <Search className="w-10 h-10 text-slate-300" />
+                                <div className="col-span-full py-32 text-center space-y-6">
+                                    <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-8 rotate-12">
+                                        <Search className="w-10 h-10 text-slate-200" />
                                     </div>
-                                    <h3 className="text-xl font-bold font-poppins text-slate-900">No mentors found</h3>
-                                    <p className="text-slate-500 font-medium font-inter">Try adjusting your search or category filters.</p>
+                                    <h3 className="text-2xl font-black font-poppins text-[#0B1F3A] uppercase tracking-tight">No experts found</h3>
+                                    <p className="text-slate-400 font-bold font-inter italic max-w-sm mx-auto">Try broadening your search or switching categories.</p>
                                 </div>
                             )}
-                        </div>
-                    </div>
-
-                    {/* --- MENTOR INSIGHTS SECTION --- */}
-                    <div className="mt-24 space-y-10 border-t border-slate-200 dark:border-white/5 pt-20">
-                        <div className="flex flex-col md:flex-row justify-between items-end gap-6 text-left">
-                            <div className="space-y-4">
-                                <h2 className="text-3xl md:text-5xl font-bold font-poppins text-gradient-salone tracking-tight leading-tight">Mentor Insights</h2>
-                                <p className="text-slate-500 dark:text-slate-400 font-medium font-inter max-w-lg">Career myths, industry truths, and professional wisdom shared by our verified experts.</p>
-                            </div>
-                            <Button variant="ghost" className="font-bold font-poppins text-[10px] uppercase tracking-[0.2em] text-primary gap-2 hover:bg-primary/5 p-0 sm:pb-3">
-                                Read All Insights <ChevronRight className="w-4 h-4" />
-                            </Button>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {MOCK_MENTORS.filter(m => m.insights).slice(0, 2).map((m, i) => (
-                                <Card key={i} className="p-8 rounded-[3rem] bg-white dark:bg-slate-900 border-none shadow-xl hover:shadow-2xl transition-all group overflow-hidden relative">
-                                    <div className="absolute top-0 right-0 p-8">
-                                        <MessageCircle className="w-12 h-12 text-slate-50 dark:text-slate-800 group-hover:text-primary/10 transition-colors" />
-                                    </div>
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <Avatar className="w-12 h-12 border-2 border-white shadow-sm">
-                                            <AvatarImage src={m.image_url} />
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-bold font-poppins text-slate-900 dark:text-white text-sm">{m.name}</p>
-                                            <p className="text-[10px] font-bold font-poppins text-slate-400 uppercase tracking-widest">{m.role}</p>
-                                        </div>
-                                    </div>
-                                    <h4 className="text-2xl font-bold font-poppins text-slate-900 dark:text-white mb-6 tracking-tight">"{m.insights![0]}"</h4>
-                                    <Link href="#" className="inline-flex items-center gap-2 text-[10px] font-bold font-poppins uppercase tracking-widest text-primary hover:gap-3 transition-all">
-                                        Read Insight <ChevronRight className="w-4 h-4" />
-                                    </Link>
-                                </Card>
-                            ))}
                         </div>
                     </div>
                 </div>
             </main>
 
-            {/* --- MENTOR DIALOG (MULTI-STEP BOOKING FLOW) --- */}
             <AnimatePresence>
                 {selectedMentor && (
                     <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
-                        <DialogContent className="sm:max-w-[750px] p-0 overflow-hidden border-none rounded-[3rem] bg-slate-50 dark:bg-slate-950 max-h-[90vh] overflow-y-auto">
-                            <DialogTitle className="sr-only">Book a Mentorship Session with {selectedMentor.name}</DialogTitle>
-                            <DialogDescription className="sr-only">
-                                Connect with verified Sierra Leonean mentors to accelerate your career growth, review your CV, or prepare for interviews.
-                            </DialogDescription>
+                        <DialogContent className="sm:max-w-[780px] p-0 overflow-hidden border-none rounded-[3.5rem] bg-white shadow-[0_50px_100px_-20px_rgba(11,31,58,0.3)] max-h-[90vh] overflow-y-auto">
+                            <DialogTitle className="sr-only">Book Strategy with {selectedMentor.name}</DialogTitle>
 
-                            {/* STEP 1: MENTOR PROFILE */}
                             {bookingStep === 1 && (
                                 <div className="flex flex-col">
-                                    <div className="h-40 bg-slate-900 relative">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-[#3b82f6]/20 to-[#10b981]/20" />
-                                        <div className="absolute -bottom-12 left-10">
-                                            <Avatar className="w-32 h-32 border-[8px] border-slate-50 dark:border-slate-950 shadow-2xl">
+                                    <div className="h-44 bg-[#0B1F3A] relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-slate-50" />
+                                        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+                                        <div className="absolute -bottom-14 left-12">
+                                            <Avatar className="w-40 h-40 border-[10px] border-white shadow-2xl">
                                                 <AvatarImage src={selectedMentor.image_url} className="object-cover" />
                                             </Avatar>
                                         </div>
                                     </div>
 
-                                    <div className="px-10 pt-16 pb-12 space-y-8">
-                                        <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-                                            <div>
-                                                <div className="flex items-center gap-3 mb-1">
-                                                    <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{selectedMentor.name}</h2>
-                                                    <Badge className="bg-emerald-500 text-white font-black text-[9px] uppercase tracking-widest border-none px-3 py-1">Verified</Badge>
+                                    <div className="px-12 pt-20 pb-16 space-y-10">
+                                        <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-slate-50 pb-8">
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-3">
+                                                    <h2 className="text-4xl font-black text-[#0B1F3A] tracking-tighter font-poppins">{selectedMentor.name}</h2>
+                                                    <Badge className="bg-[#1FA774] text-white font-black text-[9px] uppercase tracking-widest border-none px-4 py-1.5 rounded-full">Pro Expert</Badge>
                                                 </div>
-                                                <p className="text-lg font-bold text-primary">{selectedMentor.role}</p>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">{selectedMentor.credibility}</p>
+                                                <p className="text-xl font-black text-[#1E5EFF] font-poppins italic">{selectedMentor.role}</p>
+                                                <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] font-poppins">{selectedMentor.credibility}</p>
                                             </div>
-                                            <div className="flex gap-4">
+                                            <div className="flex gap-8 bg-slate-50 p-6 rounded-[2rem]">
                                                 <div className="text-center">
-                                                    <p className="text-xl font-black text-slate-900 dark:text-white leading-none">12</p>
-                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Stud.</p>
+                                                    <p className="text-2xl font-black text-[#0B1F3A] leading-none mb-1">12+</p>
+                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Sessions</p>
                                                 </div>
-                                                <div className="w-px h-8 bg-slate-200" />
+                                                <div className="w-px h-10 bg-slate-200" />
                                                 <div className="text-center">
-                                                    <p className="text-xl font-black text-slate-900 dark:text-white leading-none">4.9</p>
-                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Rating</p>
+                                                    <p className="text-2xl font-black text-[#1FA774] leading-none mb-1">4.9</p>
+                                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Trust</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                            <div className="space-y-6">
-                                                <div className="space-y-3">
-                                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                        <Info className="w-3.5 h-3.5" /> Mentor Bio
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                            <div className="space-y-8">
+                                                <div className="space-y-4">
+                                                    <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] flex items-center gap-2">
+                                                        <Info className="w-4 h-4 text-[#1E5EFF]" /> PROFESSIONAL BRIEF
                                                     </h4>
-                                                    <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                                                    <p className="text-base text-slate-600 leading-relaxed font-medium font-inter border-l-4 border-slate-100 pl-6 italic">
                                                         {selectedMentor.bio}
                                                     </p>
                                                 </div>
-                                                <div className="space-y-4">
-                                                    <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">HOW I CAN HELP</h4>
-                                                    <div className="space-y-2">
+                                                <div className="space-y-5">
+                                                    <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">EXPERTISE FOCUS</h4>
+                                                    <div className="flex flex-wrap gap-2">
                                                         {selectedMentor.support_types.map((t, i) => (
-                                                            <div key={i} className="flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5">
-                                                                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                                                                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{t}</span>
+                                                            <div key={i} className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-white border-2 border-slate-50 shadow-sm text-xs font-black text-[#0B1F3A]">
+                                                                <CheckCircle2 className="w-4 h-4 text-[#1FA774]" />
+                                                                {t}
                                                             </div>
                                                         ))}
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-6">
-                                                <div className="p-6 rounded-[2.5rem] bg-slate-900 text-white space-y-6">
-                                                    <div className="flex items-center justify-between">
-                                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Model</h4>
-                                                        <Badge className="bg-white/10 text-white font-black text-[9px] uppercase tracking-widest border-none">{selectedMentor.availability}</Badge>
+                                            <div className="space-y-8">
+                                                <div className="p-8 rounded-[3rem] bg-[#0B1F3A] text-white space-y-8 shadow-2xl relative overflow-hidden">
+                                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#1FA774]/10 rounded-full blur-2xl" />
+                                                    <div className="flex items-center justify-between relative z-10">
+                                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Model</h4>
+                                                        <Badge className="bg-white/10 text-white font-black text-[9px] uppercase tracking-widest border-none px-4">{selectedMentor.availability}</Badge>
                                                     </div>
 
-                                                    {selectedMentor.availability === "Free" ? (
-                                                        <div className="space-y-3">
-                                                            <div className="flex items-center gap-3 text-emerald-400 font-bold text-sm">
-                                                                <Unlock className="w-5 h-5" /> 100% Free
-                                                            </div>
-                                                            <p className="text-[10px] text-slate-400">This mentor provides free sessions as part of their contribution to youth development in Salone.</p>
+                                                    <div className="space-y-4 relative z-10">
+                                                        <div className={`flex items-center gap-3 ${selectedMentor.availability === "Free" ? "text-[#1FA774]" : "text-[#4ADE80]"} font-black text-lg font-poppins uppercase`}>
+                                                            {selectedMentor.availability === "Free" ? <Unlock className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
+                                                            {selectedMentor.availability === "Free" ? "No Charge" : "Full Access"}
                                                         </div>
-                                                    ) : (
-                                                        <div className="space-y-3">
-                                                            <div className="flex items-center gap-3 text-blue-400 font-bold text-sm">
-                                                                <Lock className="w-5 h-5" /> Sponsored Access
-                                                            </div>
-                                                            <p className="text-[10px] text-slate-400">Sessions are paid by our NGO partners. Free for all verified platform users.</p>
-                                                        </div>
-                                                    )}
+                                                        <p className="text-[11px] text-slate-400 leading-relaxed">Verified CareerPilot members get priority access to sessions at no personal cost thanks to our coalition partners.</p>
+                                                    </div>
 
                                                     <Button
                                                         onClick={handleStartBooking}
-                                                        className="w-full h-14 rounded-2xl bg-primary hover:bg-emerald-500 text-white font-black uppercase tracking-widest text-[11px] shadow-xl shadow-primary/20"
+                                                        className="w-full h-[64px] rounded-2xl bg-[#1FA774] hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] shadow-2xl shadow-emerald-500/10 transition-all active:scale-95"
                                                     >
-                                                        Request Guidance
+                                                        Request Guidance Now
                                                     </Button>
-                                                </div>
-
-                                                <div className="flex items-center gap-4 px-2">
-                                                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
-                                                        <Globe className="w-5 h-5" />
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">CURRENT BASE</p>
-                                                        <p className="text-xs font-bold text-slate-700">{selectedMentor.location}</p>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -416,98 +357,86 @@ export default function MentorshipPage() {
                                 </div>
                             )}
 
-                            {/* STEP 2: TOPIC SELECTION */}
                             {bookingStep === 2 && (
-                                <div className="p-10 space-y-8">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent" onClick={() => setBookingStep(1)}>
-                                            <ArrowLeft className="w-5 h-5 text-slate-400" />
-                                        </Button>
+                                <div className="p-16 space-y-12 bg-slate-50/50">
+                                    <div className="flex items-center gap-6 mb-4">
+                                        <button onClick={() => setBookingStep(1)} className="w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#1E5EFF] hover:border-[#1E5EFF] hover:shadow-xl transition-all active:scale-90">
+                                            <ArrowLeft className="w-6 h-6" />
+                                        </button>
                                         <div>
-                                            <h3 className="text-2xl font-black text-slate-900 tracking-tight">Select a Support Topic</h3>
-                                            <p className="text-sm font-medium text-slate-500">What do you want to discuss with {selectedMentor.name}?</p>
+                                            <h3 className="text-3xl font-black text-[#0B1F3A] tracking-tighter font-poppins uppercase">Strategic Objective</h3>
+                                            <p className="text-base font-bold text-slate-400 font-inter italic">Choose your focus area for this meeting</p>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {["Career Clarity", "CV & Portfolio Review", "Interview Preparation", "Scholarship Guidance", "Industry Trends"].map((t, i) => (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {["Career Strategy", "CV Engineering", "Mock Interview", "Scholarship Grants", "Business Start-Up"].map((t, i) => (
                                             <div
                                                 key={i}
                                                 onClick={() => setSelectedTopic(t)}
                                                 className={cn(
-                                                    "p-6 rounded-3xl border-2 transition-all cursor-pointer group flex items-start gap-4",
-                                                    selectedTopic === t ? "border-primary bg-primary/5" : "border-slate-100 hover:border-slate-200 bg-white"
+                                                    "p-8 rounded-[2.5rem] border-4 transition-all cursor-pointer group flex items-start gap-5 relative overflow-hidden",
+                                                    selectedTopic === t ? "border-[#1E5EFF] bg-white shadow-2xl" : "border-white bg-white/60 hover:border-slate-100"
                                                 )}
                                             >
                                                 <div className={cn(
-                                                    "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
-                                                    selectedTopic === t ? "bg-primary text-white" : "bg-slate-50 text-slate-400 group-hover:bg-slate-100"
+                                                    "w-12 h-12 rounded-[1.2rem] flex items-center justify-center transition-all",
+                                                    selectedTopic === t ? "bg-[#1E5EFF] text-white shadow-xl shadow-[#1E5EFF]/20" : "bg-slate-50 text-slate-300"
                                                 )}>
-                                                    <FileText className="w-5 h-5" />
+                                                    <Zap className="w-6 h-6" />
                                                 </div>
-                                                <div>
-                                                    <p className={cn("font-black text-sm transition-colors", selectedTopic === t ? "text-primary" : "text-slate-900")}>{t}</p>
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">30 MIN SESSION</p>
+                                                <div className="flex-1">
+                                                    <p className={cn("font-black text-base transition-colors font-poppins", selectedTopic === t ? "text-[#1E5EFF]" : "text-[#0B1F3A]")}>{t}</p>
+                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">45 MINUTE TRACK</p>
                                                 </div>
                                                 <div className={cn(
-                                                    "ml-auto w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                                                    selectedTopic === t ? "border-primary bg-primary" : "border-slate-200"
+                                                    "w-6 h-6 rounded-full border-4 flex items-center justify-center transition-all",
+                                                    selectedTopic === t ? "border-[#1E5EFF] bg-[#1E5EFF]" : "border-slate-100"
                                                 )}>
-                                                    {selectedTopic === t && <CheckCircle2 className="w-3 h-3 text-white" />}
+                                                    {selectedTopic === t && <CheckCircle2 className="w-4 h-4 text-white" />}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
 
-                                    <div className="bg-slate-100 rounded-3xl p-6 flex items-start gap-4">
-                                        <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 flex-shrink-0">
-                                            <Calendar className="w-5 h-5" />
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-black text-slate-900 mb-1">Schedule & Time</p>
-                                            <p className="text-xs text-slate-500 font-medium">After choosing the topic, we will sync with {selectedMentor.name}'s calendar and email you the confirmed meeting link.</p>
-                                        </div>
-                                    </div>
-
-                                    <DialogFooter>
+                                    <DialogFooter className="pt-8">
                                         <Button
                                             onClick={handleConfirmBooking}
-                                            className="w-full h-16 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[11px] shadow-2xl hover:bg-primary transition-all gap-2"
+                                            className="w-full h-[72px] rounded-[2rem] bg-[#0B1F3A] text-white font-black uppercase tracking-[0.2em] text-[12px] shadow-2xl hover:bg-[#1E5EFF] transition-all gap-4 active:scale-95 group"
                                         >
-                                            Confirm Request <ChevronRight className="w-4 h-4" />
+                                            Confirm Strategic Request
+                                            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                         </Button>
                                     </DialogFooter>
                                 </div>
                             )}
 
-                            {/* STEP 3: SUCCESS */}
                             {bookingStep === 3 && (
-                                <div className="p-16 text-center space-y-8 animate-in zoom-in-95 duration-500">
-                                    <div className="w-24 h-24 rounded-full bg-emerald-500 flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/20">
-                                        <Smile className="w-12 h-12 text-white" />
+                                <div className="p-20 text-center space-y-10 animate-in zoom-in-95 duration-700 bg-white">
+                                    <div className="w-32 h-32 rounded-[3.5rem] bg-emerald-50 text-[#1FA774] flex items-center justify-center mx-auto shadow-[0_30px_60px_-15px_rgba(31,167,116,0.3)] rotate-12">
+                                        <Smile className="w-16 h-16" />
                                     </div>
-                                    <div className="space-y-4">
-                                        <h3 className="text-4xl font-black text-slate-900 tracking-tight">Request Sent!</h3>
-                                        <p className="text-lg text-slate-500 font-medium max-w-sm mx-auto">Awesome! Your request for a **{selectedTopic}** session has been sent to **{selectedMentor.name}**.</p>
+                                    <div className="space-y-6">
+                                        <h3 className="text-5xl font-black text-[#0B1F3A] tracking-tighter uppercase font-poppins">Request Broadcasted!</h3>
+                                        <p className="text-xl text-slate-500 font-medium font-inter max-w-sm mx-auto leading-relaxed italic border-l-4 border-slate-50 pl-6">Mission control: your **{selectedTopic}** request is officially on **{selectedMentor.name.split(' ')[0]}'s** radar.</p>
                                     </div>
-                                    <div className="bg-slate-100 p-6 rounded-3xl inline-flex items-center gap-4">
-                                        <Clock className="w-5 h-5 text-slate-400" />
-                                        <p className="text-xs font-bold text-slate-600">Expected response time: **24-48 hours**</p>
+                                    <div className="bg-slate-50 p-6 rounded-[2rem] inline-flex items-center gap-4 border border-slate-100 shadow-inner">
+                                        <Clock className="w-6 h-6 text-[#1E5EFF]" />
+                                        <p className="text-xs font-black text-[#0B1F3A] uppercase tracking-widest italic">Expected response na Salone clock: **24-48 hours**</p>
                                     </div>
-                                    <div className="pt-6">
-                                        <Button onClick={closeDialog} className="h-14 px-12 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest text-[10px]">
-                                            Done
+                                    <div className="pt-10">
+                                        <Button onClick={closeDialog} className="h-16 px-16 rounded-[2rem] bg-[#0B1F3A] text-white font-black uppercase tracking-widest text-[11px] hover:bg-[#1FA774] transition-all shadow-2xl active:scale-95">
+                                            Return to Explorer
                                         </Button>
                                     </div>
                                 </div>
                             )}
-
                         </DialogContent>
                     </Dialog>
                 )}
             </AnimatePresence>
-
             <Footer />
         </div>
     )
 }
+

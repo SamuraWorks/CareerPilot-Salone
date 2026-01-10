@@ -3,27 +3,21 @@
 import { useChat } from '@ai-sdk/react'
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
-import { Bot, MessageCircle, Send, User, Sparkles, ArrowLeft, ShieldCheck } from 'lucide-react'
+import { Bot, MessageCircle, Send, User, Sparkles, ArrowLeft, ShieldCheck, AlertCircle } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useAuth } from '@/lib/auth-context'
+import { useRouter } from 'next/navigation'
 
 export default function AIChatPage() {
-    const [userProfile, setUserProfile] = useState({});
+    const { profile } = useAuth();
+    const router = useRouter();
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            try {
-                const stored = localStorage.getItem("userOnboarding");
-                if (stored) setUserProfile(JSON.parse(stored));
-            } catch (e) {
-                console.error("Error parsing user profile:", e);
-            }
-        }
-    }, []);
+    const isProfileComplete = profile.fullName && profile.careerGoal && profile.educationLevel;
 
-    const chatBody = useMemo(() => ({ userProfile }), [userProfile]);
+    const chatBody = useMemo(() => ({ userProfile: profile }), [profile]);
 
     const {
         messages = [],
@@ -83,30 +77,17 @@ export default function AIChatPage() {
             <div className="flex flex-col h-[calc(100vh-14rem)] md:h-[calc(100vh-12rem)] max-w-5xl mx-auto md:pb-0 space-y-6">
 
                 {/* PREMIUM HERO HEADER - Green-Blue Theme */}
-                <section className="relative rounded-[2.5rem] overflow-hidden bg-[#0B1F3A] min-h-[220px] flex items-center shadow-2xl group shrink-0">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/images/dashboard/salone_success.png"
-                            alt="AI Guidance"
-                            fill
-                            className="object-cover opacity-20 transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#1E5EFF]/60 to-transparent z-10" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.2),transparent)] z-10" />
-                    </div>
-
-                    <div className="relative z-20 p-8 md:p-12 space-y-4">
-                        <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-colors">
-                            <ArrowLeft className="w-4 h-4" /> Go Back
-                        </Link>
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 rounded-[1.5rem] bg-gradient-to-br from-[#1E5EFF] to-[#1FA774] flex items-center justify-center text-white shadow-xl">
-                                <Bot className="w-8 h-8" />
-                            </div>
-                            <div>
-                                <h1 className="text-4xl font-black text-white tracking-tight font-poppins">AI Career <span className="text-gradient-salone brightness-150">Mentor</span></h1>
-                                <p className="text-sm text-slate-300 font-medium font-inter">Personalized coaching for the Sierra Leonean professional landscape.</p>
-                            </div>
+                <section className="rounded-[2.5rem] bg-white border border-slate-100 p-8 md:p-12 space-y-4 shadow-sm">
+                    <Link href="/dashboard" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-[#0B1F3A] transition-colors">
+                        <ArrowLeft className="w-4 h-4" /> Go Back
+                    </Link>
+                    <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center">
+                            <Bot className="w-8 h-8 text-[#1E5EFF]" />
+                        </div>
+                        <div>
+                            <h1 className="text-4xl font-black text-[#0B1F3A] tracking-tight">AI Career <span className="text-gradient-salone">Mentor</span></h1>
+                            <p className="text-sm text-slate-500 font-medium">Personalized coaching for the Sierra Leonean professional landscape.</p>
                         </div>
                     </div>
                 </section>
@@ -134,15 +115,35 @@ export default function AIChatPage() {
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-gradient-to-b from-white to-slate-50/30">
+                    <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8 bg-slate-50">
+                        {!isProfileComplete && (
+                            <div className="absolute inset-0 z-50 backdrop-blur-md bg-white/60 flex flex-col items-center justify-center p-8 text-center space-y-6">
+                                <div className="w-20 h-20 rounded-[2.5rem] bg-[#0B1F3A] flex items-center justify-center text-white shadow-2xl">
+                                    <AlertCircle className="w-10 h-10 text-blue-400" />
+                                </div>
+                                <div className="space-y-2 max-w-sm">
+                                    <h3 className="text-2xl font-black text-[#0B1F3A] uppercase tracking-tighter italic">Identity Incomplete</h3>
+                                    <p className="text-sm text-slate-500 font-medium italic leading-relaxed">
+                                        I need your background details to provide accurate career guidance. Please tell me who you are first.
+                                    </p>
+                                </div>
+                                <Button
+                                    onClick={() => router.push('/onboarding')}
+                                    className="px-10 h-14 bg-[#1FA774] hover:bg-[#1E5EFF] text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl transition-all active:scale-95"
+                                >
+                                    Complete Profile
+                                </Button>
+                            </div>
+                        )}
+
                         {messages.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-6 opacity-40">
                                 <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center">
                                     <MessageCircle className="w-10 h-10 text-slate-300" />
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="font-black text-[#0B1F3A] text-lg uppercase tracking-tight">Kusheh! I'm ready.</h3>
-                                    <p className="text-sm font-medium text-slate-400">Type a message below to start your career session</p>
+                                    <h3 className="font-black text-[#0B1F3A] text-lg uppercase tracking-tight">Kusheh {profile.fullName?.split(' ')[0] || "Scholar"}!</h3>
+                                    <p className="text-sm font-medium text-slate-400">Your profile is synced. What's on your mind today?</p>
                                 </div>
                             </div>
                         )}
@@ -169,8 +170,8 @@ export default function AIChatPage() {
                                         className={cn(
                                             "px-6 py-4 text-sm font-medium leading-relaxed shadow-sm font-inter",
                                             m.role === 'user'
-                                                ? "bg-[#1E5EFF] text-white rounded-[1.8rem] rounded-tr-none"
-                                                : "bg-white text-slate-800 rounded-[1.8rem] rounded-tl-none border border-slate-100"
+                                                ? "bg-slate-100 text-[#0B1F3A] rounded-[1.8rem] rounded-tr-none"
+                                                : "bg-blue-50/50 text-[#0B1F3A] rounded-[1.8rem] rounded-tl-none border border-blue-100/50"
                                         )}
                                     >
                                         <div className="whitespace-pre-wrap">{m.content}</div>
@@ -191,7 +192,7 @@ export default function AIChatPage() {
                                             <span className="w-1.5 h-1.5 bg-[#4ADE80] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                                             <span className="w-1.5 h-1.5 bg-[#4ADE80] rounded-full animate-bounce"></span>
                                         </div>
-                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Analyzing Salone market data...</p>
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Thinking...</p>
                                     </div>
                                 </div>
                             </div>
@@ -207,8 +208,9 @@ export default function AIChatPage() {
                                 {quickActions.map((action, i) => (
                                     <button
                                         key={i}
+                                        disabled={!isProfileComplete}
                                         onClick={() => handleQuickAction(action)}
-                                        className="whitespace-nowrap px-5 py-2.5 rounded-full bg-slate-50 hover:bg-[#1E5EFF]/5 text-xs font-bold font-poppins text-[#0B1F3A] transition-all border border-slate-200 hover:border-[#1E5EFF]/20 shadow-sm active:scale-95"
+                                        className="whitespace-nowrap px-5 py-2.5 rounded-full bg-slate-50 hover:bg-[#1E5EFF]/5 text-xs font-bold font-poppins text-[#0B1F3A] transition-all border border-slate-200 hover:border-[#1E5EFF]/20 shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {action}
                                     </button>
@@ -218,17 +220,18 @@ export default function AIChatPage() {
 
                         <form onSubmit={handleFormSubmit} className="flex gap-3 relative max-w-4xl mx-auto">
                             <input
-                                className="flex-1 px-8 py-5 rounded-3xl bg-slate-50 border border-slate-100 focus:border-[#1E5EFF]/30 focus:ring-0 outline-none text-base transition-all font-inter placeholder:text-slate-400 shadow-inner"
+                                disabled={!isProfileComplete}
+                                className="flex-1 px-8 py-5 rounded-3xl bg-slate-50 border border-slate-100 focus:border-[#1E5EFF]/30 focus:ring-0 outline-none text-base transition-all font-inter placeholder:text-slate-400 shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
                                 value={input}
                                 onChange={handleInputChange}
-                                placeholder="Wetin you wan for know about jobs na Salone?"
+                                placeholder={isProfileComplete ? "Wetin you wan for know about jobs na Salone?" : "Complete profile to chat"}
                                 autoComplete="off"
                             />
                             <Button
                                 type="submit"
                                 size="icon"
-                                className="rounded-2xl w-14 h-14 shrink-0 bg-[#1FA774] hover:bg-[#1E5EFF] shadow-xl transition-all active:scale-90"
-                                disabled={!input?.trim() || isLoading}
+                                className="rounded-2xl w-14 h-14 shrink-0 bg-[#1FA774] hover:bg-[#1E5EFF] shadow-xl transition-all active:scale-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={!input?.trim() || isLoading || !isProfileComplete}
                             >
                                 <Send className="w-6 h-6 text-white" />
                             </Button>
@@ -239,6 +242,7 @@ export default function AIChatPage() {
                     </div>
                 </div>
             </div>
-        </DashboardLayout>
+        </DashboardLayout >
     )
 }
+

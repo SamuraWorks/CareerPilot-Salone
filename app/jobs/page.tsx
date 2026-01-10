@@ -8,10 +8,11 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Search, MapPin, Briefcase, Clock, ExternalLink, BookOpen, Bookmark, Loader2, ArrowLeft, Sparkles } from "lucide-react"
+import { Search, MapPin, Briefcase, Clock, ExternalLink, BookOpen, Bookmark, Loader2, ArrowLeft, Sparkles, Zap } from "lucide-react"
 import { getJobs } from "@/lib/db"
 import { toast } from "sonner"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 export default function JobsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -66,174 +67,178 @@ export default function JobsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <Link
-          href="/dashboard"
-          className="group inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-bold text-xs uppercase tracking-widest"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Dashboard
-        </Link>
-        {/* PREMIUM HERO HEADER */}
-        <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/dashboard/salone_success.png"
-              alt="Jobs & Training"
-              fill
-              className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
-          </div>
+      <div className="max-w-6xl mx-auto space-y-12 pb-24 pt-4">
 
-          <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-              <Briefcase className="w-4 h-4 text-[#1FA774]" />
-              <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Opportunity Hub</span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
-              Jobs & <span className="text-[#F4C430]">Training</span> Explorer
-            </h1>
-            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-              Explore real opportunities in Freetown, Bo, and beyond. Your next big career move starts here in 🇸🇱.
-            </p>
-
-            <div className="flex items-center gap-6 pt-2">
-              <div className="flex flex-col">
-                <span className="text-2xl font-black text-white">{opportunities.length}</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Postings</span>
+        {/* --- PREMIUM HERO SECTION --- */}
+        <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[400px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
+                    <div className="relative z-20 w-full p-10 md:p-16 space-y-8">
+            <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group">
+              <div className="p-2 rounded-lg bg-[#4ADE80]/10 border border-[#4ADE80]/20 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                <ArrowLeft className="w-4 h-4" />
               </div>
-              <div className="w-px h-8 bg-white/10" />
+              Back to Control Center
+            </Link>
+
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-md">
+                <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Opportunity Network</span>
+              </div>
+              <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                Career <br /> <span className="text-gradient-salone brightness-125">Opportunities</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6 italic">
+                Explore real professional openings in Freetown, Bo, and beyond. Your next big career move starts here na 🇸🇱.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-6 pt-2">
               <div className="flex flex-col">
-                <span className="text-2xl font-black text-[#F4C430]">{opportunities.filter(o => o.type === 'internship').length}</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Internships</span>
+                <span className="text-4xl font-black text-white">{opportunities.length}</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Live Feed</span>
+              </div>
+              <div className="w-px h-12 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-4xl font-black text-[#1FA774]">{opportunities.filter(o => o.type === 'internship').length}</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Internships</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by title, organization, or category..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 h-12 font-poppins"
-          />
+        {/* --- SMART SEARCHBAR --- */}
+        <div className="px-4 -mt-16 relative z-30 max-w-3xl mx-auto w-full">
+          <Card className="p-4 bg-white border-none shadow-2xl rounded-[3rem] w-full border-b-4 border-slate-100">
+            <div className="relative group">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-[#1E5EFF] transition-colors" />
+              <input
+                type="text"
+                placeholder="Search for job titles, organizations, or skills..."
+                className="w-full h-16 pl-16 pr-6 rounded-[2rem] bg-slate-50 border-none focus:bg-white focus:ring-[15px] focus:ring-[#1E5EFF]/5 shadow-inner outline-none font-poppins font-bold text-base transition-all text-[#0B1F3A]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </Card>
         </div>
 
-        {/* Tabs */}
-        <Tabs value={selectedType} onValueChange={(v) => setSelectedType(v as any)} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-slate-100 p-1 rounded-xl">
-            <TabsTrigger value="all" className="rounded-lg font-bold font-poppins text-xs sm:text-sm data-[state=active]:bg-white data-[state=active]:text-green-700 data-[state=active]:shadow-sm">
-              All ({getCount('all')})
-            </TabsTrigger>
-            <TabsTrigger value="job" className="rounded-lg font-bold font-poppins text-xs sm:text-sm data-[state=active]:bg-white data-[state=active]:text-green-700 data-[state=active]:shadow-sm">
-              Jobs ({getCount('job')})
-            </TabsTrigger>
-            <TabsTrigger value="internship" className="rounded-lg font-bold font-poppins text-xs sm:text-sm data-[state=active]:bg-white data-[state=active]:text-green-700 data-[state=active]:shadow-sm">
-              Internships ({getCount('internship')})
-            </TabsTrigger>
-            <TabsTrigger value="training" className="rounded-lg font-bold font-poppins text-xs sm:text-sm data-[state=active]:bg-white data-[state=active]:text-green-700 data-[state=active]:shadow-sm">
-              Training ({getCount('training')})
-            </TabsTrigger>
-          </TabsList>
+        {/* --- OPPORTUNITY FEED --- */}
+        <div className="px-4">
+          <Tabs value={selectedType} onValueChange={(v) => setSelectedType(v as any)} className="w-full space-y-10">
+            <TabsList className="grid w-full grid-cols-4 bg-slate-50 p-2 rounded-[2rem] h-20 shadow-inner border border-slate-100 max-w-4xl mx-auto">
+              {[
+                { id: 'all', label: 'Matrix', icon: Briefcase },
+                { id: 'job', label: 'Positions', icon: Briefcase },
+                { id: 'internship', label: 'Internships', icon: BookOpen },
+                { id: 'training', label: 'Academies', icon: Zap }
+              ].map(tab => (
+                <TabsTrigger
+                  key={tab.id}
+                  value={tab.id}
+                  className="rounded-[1.5rem] font-black font-poppins text-[10px] uppercase tracking-widest data-[state=active]:bg-[#0B1F3A] data-[state=active]:text-white data-[state=active]:shadow-xl transition-all h-full gap-2"
+                >
+                  <tab.icon className="w-3.5 h-3.5 hidden md:block" />
+                  {tab.label} ({getCount(tab.id)})
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
-          <TabsContent value={selectedType} className="mt-6 space-y-4">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center p-20 text-muted-foreground">
-                <Loader2 className="w-10 h-10 animate-spin mb-4 text-primary" />
-                <p className="font-medium font-inter">Finding the best opportunities for you...</p>
-              </div>
-            ) : filteredOpportunities.length === 0 ? (
-              <Card className="p-12 text-center bg-slate-50 border-dashed border-2">
-                <p className="text-muted-foreground font-medium font-inter">No opportunities found matching your criteria.</p>
-                <Button variant="link" onClick={() => { setSearchTerm(""); setSelectedType("all") }} className="mt-2 font-poppins text-primary">
-                  Clear all filters
-                </Button>
-              </Card>
-            ) : (
-              filteredOpportunities.map((opp) => (
-                <Card key={opp.id} className="p-6 hover:shadow-lg transition-shadow border-slate-100 group">
-                  <div className="flex flex-col gap-4">
-                    {/* Header */}
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 group-hover:bg-primary/5 transition-colors">
-                        {opp.type === 'job' ? <Briefcase className="w-7 h-7 text-primary" /> : <BookOpen className="w-7 h-7 text-secondary" />}
+            <TabsContent value={selectedType} className="mt-6 space-y-8">
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-40 gap-8 bg-white rounded-[4rem] border-8 border-slate-50 shadow-inner">
+                  <Loader2 className="w-20 h-20 text-[#1FA774] animate-spin" />
+                  <p className="text-[#0B1F3A] font-black font-poppins text-xs uppercase tracking-[0.5em] animate-pulse italic">Scanning Network Nodes...</p>
+                </div>
+              ) : filteredOpportunities.length === 0 ? (
+                <Card className="p-20 text-center bg-white border-8 border-slate-50 rounded-[4rem] shadow-inner">
+                  <div className="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 rotate-12">
+                    <Search className="w-10 h-10 text-slate-200" />
+                  </div>
+                  <h3 className="text-2xl font-black font-poppins text-[#0B1F3A] uppercase tracking-tighter">Vector not found</h3>
+                  <p className="text-slate-400 font-bold italic font-inter mt-2">Adjust your parameters or check back for new data injections.</p>
+                  <Button variant="link" onClick={() => { setSearchTerm(""); setSelectedType("all") }} className="mt-6 font-black font-poppins text-[#1FA774] uppercase text-[10px] tracking-widest">
+                    Reset Search Terminal
+                  </Button>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 gap-8">
+                  {filteredOpportunities.map((opp) => (
+                    <Card key={opp.id} className="p-10 rounded-[3.5rem] bg-white border border-slate-50 hover:border-[#1FA774]/20 shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden flex flex-col md:flex-row gap-10">
+                      <div className="absolute top-0 right-0 w-3 h-full bg-slate-50 group-hover:bg-[#1FA774] transition-colors" />
+
+                      <div className="w-24 h-24 rounded-[1.8rem] bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 group-hover:bg-[#1FA774]/5 group-hover:border-[#1FA774]/20 transition-all">
+                        {opp.type === 'job' ? <Briefcase className="w-10 h-10 text-[#0B1F3A] group-hover:text-[#1FA774] transition-colors" /> : <BookOpen className="w-10 h-10 text-[#1FA774] group-hover:text-[#1E5EFF] transition-colors" />}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                          <h3 className="text-xl font-bold font-poppins text-slate-900 group-hover:text-primary transition-colors">{opp.title}</h3>
-                          <div className="flex gap-2">
-                            <Badge variant="outline" className="bg-slate-50 uppercase text-[10px] font-bold font-poppins border-slate-200">
+
+                      <div className="flex-1 space-y-6">
+                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                          <div className="space-y-1">
+                            <h3 className="text-2xl md:text-3xl font-black font-poppins text-[#0B1F3A] group-hover:text-[#1E5EFF] transition-colors leading-tight underline decoration-[#1FA774]/10 group-hover:decoration-transparent">{opp.title}</h3>
+                            <p className="font-black font-poppins text-[#1FA774] text-[11px] uppercase tracking-[0.2em] italic">{opp.organization}</p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge className="bg-[#0B1F3A] text-white font-black text-[9px] uppercase tracking-widest px-4 py-2 border-none rounded-xl">
                               {opp.type}
                             </Badge>
                             {opp.salary && (
-                              <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-none font-bold font-poppins text-[10px] uppercase">
+                              <Badge className="bg-[#1FA774]/10 text-[#1FA774] font-black text-[9px] uppercase tracking-widest px-4 py-2 border-none rounded-xl">
                                 {opp.salary}
                               </Badge>
                             )}
                           </div>
                         </div>
-                        <p className="font-bold font-poppins text-slate-600 mt-0.5">{opp.organization}</p>
-                      </div>
-                    </div>
 
-                    {/* Metadata */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-slate-100 bg-slate-50/50 p-4 rounded-xl">
-                      <div className="flex items-center gap-2 text-[13px] font-medium font-inter text-slate-600">
-                        <MapPin className="w-4 h-4 text-slate-400" />
-                        {opp.location}
-                      </div>
-                      <div className="flex items-center gap-2 text-[13px] font-medium font-inter text-slate-600">
-                        <Briefcase className="w-4 h-4 text-slate-400" />
-                        {opp.category && opp.category[0]}
-                      </div>
-                      {opp.deadline && (
-                        <div className="flex items-center gap-2 text-[13px] font-medium font-inter text-slate-600">
-                          <Clock className="w-4 h-4 text-slate-400" />
-                          {opp.deadline}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-6 border-y border-slate-50 bg-slate-50/50 px-8 rounded-[2rem] group-hover:bg-white transition-all group-hover:shadow-inner">
+                          <div className="flex items-center gap-3 text-[11px] font-black font-poppins text-[#0B1F3A] uppercase tracking-widest">
+                            <MapPin className="w-4 h-4 text-[#1FA774]" />
+                            {opp.location}
+                          </div>
+                          <div className="flex items-center gap-3 text-[11px] font-black font-poppins text-[#0B1F3A] uppercase tracking-widest">
+                            <Briefcase className="w-4 h-4 text-[#1E5EFF]" />
+                            {opp.category && opp.category[0]}
+                          </div>
+                          {opp.deadline && (
+                            <div className="flex items-center gap-3 text-[11px] font-black font-poppins text-[#0B1F3A] uppercase tracking-widest">
+                              <Clock className="w-4 h-4 text-red-400" />
+                              {opp.deadline}
+                            </div>
+                          )}
+                          {opp.duration && (
+                            <div className="flex items-center gap-3 text-[11px] font-black font-poppins text-[#0B1F3A] uppercase tracking-widest">
+                              <Clock className="w-4 h-4 text-blue-400" />
+                              {opp.duration}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {opp.duration && (
-                        <div className="flex items-center gap-2 text-[13px] font-medium font-inter text-slate-600">
-                          <Clock className="w-4 h-4 text-slate-400" />
-                          {opp.duration}
+
+                        <p className="text-[#0B1F3A]/60 font-medium font-inter text-base line-clamp-2 italic leading-relaxed pl-6 border-l-4 border-slate-50 group-hover:border-[#1FA774] transition-all">{opp.description}</p>
+
+                        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                          <Button
+                            onClick={() => handleApply(opp.link, opp.title)}
+                            className="flex-1 h-[68px] rounded-[2rem] bg-[#0B1F3A] hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] shadow-2xl active:scale-95 transition-all group/btn"
+                          >
+                            Initiate Application Phase
+                            <ExternalLink className="ml-3 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            onClick={() => handleSave(opp.id)}
+                            className={cn("h-[68px] rounded-[2rem] px-8 border-2 border-slate-100 font-black uppercase tracking-widest text-[10px] transition-all hover:bg-white active:scale-95", savedOpportunities.includes(opp.id) ? "bg-[#1FA774]/10 border-[#1FA774]/20 text-[#1FA774]" : "text-slate-400")}
+                          >
+                            <Bookmark className={cn("w-5 h-5 mr-3", savedOpportunities.includes(opp.id) && "fill-current")} />
+                            {savedOpportunities.includes(opp.id) ? "Vector Locked" : "Lock Vector"}
+                          </Button>
                         </div>
-                      )}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-slate-600 line-clamp-2 text-sm leading-relaxed font-inter">{opp.description}</p>
-
-                    {/* Actions */}
-                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                      <Button onClick={() => handleApply(opp.link, opp.title)} className="flex-1 gap-2 font-bold font-poppins uppercase text-xs tracking-wider h-12 shadow-lg shadow-primary/20 bg-slate-900 text-white hover:bg-primary">
-                        View Details & Apply
-                        <ExternalLink className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        onClick={() => handleSave(opp.id)}
-                        className={cn("gap-2 h-12 font-bold font-poppins px-6 border border-slate-200", savedOpportunities.includes(opp.id) && "bg-slate-100 border-slate-300")}
-                      >
-                        <Bookmark className={cn("w-4 h-4", savedOpportunities.includes(opp.id) && "fill-current")} />
-                        {savedOpportunities.includes(opp.id) ? "Saved" : "Save"}
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))
-            )}
-          </TabsContent>
-        </Tabs>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </DashboardLayout>
   )
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ')
 }

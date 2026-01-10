@@ -109,7 +109,13 @@ export async function processWhatsAppMessage(body: string, sender: string): Prom
         case 'JOBS':
             return "💼 *Trending Sectors na Salone*\n1. Digital Technology (High Demand!)\n2. Renewable Energy (Solar)\n3. Modern Agriculture\n4. Healthcare\n\nTo see list, reply with sector name or type START for a full career match.";
         case 'KRIO':
+            session.language = 'krio';
+            await updateSession(sender, session);
             return "Kusheh! Ah gladi for help you build your career. Type *START* for begin de career business or *MENU* for see waitin we get.";
+        case 'ENGLISH':
+            session.language = 'en';
+            await updateSession(sender, session);
+            return "Hello! I've switched your language to English. Type *START* to begin or *MENU* for options.";
         case 'ABOUT':
             return "CareerPilot Salone 🇸🇱 is your #1 mentor for navigating the job market in Sierra Leone. We provide roadmaps, CV help, and job alerts via WhatsApp and Web.";
         default:
@@ -125,6 +131,7 @@ export async function processWhatsAppMessage(body: string, sender: string): Prom
                     PERSONALITY: Extremely helpful, encouraging, and knowledgeable about the Sierra Leonean labor market. You speak a mix of English and occasional Krio (like 'Kusheh', 'Gladi', 'Salone').
                     ROLE: Personal career mentor for Sierra Leonean youth.
                     WHATSAPP MODE: Keep responses very short, professional, and friendly. Use Bullet points.
+                    LANGUAGE: The user prefers ${session.language === 'krio' ? 'Krio' : 'English'}. Respond in their preferred language.
                     CONTEXT: Current location is Sierra Leone. Mention local institutions like FBC, IPAM, Njala, or DSTI where relevant.
                     KNOWLEDGE: ${groundedCareers}
                     ACTIONS: If the user is confused, tell them to type START to begin a career match quiz.`,

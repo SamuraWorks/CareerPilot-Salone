@@ -9,54 +9,64 @@ export async function POST(req: Request) {
     try {
         const { messages, userProfile } = await req.json();
 
-        // 1. Build Grounding Context (Expanded to top 100 careers for better coverage)
-        const groundedCareers = SIERRA_LEONE_CAREERS.slice(0, 100).map(c =>
-            `- ${c.title} [${c.industry}]: ${c.description}. Paths: ${c.requiredEducation.join(', ')}. Demand: ${c.demand} in Salone. Sal: ${c.salaryRange}.`
-        ).join('\n');
+        let groundedCareers = "";
+        // Optimize context size: Map only essential fields
+        groundedCareers = SIERRA_LEONE_CAREERS.map(c =>
+            `CAREER: ${c.title}
+             SALARY: ${c.salaryRange}
+             DEMAND: ${c.demand}
+             EDUCATION: ${c.requiredEducation.join(', ')}
+             INSTITUTIONS: ${c.localInstitutions.join(', ')}
+             SKILLS: ${c.requiredSkills.join(', ')}`
+        ).join('\n---\n');
 
         const groundedInstitutions = INSTITUTIONS.map(inst =>
-            `- ${inst.name}: ${inst.specializations.join(', ')}. (${inst.location})`
+            `INSTITUTION: ${inst.name} (${inst.location}) - SPECIALTIES: ${inst.specializations.join(', ')}`
         ).join('\n');
 
         const groundingContext = `
-You are "CareerPilot Salone AI", a professional career coach for Sierra Leonean youth.
-Your mission is to provide realistic, encouraging, and highly local career guidance.
+You are CareerPilot Salone AI, a dedicated career architect for Sierra Leone. 
+**CRITICAL DIRECTIVE: NO GUESSWORK.** 
+You must ONLY provide information based on the "OFFICIAL DATA" provided below.
 
-KNOWLEDGE BASE (LOCAL CAREERS):
+OFFICIAL DATA (SIERRA LEONE CAREERS):
 ${groundedCareers}
 
-LOCAL INSTITUTIONS:
+OFFICIAL DATA (LOCAL INSTITUTIONS):
 ${groundedInstitutions}
 
-USER CONTEXT:
+USER PROFILE:
 ${JSON.stringify(userProfile || {})}
 
-GUIDELINES:
-1. **Be Salone-Specific**: Always refer to the Sierra Leonean context (e.g., mention WASSCE, Freetown, provincial cities, local universities).
-2. **Use the Knowledge Base**: If a user asks about a career, check if it's in the list above. If it is, use that data (salary, institutions).
-3. **Structured Advice**: Respond with a Summary, followed by concrete Path options, and finish with 2-3 immediate Action Items.
-4. **Tone**: Be a "Big Brother/Sister" mentor—professional but accessible. Use common local terms like "Salone" or "Kusheh" where appropriate, but keep the core advice in clear English.
-5. **No Hallucinations**: If you don't know a local detail, admit it and suggest where they can find out (e.g., "Check with the Ministry of Technical and Higher Education").
-6. **Integrity**: Never recommend a degree at a university that doesn't offer it (e.g., Engineering at IPAM is a NO).
+STRICT RESPONSE RULES:
+1. **Fact-Check First**: Before recommending a salary or degree, verify it exists in the "OFFICIAL DATA" above. If it is NOT listed, state: "I don't have verified local data for that specific role yet, but generally in West Africa..."
+2. **Local Currency**: Always quote salaries in SLE (New Leones). Use the ranges provided in the data.
+3. **Real Institutions**: Only recommend universities/colleges listed in the data. Do NOT invent course names.
+4. **Actionable Steps**: Give 3 real, physical steps the user can take in Sierra Leone (e.g., "Visit the IPAM registrar's office at Tower Hill", "Check usage of LinkedIn in Freetown").
+5. **Tone**: Empowerment, professional, and locally grounded (use "Salone", "Kusheh" sparingly but naturally).
+
+If the user asks about a career NOT in your database, answer based on general professional principles but explicitly flag it as "General Advice" rather than "Verified Local Data".
 `;
 
         let result;
 
-        // 2. Select Model
-        if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
+        // 2. Select Model with strict preference for high-intelligence models
+        if (process.env.OPENAI_API_KEY) {
+            console.log("Using OpenAI GPT-4o for authentic responses");
             result = await streamText({
                 model: openai('gpt-4o'),
                 system: groundingContext,
                 messages: messages,
-                temperature: 0.7,
+                temperature: 0.3, // Lower temperature for more factual responses
             });
         }
         else if (process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+            console.log("Using Google Gemini 1.5 Pro for authentic responses");
             result = await streamText({
-                model: google('gemini-1.5-flash'),
+                model: google('gemini-1.5-pro'), // Upgraded to Pro for better reasoning
                 system: groundingContext,
                 messages: messages,
-                temperature: 0.7,
+                temperature: 0.3,
             });
         }
         else {

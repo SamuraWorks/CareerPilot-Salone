@@ -5,9 +5,11 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { MessageCircle, CheckCheck, ArrowRight } from "lucide-react"
+import { MessageCircle, CheckCheck, ArrowRight, Sparkles, Phone, Zap, ArrowLeft } from "lucide-react"
 import { FaWhatsapp } from "react-icons/fa"
+import { cn } from "@/lib/utils"
 import Image from "next/image"
+import Link from "next/link"
 
 interface WhatsAppMessage {
   id: number
@@ -69,68 +71,73 @@ export default function WhatsAppPage() {
   ])
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
+      <main className="flex-1 pb-32">
+        {/* --- PREMIUM HERO SECTION --- */}
+        <section className="relative min-h-[450px] flex items-center bg-[#0B1F3A] overflow-hidden border-b-8 border-b-[#1FA774]">
 
-      <main className="flex-1 bg-gradient-to-br from-secondary/10 via-background to-primary/10 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* PREMIUM HERO HEADER */}
-          <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group mb-16">
-            <div className="absolute inset-0 z-0">
-              <Image
-                src="/images/dashboard/salone_success.png"
-                alt="WhatsApp Guidance"
-                fill
-                className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-            </div>
-
-            <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full backdrop-blur-md">
-                <FaWhatsapp className="w-4 h-4 text-[#25D366]" />
-                <span className="text-[#25D366] font-bold text-xs uppercase tracking-widest">Mobile Guidance</span>
-              </div>
-              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
-                WhatsApp <span className="text-[#F4C430]">Smart</span> Assistant
-              </h1>
-              <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-                Experience the future of career mentorship on your favorite chat app. Fast, inclusive, and available everywhere.
-              </p>
-
-              <div className="flex items-center gap-6 pt-2">
-                <div className="flex flex-col">
-                  <span className="text-2xl font-black text-white">24/7</span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Availability</span>
+          <div className="container mx-auto px-6 relative z-20 pt-10">
+            <div className="max-w-4xl space-y-10">
+              <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-poppins uppercase tracking-[0.3em] text-[#4ADE80] hover:text-white transition-all group">
+                <div className="p-2 rounded-lg bg-[#4ADE80]/10 border border-[#4ADE80]/20 group-hover:bg-[#4ADE80] group-hover:text-[#0B1F3A] transition-all">
+                  <ArrowLeft className="w-4 h-4" />
                 </div>
-                <div className="w-px h-8 bg-white/10" />
+                Back to Control Center
+              </Link>
+
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366]/10 border border-[#25D366]/20 rounded-full backdrop-blur-md">
+                  <FaWhatsapp className="w-4 h-4 text-[#25D366]" />
+                  <span className="text-[#25D366] font-black text-[10px] uppercase tracking-[0.2em]">Mobile Nexus Protocol</span>
+                </div>
+                <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                  WhatsApp <br /> <span className="text-gradient-salone brightness-125">Omni-Assistant</span>
+                </h1>
+                <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6">
+                  Experience the future of professional mentorship on your primary communication node. Inclusive, low-bandwidth, and omnipresent na Salone.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-10 pt-4">
                 <div className="flex flex-col">
-                  <span className="text-2xl font-black text-[#F4C430]">Krio</span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Language Support</span>
+                  <span className="text-4xl font-black text-white">24/7</span>
+                  <span className="text-[10px] font-black text-[#1FA774] uppercase tracking-widest">Global Uptime</span>
+                </div>
+                <div className="w-px h-12 bg-white/10" />
+                <div className="flex flex-col">
+                  <span className="text-4xl font-black text-[#1E5EFF]">KRIO</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Native Synthesis</span>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+        <div className="max-w-7xl mx-auto px-6 mt-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
             {/* WhatsApp Chat Mockup */}
-            <div>
-              <Card className="overflow-hidden shadow-lg">
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-slate-50" />
+              <Card className="overflow-hidden border-none rounded-[3.5rem] shadow-2xl relative z-10 bg-white">
                 {/* WhatsApp Header */}
-                <div className="bg-secondary text-secondary-foreground p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-secondary-foreground/20 rounded-full flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5" />
+                <div className="bg-[#075E54] text-white p-8 flex items-center gap-6">
+                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center backdrop-blur-md overflow-hidden p-1">
+                    <Image src="/logo.png" alt="CareerPilot" width={48} height={48} className="object-contain" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold">CareerPilot Salone</h3>
-                    <p className="text-xs opacity-90">Online</p>
+                    <h3 className="font-black font-poppins text-xl tracking-tight uppercase">CareerPilot Salone</h3>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse" />
+                      <p className="text-xs font-bold uppercase tracking-widest opacity-80">Synchronized</p>
+                    </div>
                   </div>
                 </div>
 
                 {/* Chat Area */}
-                <div className="bg-[#e5ddd5] p-4 h-[500px] overflow-y-auto space-y-4 font-sans border-t border-b">
+                <div className="bg-[#e5ddd5] p-8 h-[600px] overflow-y-auto space-y-6 font-sans border-t border-b custom-scrollbar">
                   <div className="text-center">
-                    <span className="bg-[#dcf8c6] text-[10px] px-2 py-1 rounded-md text-slate-600 shadow-sm uppercase tracking-wider font-bold">
-                      Messages are end-to-end encrypted
+                    <span className="bg-[#dcf8c6] text-[10px] px-4 py-2 rounded-full text-slate-600 shadow-sm uppercase tracking-widest font-black border border-slate-200/50 backdrop-blur-md">
+                      End-to-end Encrypted Intelligence
                     </span>
                   </div>
 
@@ -140,24 +147,28 @@ export default function WhatsAppPage() {
                       className={msg.sender === "bot" ? "flex justify-start" : "flex justify-end"}
                     >
                       <div
-                        className={`max-w-[85%] p-3 rounded-lg shadow-sm relative ${msg.sender === "bot" ? "bg-white text-slate-800" : "bg-[#dcf8c6] text-slate-800"
-                          }`}
+                        className={cn(
+                          "max-w-[85%] p-5 rounded-[2rem] shadow-sm relative group/msg",
+                          msg.sender === "bot"
+                            ? "bg-white text-[#0B1F3A] rounded-tl-none border border-slate-200"
+                            : "bg-[#dcf8c6] text-[#0B1F3A] rounded-tr-none"
+                        )}
                       >
-                        <div className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</div>
+                        <div className="whitespace-pre-wrap text-sm font-bold leading-relaxed">{msg.content}</div>
 
                         {msg.buttons && (
-                          <div className="mt-3 space-y-2">
+                          <div className="mt-6 space-y-3">
                             {msg.buttons.map((button: string, idx: number) => (
-                              <div key={idx} className="bg-[#f0f2f5] hover:bg-[#e9edef] transition-colors p-2 rounded-md text-center text-xs font-semibold text-blue-600 cursor-pointer border border-slate-200">
+                              <div key={idx} className="bg-white/50 backdrop-blur-sm border border-slate-200/50 hover:bg-[#1E5EFF] hover:text-white hover:border-[#1E5EFF] transition-all p-3 rounded-xl text-center text-xs font-black uppercase tracking-widest cursor-pointer shadow-sm active:scale-95">
                                 {button}
                               </div>
                             ))}
                           </div>
                         )}
 
-                        <div className="text-[10px] text-slate-400 mt-1 flex items-center justify-end gap-1">
+                        <div className="text-[9px] font-black text-slate-400 mt-2 flex items-center justify-end gap-2 uppercase tracking-tight">
                           {msg.time}
-                          {msg.sender === "user" && <CheckCheck className="w-3 h-3 text-blue-500" />}
+                          {msg.sender === "user" && <CheckCheck className="w-3 h-3 text-[rgb(30,94,255)]" />}
                         </div>
                       </div>
                     </div>
@@ -165,71 +176,86 @@ export default function WhatsAppPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-[#f0f2f5] p-3 flex items-center gap-3">
-                  <div className="flex-1 bg-white rounded-full px-4 py-2 text-sm text-slate-400">
-                    Type a message...
+                <div className="bg-slate-50 p-6 flex items-center gap-4">
+                  <div className="flex-1 bg-white border border-slate-200 rounded-2xl px-6 py-4 text-xs font-bold text-slate-400">
+                    Type tactical query...
                   </div>
-                  <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-secondary-foreground">
-                    <MessageCircle className="w-5 h-5 rotate-90" />
+                  <div className="w-14 h-14 bg-[#1FA774] rounded-2xl flex items-center justify-center text-white shadow-lg active:scale-90 transition-transform cursor-pointer">
+                    <MessageCircle className="w-6 h-6 rotate-90" />
                   </div>
                 </div>
               </Card>
             </div>
 
-            {/* Features List */}
-            <div className="flex flex-col justify-center space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold">Features on WhatsApp</h2>
-                <p className="text-muted-foreground">Everything you can do on the website, now available via chat.</p>
-              </div>
+            {/* Connection Guide & Features */}
+            <div className="space-y-12">
+              <div className="space-y-8">
+                <div className="inline-block px-4 py-1 bg-[#1E5EFF]/10 text-[#1E5EFF] rounded-full text-[10px] font-black uppercase tracking-widest border border-[#1E5EFF]/10">
+                  Connection Guide
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-[#0B1F3A] uppercase tracking-tighter font-poppins leading-[0.9]">
+                  How to Access <br /><span className="text-[#1FA774]">The Network</span>
+                </h2>
 
-              <div className="grid gap-4">
-                {[
-                  {
-                    title: "AI Career Counselor",
-                    desc: "Get instant answers to your career questions in the language you prefer (Krio or English).",
-                  },
-                  {
-                    title: "Automated CV Builder",
-                    desc: "Answer a few chat questions and receive a professionally formatted PDF CV on WhatsApp.",
-                  },
-                  {
-                    title: "Job & Scholarship Alerts",
-                    desc: "Choose your field and get immediate notifications for new openings in Sierra Leone.",
-                  },
-                  {
-                    title: "University Guidance",
-                    desc: "Find out which local universities offer the courses required for your dream job.",
-                  },
-                ].map((feature, i) => (
-                  <div key={i} className="flex gap-4 p-4 rounded-xl bg-white border border-slate-100 shadow-sm">
-                    <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                      <CheckCheck className="w-5 h-5 text-secondary" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold">{feature.title}</h4>
-                      <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                <div className="space-y-6">
+                  {/* Step 1 */}
+                  <div className="flex gap-6 items-start p-6 bg-slate-50 rounded-3xl border border-slate-100 hover:border-[#1E5EFF]/30 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center font-black text-xl text-[#0B1F3A]">01</div>
+                    <div className="space-y-2">
+                      <h3 className="font-bold text-[#0B1F3A] uppercase tracking-wide">Save the Node</h3>
+                      <p className="text-slate-500 text-sm">Save this number to your contacts as <span className="font-bold text-[#0B1F3A]">CareerPilot AI</span></p>
+                      <div className="inline-block bg-white px-4 py-2 rounded-lg border border-slate-200 mt-2 font-mono font-bold text-[#1E5EFF] select-all">
+                        +232 75 668258
+                      </div>
                     </div>
                   </div>
-                ))}
+
+                  {/* Step 2 */}
+                  <div className="flex gap-6 items-start p-6 bg-slate-50 rounded-3xl border border-slate-100 hover:border-[#25D366]/30 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-[#25D366]/10 shadow-sm flex items-center justify-center font-black text-xl text-[#25D366]">02</div>
+                    <div className="space-y-2">
+                      <h3 className="font-bold text-[#0B1F3A] uppercase tracking-wide">Initialize</h3>
+                      <p className="text-slate-500 text-sm">Open WhatsApp and send the activation command.</p>
+                      <a
+                        href="https://wa.me/23275668258?text=Hello%20CareerPilot%20Salone"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 mt-2 text-xs font-black uppercase tracking-widest text-[#25D366] hover:underline"
+                      >
+                        Click to Open WhatsApp <ArrowRight className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <a
+                    href="https://wa.me/23275668258?text=Hello%20CareerPilot%20Salone"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Button size="lg" className="w-full px-12 bg-[#25D366] hover:bg-[#128C7E] text-white gap-4 h-20 rounded-3xl text-xl font-black uppercase tracking-widest shadow-2xl shadow-green-500/30 group">
+                      <FaWhatsapp className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+                      Connect Instantly
+                      <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                    </Button>
+                  </a>
+                </div>
               </div>
 
-              <div className="pt-6">
-                <a
-                  href="https://wa.me/23275977351?text=Hello%20CareerPilot%20Salone"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button size="lg" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 h-14 rounded-2xl text-lg shadow-xl shadow-green-500/20">
-                    <FaWhatsapp className="w-6 h-6" />
-                    Start Chatting Now
-                    <ArrowRight className="w-5 h-5" />
-                  </Button>
-                </a>
-                <p className="text-center text-xs text-muted-foreground mt-4 font-medium uppercase tracking-[0.2em]">
-                  Official SIERRA LEONE Number: +232 75 977351
-                </p>
+              {/* Quick Features Grid */}
+              <div className="grid grid-cols-2 gap-4 pt-8 border-t border-slate-100">
+                {[
+                  { label: "CV Generation", icon: CheckCheck },
+                  { label: "Job Alerts", icon: Zap },
+                  { label: "Roadmaps", icon: ArrowRight },
+                  { label: "Mentorship", icon: Sparkles }
+                ].map((f, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <f.icon className="w-4 h-4 text-[#1FA774]" /> {f.label}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -240,3 +266,4 @@ export default function WhatsAppPage() {
     </div>
   )
 }
+

@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Search, GraduationCap, ExternalLink, Bookmark, Calendar, Globe, Loader2 } from "lucide-react"
+import { Search, GraduationCap, ExternalLink, Bookmark, Calendar, Globe, Loader2, Sparkles, Zap, Lightbulb, ArrowLeft } from "lucide-react"
 import { getScholarships } from "@/lib/db"
 import { toast } from "sonner"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
 
 export default function ScholarshipsPage() {
     const [searchTerm, setSearchTerm] = useState("")
@@ -56,233 +57,183 @@ export default function ScholarshipsPage() {
 
     return (
         <DashboardLayout>
-            <div className="space-y-6">
-                {/* PREMIUM HERO HEADER */}
-                <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[340px] flex items-center shadow-2xl group">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src="/images/dashboard/salone_success.png"
-                            alt="Scholarships"
-                            fill
-                            className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
-                    </div>
-
-                    <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-                            <GraduationCap className="w-4 h-4 text-[#1FA774]" />
-                            <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Global Access</span>
+            <div className="max-w-6xl mx-auto space-y-10 pb-20">
+                {/* --- PREMIUM HERO SECTION --- */}
+                <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[400px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
+                                        <div className="relative z-20 w-full p-10 md:p-16 space-y-8">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full backdrop-blur-md">
+                            <Sparkles className="w-4 h-4 text-[#1FA774]" />
+                            <span className="text-[#1FA774] font-black text-[10px] uppercase tracking-[0.2em]">Global Opportunity Access</span>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
-                            Scholarship <span className="text-[#F4C430]">Future</span>
-                        </h1>
-                        <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-                            Find your path to local and international higher education with curated funding opportunities for Sierra Leonean students.
-                        </p>
 
-                        <div className="flex items-center gap-6 pt-2">
+                        <div className="space-y-6">
+                            <h1 className="text-5xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                                Funding <br /> <span className="text-gradient-salone brightness-125">Opportunities</span>
+                            </h1>
+                            <p className="text-xl md:text-2xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed border-l-4 border-[#1FA774] pl-6 italic">
+                                Find your path to local and international higher education with curated funding for Sierra Leonean students.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-6 pt-2">
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-white">{scholarships.length}</span>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Active</span>
+                                <span className="text-4xl font-black text-white">{scholarships.length}</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Active Grants</span>
                             </div>
-                            <div className="w-px h-8 bg-white/10" />
+                            <div className="w-px h-12 bg-white/10" />
                             <div className="flex flex-col">
-                                <span className="text-2xl font-black text-[#F4C430]">{scholarships.filter(s => s.category?.includes("international")).length}</span>
-                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">International</span>
+                                <span className="text-4xl font-black text-[#1FA774]">{scholarships.filter(s => s.category?.includes("international")).length}</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">International</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Search */}
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                        placeholder="Search scholarships by title, organization, or field..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-9 h-12"
-                    />
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Card className="p-4 bg-primary/5 border-primary/10">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                <GraduationCap className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-black text-slate-800">{scholarships.length}</p>
-                                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Available</p>
-                            </div>
-                        </div>
-                    </Card>
-                    <Card className="p-4 bg-emerald-50/50 border-emerald-100">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
-                                <Globe className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-black text-slate-800">
-                                    {scholarships.filter(s => s.category?.includes("international")).length}
-                                </p>
-                                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">International</p>
-                            </div>
-                        </div>
-                    </Card>
-                    <Card className="p-4 bg-slate-50 border-slate-100">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500">
-                                <Bookmark className="w-5 h-5" />
-                            </div>
-                            <div>
-                                <p className="text-2xl font-black text-slate-800">{savedScholarships.length}</p>
-                                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Saved Items</p>
-                            </div>
+                {/* --- SMART SEARCH --- */}
+                <div className="relative -mt-12 z-30 max-w-3xl mx-auto px-6">
+                    <Card className="p-4 bg-white border-none shadow-2xl rounded-[2.5rem] flex flex-col md:flex-row gap-4 items-center border-b-4 border-slate-100">
+                        <div className="relative flex-1 w-full group">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300 group-focus-within:text-[#1E5EFF] transition-colors" />
+                            <Input
+                                className="pl-16 h-16 rounded-2xl border-slate-50 bg-slate-50 focus:bg-white focus:ring-[#1E5EFF]/20 focus:border-[#1E5EFF] w-full text-base font-bold font-poppins shadow-inner"
+                                placeholder="Search by title, organization, or field..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
                     </Card>
                 </div>
 
-                {/* Scholarships List */}
-                <div className="space-y-6">
+                {/* --- SCHOLARSHIPS FEED --- */}
+                <div className="space-y-8 px-2">
                     {loading ? (
-                        <div className="flex flex-col items-center justify-center p-20 text-muted-foreground">
-                            <Loader2 className="w-10 h-10 animate-spin mb-4 text-primary" />
-                            <p className="font-medium">Finding the latest scholarships for you...</p>
+                        <div className="flex flex-col items-center justify-center p-32 text-slate-300">
+                            <Loader2 className="w-16 h-16 animate-spin text-[#1FA774] mb-6" />
+                            <p className="font-black uppercase tracking-[0.4em] text-[10px] italic text-[#0B1F3A]">Scanning Global Databases...</p>
                         </div>
                     ) : filteredScholarships.length === 0 ? (
-                        <Card className="p-12 text-center border-dashed border-2">
-                            <p className="text-muted-foreground font-medium">No scholarships found matching your criteria.</p>
+                        <Card className="p-20 text-center border-dashed border-4 border-slate-100 rounded-[3rem] bg-slate-50">
+                            <div className="w-20 h-20 bg-white rounded-[2rem] border border-slate-100 flex items-center justify-center mx-auto mb-6">
+                                <Search className="w-8 h-8 text-slate-200" />
+                            </div>
+                            <h3 className="text-xl font-black text-[#0B1F3A] uppercase font-poppins">No matches found</h3>
+                            <p className="text-slate-400 font-bold italic text-sm mt-2">Try adjusting your search criteria or checking back soon.</p>
                         </Card>
                     ) : (
-                        filteredScholarships.map((scholarship) => (
-                            <Card key={scholarship.id} className="p-8 hover:shadow-xl transition-all border-slate-100 group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-2 h-full bg-primary/20 group-hover:bg-primary transition-colors" />
-                                <div className="flex flex-col gap-6">
-                                    {/* Header */}
-                                    <div className="flex items-start gap-4">
-                                        <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center shrink-0 border border-primary/10">
-                                            <GraduationCap className="w-7 h-7 text-primary" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="text-2xl font-black text-slate-900 mb-1 group-hover:text-primary transition-colors">
-                                                {scholarship.title}
-                                            </h3>
-                                            <p className="font-bold text-slate-500 text-lg uppercase text-[12px] tracking-wide">
-                                                {scholarship.organization}
-                                            </p>
-                                        </div>
-                                        {scholarship.deadline && (
-                                            <Badge variant="destructive" className="h-8 gap-2 px-3 font-bold text-[10px] uppercase">
-                                                <Calendar className="w-3.5 h-3.5" />
-                                                Due: {scholarship.deadline}
-                                            </Badge>
-                                        )}
-                                    </div>
+                        <div className="grid grid-cols-1 gap-8">
+                            {filteredScholarships.map((scholarship) => (
+                                <Card key={scholarship.id} className="p-10 rounded-[3.5rem] bg-white border border-slate-50 hover:border-[#1FA774]/20 shadow-sm hover:shadow-2xl transition-all group relative overflow-hidden flex flex-col md:flex-row gap-10">
+                                    <div className="absolute top-0 right-0 w-3 h-full bg-slate-50 group-hover:bg-[#1FA774] transition-colors" />
 
-                                    {/* Description */}
-                                    <p className="text-slate-600 leading-relaxed text-sm">
-                                        {scholarship.description}
-                                    </p>
-
-                                    {/* Categories & Requirements Grid */}
-                                    <div className="grid md:grid-cols-2 gap-6 p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
-                                        <div>
-                                            <p className="text-xs font-black uppercase text-slate-400 mb-3 tracking-widest leading-none">Requirements</p>
-                                            <ul className="space-y-2">
-                                                {scholarship.requirements?.map((req: string, idx: number) => (
-                                                    <li key={idx} className="flex gap-2 text-sm text-slate-600 font-medium">
-                                                        <span className="text-primary font-bold">✓</span>
-                                                        {req}
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                    <div className="flex-1 space-y-8">
+                                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                                            <div className="flex items-start gap-6">
+                                                <div className="w-20 h-20 rounded-[1.8rem] bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 group-hover:bg-[#1FA774]/5 group-hover:border-[#1FA774]/20 transition-all">
+                                                    <GraduationCap className="w-10 h-10 text-[#0B1F3A] group-hover:text-[#1FA774] transition-colors" />
+                                                </div>
+                                                <div className="space-y-2 pt-2">
+                                                    <h3 className="text-2xl md:text-3xl font-black text-[#0B1F3A] group-hover:text-[#1E5EFF] transition-colors font-poppins leading-tight">
+                                                        {scholarship.title}
+                                                    </h3>
+                                                    <p className="font-black text-[#1FA774] text-[11px] uppercase tracking-[0.2em] italic">
+                                                        {scholarship.organization}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            {scholarship.deadline && (
+                                                <Badge className="bg-[#0B1F3A] hover:bg-red-500 text-white border-none py-2 px-5 font-black text-[10px] uppercase tracking-widest gap-3 rounded-full shadow-lg h-fit">
+                                                    <Calendar className="w-4 h-4" />
+                                                    {scholarship.deadline}
+                                                </Badge>
+                                            )}
                                         </div>
-                                        <div>
-                                            <p className="text-xs font-black uppercase text-slate-400 mb-3 tracking-widest leading-none">Target Student</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {scholarship.education_level?.map((level: string) => (
-                                                    <Badge key={level} variant="secondary" className="bg-white border-slate-200 text-slate-700 font-bold uppercase text-[10px]">
-                                                        {level}
-                                                    </Badge>
-                                                ))}
-                                                {scholarship.category?.map((cat: string) => (
-                                                    <Badge key={cat} variant="outline" className="bg-primary/5 border-primary/20 text-primary font-bold uppercase text-[10px]">
-                                                        {cat}
-                                                    </Badge>
-                                                ))}
+
+                                        <p className="text-[#0B1F3A]/70 leading-relaxed text-base font-medium font-inter border-l-4 border-slate-50 pl-6 border-transparent group-hover:border-slate-100 transition-all">
+                                            {scholarship.description}
+                                        </p>
+
+                                        <div className="grid md:grid-cols-2 gap-8 p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 group-hover:bg-white transition-all group-hover:shadow-inner">
+                                            <div className="space-y-4">
+                                                <p className="text-[10px] font-black uppercase text-slate-300 mb-2 tracking-[0.3em] italic">Candidate Profile</p>
+                                                <ul className="space-y-3">
+                                                    {scholarship.requirements?.map((req: string, idx: number) => (
+                                                        <li key={idx} className="flex gap-4 text-xs font-bold text-[#0B1F3A] font-inter">
+                                                            <div className="w-2 h-2 rounded-full bg-[#1FA774] mt-1.5 shrink-0" />
+                                                            {req}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div className="space-y-6">
+                                                <p className="text-[10px] font-black uppercase text-slate-300 mb-2 tracking-[0.3em] italic">Eligibility Vectors</p>
+                                                <div className="flex flex-wrap gap-2.5">
+                                                    {scholarship.education_level?.map((level: string) => (
+                                                        <Badge key={level} className="bg-white border-slate-200 text-[#0B1F3A] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
+                                                            {level}
+                                                        </Badge>
+                                                    ))}
+                                                    {scholarship.category?.map((cat: string) => (
+                                                        <Badge key={cat} className="bg-[#1E5EFF]/5 border-[#1E5EFF]/10 text-[#1E5EFF] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
+                                                            {cat}
+                                                        </Badge>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* Actions */}
-                                    <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                                        <Button
-                                            className="flex-1 gap-2 font-black uppercase text-xs tracking-wider h-12 shadow-lg shadow-primary/20"
-                                            onClick={() => handleApply(scholarship.link, scholarship.title)}
-                                        >
-                                            Start Application
-                                            <ExternalLink className="w-4 h-4" />
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            onClick={() => handleSave(scholarship.id)}
-                                            className={cn("gap-2 h-12 font-bold px-6 border border-slate-200", savedScholarships.includes(scholarship.id) && "bg-slate-100 border-slate-300")}
-                                        >
-                                            <Bookmark className={cn("w-4 h-4", savedScholarships.includes(scholarship.id) && "fill-current")} />
-                                            {savedScholarships.includes(scholarship.id) ? "Saved to Profile" : "Save for Later"}
-                                        </Button>
+                                        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                                            <Button
+                                                className="flex-1 h-[64px] rounded-2xl bg-[#0B1F3A] hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] shadow-2xl transition-all active:scale-95 group/btn"
+                                                onClick={() => handleApply(scholarship.link, scholarship.title)}
+                                            >
+                                                Initiate Application Phase
+                                                <ExternalLink className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                onClick={() => handleSave(scholarship.id)}
+                                                className={cn("h-[64px] rounded-2xl px-8 border-2 border-slate-100 font-black uppercase text-[10px] tracking-widest transition-all hover:bg-white active:scale-95", savedScholarships.includes(scholarship.id) ? "bg-[#1FA774]/10 border-[#1FA774]/20 text-[#1FA774]" : "text-slate-400")}
+                                            >
+                                                <Bookmark className={cn("w-5 h-5 mr-3", savedScholarships.includes(scholarship.id) && "fill-current")} />
+                                                {savedScholarships.includes(scholarship.id) ? "Tracker Active" : "Track Future"}
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            </Card>
-                        ))
+                                </Card>
+                            ))}
+                        </div>
                     )}
                 </div>
 
-                {/* Tips Card */}
-                <Card className="p-8 bg-gradient-to-r from-primary to-primary-foreground text-white border-none shadow-xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                        <GraduationCap className="w-32 h-32" />
+                {/* --- MASTERCLASS AD --- */}
+                <Card className="p-12 md:p-20 rounded-[4rem] bg-[#0B1F3A] text-white border-none shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#1FA774]/10 rounded-full blur-[100px] -z-10 group-hover:bg-[#1E5EFF]/20 transition-all duration-[5s]" />
+
+                    <div className="flex items-center gap-6 mb-12">
+                        <div className="w-16 h-16 rounded-[1.5rem] bg-slate-50 flex items-center justify-center shadow-xl shadow-emerald-500/10">
+                            <Lightbulb className="w-8 h-8 text-white" />
+                        </div>
+                        <div>
+                            <h3 className="text-3xl md:text-5xl font-black font-poppins uppercase tracking-tighter italic">Application <span className="text-[#1FA774]">Intell</span></h3>
+                            <p className="text-slate-400 font-bold font-inter text-sm">Strategic tips for the Sierra Leonean scholar</p>
+                        </div>
                     </div>
-                    <h3 className="text-xl font-black mb-6 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                            <Lightbulb className="w-6 h-6" />
-                        </div>
-                        Application Masterclass Tips
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-8 relative z-10">
-                        <div className="space-y-4">
-                            <div className="flex gap-4">
-                                <div className="text-2xl font-black opacity-30">01</div>
-                                <p className="text-sm font-medium leading-relaxed">Start your application early - most scholarships have extremely competitive deadlines and complex documentation needed.</p>
+
+                    <div className="grid md:grid-cols-2 gap-12 relative z-10">
+                        {[
+                            { id: "01", text: "Start your application early - most scholarships have extremely competitive deadlines and complex documentation needed na Salone." },
+                            { id: "02", text: "Prepare strong recommendation letters from teachers or mentors who know your work personally." },
+                            { id: "03", text: "Write a compelling personal statement that connects your past experience to your future vision for Sierra Leone." },
+                            { id: "04", text: "Keep your academic records current. Maintain a digital folder with all your certificates ready for upload." }
+                        ].map((tip) => (
+                            <div key={tip.id} className="flex gap-8 group/tip">
+                                <div className="text-5xl font-black text-white/5 font-poppins group-hover/tip:text-[#1FA774]/20 transition-colors">{tip.id}</div>
+                                <p className="text-base text-slate-300 font-medium leading-relaxed font-inter italic pt-2">{tip.text}</p>
                             </div>
-                            <div className="flex gap-4">
-                                <div className="text-2xl font-black opacity-30">02</div>
-                                <p className="text-sm font-medium leading-relaxed">Prepare strong recommendation letters from teachers or mentors who know your work personally.</p>
-                            </div>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="flex gap-4">
-                                <div className="text-2xl font-black opacity-30">03</div>
-                                <p className="text-sm font-medium leading-relaxed">Write a compelling personal statement that connects your past experience to your future vision for Sierra Leone.</p>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-2xl font-black opacity-30">04</div>
-                                <p className="text-sm font-medium leading-relaxed">Keep your academic records current. Maintain a digital folder with all your certificates ready for upload.</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </Card>
             </div>
         </DashboardLayout>
     )
-}
-
-import { Lightbulb } from "lucide-react"
-
-function cn(...inputs: any[]) {
-    return inputs.filter(Boolean).join(' ')
 }

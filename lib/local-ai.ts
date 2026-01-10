@@ -32,21 +32,25 @@ export async function generateChatResponse(
     if (['CV', 'RESUME'].some(k => upperMsg.includes(k))) return getCVResponse();
     if (['MENTOR', 'COACH'].some(k => upperMsg.includes(k))) return getMentorResponse();
 
-    // 2. KRIO / SALONE GREETINGS
-    const krioGreets = ['kusheh', 'bodi', 'wetin', 'salone', 'leone', 'una', 'pikin', 'fambul', 'tenki', 'gladi'];
+    // 2. KRIO / SALONE GREETINGS & CASUAL
+    const krioGreets = ['kusheh', 'bodi', 'wetin', 'salone', 'leone', 'una', 'pikin', 'fambul', 'tenki', 'gladi', 'hello', 'hi', 'hey', 'start'];
     const isKrio = krioGreets.some(k => lowerMsg.includes(k));
 
-    if (isKrio && trimmedMsg.length < 20) {
+    if (isKrio && trimmedMsg.length < 50) {
         return `Kusheh fambul! 🇸🇱 Ah gladi for help you with your career path na Salone. 
         
-You kin ask me anything about jobs, universities (lek FBC, IPAM, Njala), or how for build a sweet CV.
-        
+You kin ask me anything about:
+• **Jobs** (Software, Nursing, Banking...)
+• **Universities** (FBC, Njala, IPAM...)
+• **CVs** (How for road am better)
+
 Tell me wetin you de study or wetin you wan for do? Or type **MENU** for see all de things ah kin do.`;
     }
 
     // 3. CAREER SPECIFIC MATCHING
     const matchingCareer = SIERRA_LEONE_CAREERS.find(c => lowerMsg.includes(c.title.toLowerCase()) || c.keywords.some(k => lowerMsg.includes(k)));
-    if (matchingCareer && trimmedMsg.length < 50) {
+    // Relaxed length constraint to allow for "Tell me about software developers"
+    if (matchingCareer) {
         return generateComprehensiveGuidance(matchingCareer.title);
     }
 
@@ -56,17 +60,23 @@ Tell me wetin you de study or wetin you wan for do? Or type **MENU** for see all
         return faqAnswer;
     }
 
-    // If it looks like a profile description, give comprehensive guidance
-    if (trimmedMsg.length > 30 || siteContext.includes("Guidance")) {
-        return generateComprehensiveGuidance(trimmedMsg);
+    // 5. If it looks like a profile description (even short ones), give comprehensive guidance or ask for more
+    if (trimmedMsg.length > 20 || siteContext.includes("Guidance")) {
+        // Attempt to extract interest even from short text like "I want to be a doctor"
+        const potentialCareer = SIERRA_LEONE_CAREERS.find(c => trimmedMsg.toLowerCase().includes(c.title.toLowerCase().split(' ')[0]));
+        if (potentialCareer) return generateComprehensiveGuidance(potentialCareer.title);
+
+        if (trimmedMsg.length > 30) return generateComprehensiveGuidance(trimmedMsg);
     }
 
     return `I'm here to help you navigate your career path in Sierra Leone! 🇸🇱
 
-To give you the best advice, tell me:
+I didn't quite catch that. To give you the best advice, tell me:
 1. Wetin you study? (Education)
 2. Wetin you lek for do? (Interests)
 3. Which job you de look for?
+
+Example: "I want to be a Nurse" or "Jobs in Tech"
 
 Or type **MENU** to see options.`;
 }

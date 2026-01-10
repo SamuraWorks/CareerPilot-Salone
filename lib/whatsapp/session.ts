@@ -3,6 +3,7 @@ export interface SessionState {
     data: Record<string, any>;
     quizIndex?: number;
     scores?: Record<string, number>;
+    language?: 'en' | 'krio';
 }
 
 // In-memory session store (Mock Version)
@@ -12,7 +13,7 @@ const MOCK_SESSIONS = new Map<string, SessionState>();
 export async function getSession(phoneNumber: string): Promise<SessionState> {
     const session = MOCK_SESSIONS.get(phoneNumber);
     if (!session) {
-        return { step: 'START', data: {} };
+        return { step: 'START', data: {}, language: 'en' };
     }
     return session;
 }

@@ -1,23 +1,15 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Poppins } from "next/font/google"
+import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import "@fontsource/poppins/500.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
 import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/lib/auth-context"
 import { AuthGuard } from "@/components/auth-guard"
-import { WhatsAppFAB } from "@/components/whatsapp-fab"
+
 import { Navigation } from "@/components/navigation"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-poppins"
-})
 
 export const metadata: Metadata = {
   title: {
@@ -80,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`${inter.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#FFFFFF" />
@@ -91,10 +83,8 @@ export default function RootLayout({
         <AuthProvider>
           <AuthGuard>
             <Navigation />
-            <div className="pt-16">
-              {children}
-            </div>
-            <WhatsAppFAB />
+            {children}
+
           </AuthGuard>
           <Toaster richColors position="top-right" />
           <Analytics />

@@ -1,235 +1,180 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { DashboardLayout } from "@/components/dashboard-layout"
-import { CareerCard } from "@/components/career-card"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Search, Briefcase, TrendingUp, Users, Loader2, Filter, Sparkles } from "lucide-react"
-import { type Career } from "@/lib/sample-data"
-import { useSearchParams } from "next/navigation"
+import { Input } from "@/components/ui/input"
+import { Footer } from "@/components/footer"
+import { CareerCard } from "@/components/career-card"
+import { DashboardLayout } from "@/components/dashboard-layout"
+import { sampleCareers } from "@/lib/sample-data"
+import { Search, Briefcase, TrendingUp, Users, Sparkles, MapPin, ArrowRight, Target } from "lucide-react"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
 
 export default function CareersPage() {
-  const searchParams = useSearchParams()
-  const initialSearch = searchParams.get("search") || ""
-
-  const [searchTerm, setSearchTerm] = useState(initialSearch)
+  const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [careers, setCareers] = useState<Career[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const query = searchParams.get("search")
-    if (query !== null) setSearchTerm(query)
-  }, [searchParams])
+  const categories = Array.from(new Set(sampleCareers.map((c) => c.category)))
 
-  useEffect(() => {
-    async function fetchCareers() {
-      try {
-        setLoading(true)
-        await new Promise(resolve => setTimeout(resolve, 400))
-        const { SIERRA_LEONE_CAREERS } = await import("@/lib/career-data")
-
-        const mappedCareers: Career[] = SIERRA_LEONE_CAREERS.map((c: any, index: number) => {
-          const leMatch = c.salaryUSD.match(/([\d,]+)/g);
-          const minLe = leMatch ? parseInt(leMatch[0].replace(/,/g, '')) : 0;
-          const maxLe = leMatch && leMatch.length > 1 ? parseInt(leMatch[1].replace(/,/g, '')) : minLe;
-
-          const usdMatch = c.salaryRange.match(/([\d,]+)/g);
-          const minUsd = usdMatch ? parseInt(usdMatch[0].replace(/,/g, '')) : 0;
-          const maxUsd = usdMatch && usdMatch.length > 1 ? parseInt(usdMatch[1].replace(/,/g, '')) : minUsd;
-
-          return {
-            id: (index + 1).toString(),
-            title: c.title,
-            description: c.description,
-            skills: c.requiredSkills,
-            salary: c.salaryUSD,
-            salaryUsd: c.salaryRange,
-            salaryMinLe: minLe,
-            salaryMaxLe: maxLe,
-            salaryMinUsd: minUsd,
-            salaryMaxUsd: maxUsd,
-            demand: c.demand,
-            category: c.industry,
-            imageUrl: c.image || "/placeholder.svg"
-          };
-        });
-
-        setCareers(mappedCareers)
-      } catch (err) {
-        console.error("Error fetching careers:", err)
-        setError("Failed to load careers. Please try again later.")
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchCareers()
-  }, [])
-
-  const categories = Array.from(new Set(careers.map((c: Career) => c.category)))
-
-  const filteredCareers = careers.filter((career: Career) => {
+  const filteredCareers = sampleCareers.filter((career) => {
     const matchesSearch =
       career.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       career.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (career.skills && career.skills.some((skill: string) => skill.toLowerCase().includes(searchTerm.toLowerCase())))
+      career.skills.some((skill) => skill.toLowerCase().includes(searchTerm.toLowerCase()))
 
     const matchesCategory = !selectedCategory || career.category === selectedCategory
+
     return matchesSearch && matchesCategory
   })
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-700 pb-20">
+      <div className="space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-700">
 
-        {/* PREMIUM HERO HEADER */}
-        <section className="relative rounded-[3rem] overflow-hidden bg-[#0B1F3A] min-h-[400px] flex items-center shadow-2xl group">
+        {/* --- PREMIUM DYNAMIC HERO --- */}
+        <section className="relative rounded-[3.5rem] overflow-hidden bg-[#0B1F3A] min-h-[360px] flex items-center shadow-2xl group border-b-8 border-b-[#1FA774]">
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/dashboard/salone_success.png"
-              alt="Careers in Sierra Leone"
+              src="/salone_education.png"
+              alt="Careers Library"
               fill
-              className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-105"
+              className="object-cover brightness-75 group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B1F3A] via-[#0B1F3A]/80 to-transparent z-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(31,167,116,0.15),transparent)] z-10" />
+            <div className="absolute inset-0 bg-[#0B1F3A]/80" />
           </div>
 
-          <div className="relative z-20 max-w-4xl p-10 md:p-16 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full backdrop-blur-md">
-              <Sparkles className="w-4 h-4 text-[#1FA774]" />
-              <span className="text-[#1FA774] font-bold text-xs uppercase tracking-widest">Market Insights 2026</span>
+          <div className="relative z-20 w-full p-10 md:p-16 space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#1FA774]/20 border border-[#1FA774]/30 rounded-full backdrop-blur-md">
+              <Sparkles className="w-4 h-4 text-[#4ADE80]" />
+              <span className="text-[#4ADE80] font-black text-[10px] uppercase tracking-[0.2em]">Career Intelligence Repository</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight font-poppins">
-              Explore Careers in <br /><span className="text-[#F4C430]">Sierra Leone</span>
-            </h1>
-            <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-xl leading-relaxed">
-              Find verified career paths with realistic salary data, required skills, and local university recommendations.
-            </p>
 
-            <div className="flex items-center gap-6 pt-2">
-              <div className="flex flex-col">
-                <span className="text-2xl font-black text-white">{careers.length}</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Paths</span>
-              </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-2xl font-black text-[#F4C430]">{categories.length}</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Industries</span>
-              </div>
+            <div className="space-y-4 max-w-3xl">
+              <h1 className="text-4xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter font-poppins uppercase">
+                Explore <br /> <span className="text-gradient-salone brightness-125">Opportunities</span>
+              </h1>
+              <p className="text-lg md:text-xl text-slate-300 font-medium font-inter max-w-2xl leading-relaxed italic border-l-4 border-[#1FA774] pl-6">
+                Discover your path within Sierra Leone's evolving professional landscape. From tech to mining, find where you fit.
+              </p>
             </div>
-          </div>
 
-          <div className="absolute top-1/2 right-20 -translate-y-1/2 hidden lg:block opacity-10">
-            <Briefcase className="w-64 h-64 text-white hover:scale-110 transition-transform duration-700" />
+            {/* Quick Stats Banner */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl">
+              {[
+                { label: "Vetted Paths", val: `${sampleCareers.length}+`, icon: Briefcase, color: "text-blue-400" },
+                { label: "Active Users", val: "8.5K", icon: Users, color: "text-[#1FA774]" },
+                { label: "Growth Sectors", val: "12+", icon: TrendingUp, color: "text-amber-400" },
+                { label: "Success Rate", val: "92%", icon: Target, color: "text-indigo-400" }
+              ].map((s, i) => (
+                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl">
+                  <div className="flex items-center gap-3 mb-1">
+                    <s.icon className={cn("w-4 h-4", s.color)} />
+                    <span className="text-white font-black text-lg font-poppins">{s.val}</span>
+                  </div>
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{s.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* SEARCH & FILTERS */}
-        <div className="space-y-6">
-          <div className="flex flex-col lg:flex-row gap-6 items-end lg:items-center">
-            <div className="relative flex-1 group w-full">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400 group-focus-within:text-[#1FA774] transition-colors" />
-              <input
-                type="text"
-                placeholder="Search by job title, skills, or industry..."
-                className="w-full h-16 pl-14 pr-6 rounded-3xl bg-white border-2 border-slate-100 focus:border-[#1FA774] outline-none font-inter text-lg shadow-sm focus:shadow-md transition-all"
+        {/* Search and Filter Architecture */}
+        <div className="sticky top-0 z-30 py-6 bg-white/80 backdrop-blur-md border-b border-slate-100 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-6 items-center">
+            <div className="relative w-full max-w-xl group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-[#1E5EFF] transition-colors" />
+              <Input
+                type="search"
+                placeholder="Find your future: search by career, skill, or industry..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-14 pl-12 rounded-2xl border-slate-200 bg-slate-50 focus-visible:ring-[#1E5EFF]/20 font-medium text-base shadow-sm group-hover:border-slate-300 transition-all"
               />
             </div>
 
-            <div className="flex gap-3 w-full lg:w-auto">
-              <Button variant="outline" className="h-16 px-8 rounded-3xl border-slate-100 font-bold font-poppins text-slate-600 gap-2">
-                <Filter className="w-5 h-5" /> Filter
-              </Button>
-            </div>
-          </div>
-
-          {/* CATEGORY PILLS */}
-          <div className="flex flex-wrap gap-2 pt-2">
-            <button
-              onClick={() => setSelectedCategory(null)}
-              className={`px-6 py-3 rounded-full font-poppins font-bold text-sm tracking-wide transition-all ${selectedCategory === null
-                ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
-                : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
-                }`}
-            >
-              All Industries
-            </button>
-            {categories.map((cat: any) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-3 rounded-full font-poppins font-bold text-sm tracking-wide transition-all ${selectedCategory === cat
-                  ? 'bg-[#0B1F3A] text-white shadow-lg scale-105'
-                  : 'bg-white text-slate-500 border border-slate-100 hover:border-slate-300'
-                  }`}
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-end flex-1">
+              <Button
+                variant={selectedCategory === null ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(null)}
+                className={cn(
+                  "h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[9px]",
+                  selectedCategory === null ? "bg-[#0B1F3A] text-white" : "border-slate-200"
+                )}
               >
-                {cat}
-              </button>
-            ))}
+                All Vectors
+              </Button>
+              {categories.map((category) => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(category)}
+                  className={cn(
+                    "h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[9px]",
+                    selectedCategory === category ? "bg-[#1E5EFF] text-white border-[#1E5EFF]" : "border-slate-200"
+                  )}
+                >
+                  {category}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* CAREER GRID */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-32 gap-6 bg-slate-50/50 rounded-[3rem] border border-dashed border-slate-200">
-            <Loader2 className="w-16 h-16 text-[#1FA774] animate-spin" />
-            <p className="text-slate-500 font-bold font-poppins text-lg animate-pulse">Scanning the Salone job market...</p>
-          </div>
-        ) : error ? (
-          <Card className="p-12 border-red-100 bg-red-50 text-center rounded-[3rem] space-y-6 shadow-sm">
-            <p className="text-red-700 font-bold font-poppins text-xl">{error}</p>
-            <Button onClick={() => window.location.reload()} className="bg-red-600 hover:bg-red-700 rounded-2xl h-12 px-8 shadow-lg">
-              Try Again
+        {/* Results Metadata */}
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic leading-none">
+            Synthesized {filteredCareers.length} Career Vectors
+          </p>
+        </div>
+
+        {/* Career Intelligence Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCareers.map((career) => (
+            <CareerCard key={career.id} career={career} />
+          ))}
+        </div>
+
+        {/* Null State Architecture */}
+        {filteredCareers.length === 0 && (
+          <div className="text-center py-40 bg-slate-50 rounded-[4rem] border-2 border-dashed border-slate-200">
+            <Search className="w-16 h-16 text-slate-200 mx-auto mb-6" />
+            <h3 className="text-2xl font-black text-[#0B1F3A] uppercase tracking-tighter mb-2">No Vectors Found</h3>
+            <p className="text-slate-500 font-medium mb-8">System could not locate matches for your current parameters.</p>
+            <Button
+              onClick={() => {
+                setSearchTerm("")
+                setSelectedCategory(null)
+              }}
+              className="h-14 px-10 rounded-2xl bg-[#0B1F3A] text-white font-black uppercase tracking-widest text-[10px]"
+            >
+              Reset Intelligence Filter
             </Button>
-          </Card>
-        ) : filteredCareers.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredCareers.map((career: Career) => (
-              <CareerCard key={career.id} career={career} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-32 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
-            <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-              <Search className="w-10 h-10 text-slate-300" />
-            </div>
-            <h3 className="text-2xl font-bold font-poppins text-slate-900 mb-2">No matches found</h3>
-            <p className="text-slate-500 font-medium font-inter">Try searching for something else or changing the industry filter.</p>
           </div>
         )}
 
-        {/* MARKET SNAPSHOT */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-12">
-          <Card className="p-8 border-none bg-slate-900 text-white rounded-[2rem] space-y-4 shadow-xl">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-              <TrendingUp className="text-[#1FA774] w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-bold font-poppins">High Demand</h4>
-            <p className="text-slate-400 text-sm font-inter leading-relaxed">Tech, Healthcare, and Engineering remain the fastest growing sectors in Sierra Leone for 2026.</p>
-          </Card>
-          <Card className="p-8 border-none bg-[#1FA774] text-white rounded-[2rem] space-y-4 shadow-xl">
-            <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center">
-              <Briefcase className="text-white w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-bold font-poppins">Local Opportunities</h4>
-            <p className="text-white/80 text-sm font-inter leading-relaxed">We've verified over 100+ local career paths with specific salary ranges for Junior, Mid, and Senior levels.</p>
-          </Card>
-          <Card className="p-8 border-none bg-[#F4C430] text-[#0B1F3A] rounded-[2rem] space-y-4 shadow-xl">
-            <div className="w-12 h-12 bg-[#0B1F3A]/5 rounded-2xl flex items-center justify-center">
-              <Users className="text-[#0B1F3A] w-6 h-6" />
-            </div>
-            <h4 className="text-xl font-bold font-poppins">Mentorship Ready</h4>
-            <p className="text-[#0B1F3A]/70 text-sm font-inter leading-relaxed">Every career path features a list of local professionals who are ready to guide you on your journey.</p>
-          </Card>
+        {/* CTA Banner */}
+        <section className="bg-slate-50 rounded-[4rem] p-12 md:p-24 text-center space-y-8 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#1FA774]/5 rounded-full blur-[100px] group-hover:scale-110 transition-transform" />
+          <h2 className="text-3xl md:text-5xl font-black text-[#0B1F3A] tracking-tight font-poppins uppercase leading-none italic">
+            Don't see your <br /> <span className="text-[#1FA774]">Dream Path</span>?
+          </h2>
+          <p className="text-slate-500 font-medium max-w-2xl mx-auto italic">
+            Our AI Mentor can synthesize a personalized career roadmap for any profession, even those not listed in our main repository.
+          </p>
+          <div className="pt-4">
+            <Link href="/guidance">
+              <Button size="lg" className="h-[72px] px-12 rounded-[2rem] bg-[#0B1F3A] text-white font-black uppercase tracking-[0.2em] text-[10px] hover:bg-[#1E5EFF] transition-all shadow-2xl active:scale-95">
+                Consult AI Mentor Now
+              </Button>
+            </Link>
+          </div>
         </section>
       </div>
+      <Footer />
     </DashboardLayout>
   )
 }

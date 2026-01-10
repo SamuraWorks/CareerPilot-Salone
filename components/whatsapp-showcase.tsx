@@ -65,10 +65,10 @@ export function WhatsAppShowcase() {
                         </div>
 
                         <div className="pt-4">
-                            <a href="https://wa.me/23275977351?text=Hi%20CareerPilot!%20I%20need%20help%20with%20my%20career." target="_blank" rel="noopener noreferrer">
+                            <a href="https://wa.me/23275668258?text=Hi%20CareerPilot!%20I%20need%20help%20with%20my%20career." target="_blank" rel="noopener noreferrer">
                                 <Button size="lg" className="h-16 px-10 text-xl font-black bg-[#25D366] hover:bg-[#128C7E] text-white rounded-2xl shadow-2xl shadow-green-500/20 gap-3">
                                     <FaWhatsapp className="w-6 h-6" />
-                                    Chat on WhatsApp (+232 75 977351)
+                                    Chat on WhatsApp (+232 75 668258)
                                 </Button>
                             </a>
                         </div>
@@ -77,7 +77,7 @@ export function WhatsAppShowcase() {
                     {/* WhatsApp Mockup */}
                     <div className="flex-1 relative w-full max-w-[400px]">
                         {/* Background Decoration */}
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-[#25D366]/20 to-primary/20 blur-3xl rounded-full opacity-50" />
+                        <div className="absolute -inset-4 bg-[#25D366]/20 blur-3xl rounded-full opacity-50" />
 
                         <Card className="relative overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] rounded-[2.5rem] border-[8px] border-slate-900 aspect-[9/19]">
                             {/* Phone Header */}
