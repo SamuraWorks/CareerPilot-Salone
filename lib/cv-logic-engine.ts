@@ -10,6 +10,12 @@ export interface UserProfile {
     targetRole: string
     skills: string[]
     projectCount: number
+<<<<<<< HEAD
+=======
+    impact_metrics?: string
+    leadership_experience?: string
+    unique_hook?: string
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 }
 
 export interface LayoutStrategy {

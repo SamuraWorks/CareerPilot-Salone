@@ -37,7 +37,14 @@ export function CoverLetterGenerator() {
             yearsExperience: 2, // Default fallback
             targetRole: job.title,
             skills: profile?.hardSkills || [],
+<<<<<<< HEAD
             projectCount: 0
+=======
+            projectCount: 0,
+            impact_metrics: profile?.impact_metrics || profile?.resumeData?.impactMetric,
+            leadership_experience: profile?.leadership_experience || profile?.resumeData?.leadershipAction || profile?.resumeData?.leadership,
+            unique_hook: profile?.unique_hook || profile?.resumeData?.professionalHook
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
         }
 
         try {

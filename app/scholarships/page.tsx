@@ -58,7 +58,11 @@ export default function ScholarshipsPage() {
 
     return (
         <DashboardLayout>
+<<<<<<< HEAD
             <div className="flex flex-col min-h-screen bg-[#F9FAFB] -m-4 md:-m-8 lg:-m-10">
+=======
+            <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
                 <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center mb-12">

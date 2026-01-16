@@ -12,6 +12,10 @@ export interface Mentor {
     availability: 'Free' | 'Sponsored' | 'Paid';
     credibility: string;
     insights: string[];
+<<<<<<< HEAD
+=======
+    menteesCount?: number;
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 }
 
 export const MOCK_MENTORS: Mentor[] = [

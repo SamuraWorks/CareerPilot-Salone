@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+<<<<<<< HEAD
+=======
+import { Textarea } from "@/components/ui/textarea"
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 import {
   User,
   FileText,
@@ -40,7 +44,14 @@ export default function ProfilePage() {
     name: globalProfile.fullName,
     university: globalProfile.educationLevel,
     email: "mentor@careerpilot.sl", // Display purposes for now
+<<<<<<< HEAD
     phone: globalProfile.whatsappNumber || "Not Linked"
+=======
+    phone: globalProfile.whatsappNumber || "Not Linked",
+    impactMetric: globalProfile.resumeData?.impactMetric || "",
+    leadershipAction: globalProfile.resumeData?.leadershipAction || globalProfile.resumeData?.leadership || "",
+    professionalHook: globalProfile.resumeData?.professionalHook || ""
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
   })
 
   // Sync if global changes
@@ -49,7 +60,14 @@ export default function ProfilePage() {
       name: globalProfile.fullName,
       university: globalProfile.educationLevel,
       email: "mentor@careerpilot.sl",
+<<<<<<< HEAD
       phone: globalProfile.whatsappNumber || "Not Linked"
+=======
+      phone: globalProfile.whatsappNumber || "Not Linked",
+      impactMetric: globalProfile.resumeData?.impactMetric || "",
+      leadershipAction: globalProfile.resumeData?.leadershipAction || globalProfile.resumeData?.leadership || "",
+      professionalHook: globalProfile.resumeData?.professionalHook || ""
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     })
     setWhatsappEnabled(globalProfile.whatsappSubscribed)
     setLanguage(globalProfile.preferredLanguage || "English")
@@ -60,7 +78,17 @@ export default function ProfilePage() {
       fullName: profile.name,
       educationLevel: profile.university,
       whatsappNumber: profile.phone,
+<<<<<<< HEAD
       whatsappSubscribed: whatsappEnabled
+=======
+      whatsappSubscribed: whatsappEnabled,
+      resumeData: {
+        ...globalProfile.resumeData,
+        impactMetric: profile.impactMetric,
+        leadershipAction: profile.leadershipAction,
+        professionalHook: profile.professionalHook
+      }
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     })
     setIsEditing(false)
     toast.success("Profile updated successfully!", {
@@ -80,7 +108,14 @@ export default function ProfilePage() {
       name: globalProfile.fullName,
       university: globalProfile.educationLevel,
       email: "mentor@careerpilot.sl",
+<<<<<<< HEAD
       phone: globalProfile.whatsappNumber || "Not Linked"
+=======
+      phone: globalProfile.whatsappNumber || "Not Linked",
+      impactMetric: globalProfile.resumeData?.impactMetric || "",
+      leadershipAction: globalProfile.resumeData?.leadershipAction || globalProfile.resumeData?.leadership || "",
+      professionalHook: globalProfile.resumeData?.professionalHook || ""
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     })
     setIsEditing(false)
   }
@@ -229,6 +264,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-6 relative z-10">
+<<<<<<< HEAD
               <div className="space-y-3">
                 <Label className="text-[10px] font-black font-sans text-slate-400 uppercase tracking-[0.3em] px-2 italic">Primary Mission</Label>
                 <div className="p-6 rounded-[2rem] bg-slate-50 font-black font-sans text-lg text-[#0B1F3A] border-l-4 border-[#1FA774] italic">
@@ -249,6 +285,89 @@ export default function ProfilePage() {
                     <span className="text-sm text-slate-400 italic px-2">No interests logged.</span>
                   )}
                 </div>
+=======
+              {!isEditing ? (
+                <>
+                  <div className="space-y-3">
+                    <Label className="text-[10px] font-black font-sans text-slate-400 uppercase tracking-[0.3em] px-2 italic">Primary Mission</Label>
+                    <div className="p-6 rounded-[2rem] bg-slate-50 font-black font-sans text-lg text-[#0B1F3A] border-l-4 border-[#1FA774] italic">
+                      {globalProfile.careerGoal || "Undefined"}
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-black font-sans text-slate-400 uppercase tracking-[0.3em] px-2 italic">Professional Hook</Label>
+                    <p className="text-sm font-bold text-slate-600 px-2 italic">{profile.professionalHook || "No hook defined."}</p>
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold font-sans text-slate-400 uppercase tracking-wide">Target Role / Career Goal</Label>
+                    <Input
+                      value={globalProfile.careerGoal}
+                      onChange={(e) => updateProfile({ careerGoal: e.target.value })}
+                      className="h-12 rounded-xl border-slate-200"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs font-bold font-sans text-slate-400 uppercase tracking-wide">Professional Hook</Label>
+                    <Textarea
+                      value={profile.professionalHook}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setProfile({ ...profile, professionalHook: e.target.value })}
+                      className="rounded-xl border-slate-200 min-h-[100px]"
+                      placeholder="What makes you unique?"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </Card>
+
+          {/* High Impact Metrics - NEW SECTION */}
+          <Card className="p-10 rounded-[3.5rem] border-none bg-emerald-50 shadow-sm hover:shadow-2xl transition-all space-y-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.05] grayscale transition-all group-hover:opacity-10">
+              <Zap className="w-32 h-32" />
+            </div>
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-emerald-100">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black font-sans uppercase tracking-tighter text-[#0B1F3A] italic">High-Value Intel</h3>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 relative z-10">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black font-sans text-slate-400 uppercase tracking-[0.3em] px-2 italic">Impact Metric</Label>
+                {!isEditing ? (
+                  <div className="p-5 rounded-2xl bg-white border border-emerald-100 font-bold font-sans text-slate-900 shadow-sm">
+                    {profile.impactMetric || "No metrics recorded."}
+                  </div>
+                ) : (
+                  <Input
+                    value={profile.impactMetric}
+                    onChange={(e) => setProfile({ ...profile, impactMetric: e.target.value })}
+                    className="h-12 rounded-xl border-emerald-200 bg-white"
+                    placeholder="e.g. 20% Growth in Sales"
+                  />
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black font-sans text-slate-400 uppercase tracking-[0.3em] px-2 italic">Leadership Experience</Label>
+                {!isEditing ? (
+                  <div className="p-5 rounded-2xl bg-white border border-emerald-100 font-bold font-sans text-slate-900 shadow-sm">
+                    {profile.leadershipAction || "No leadership roles logged."}
+                  </div>
+                ) : (
+                  <Input
+                    value={profile.leadershipAction}
+                    onChange={(e) => setProfile({ ...profile, leadershipAction: e.target.value })}
+                    className="h-12 rounded-xl border-emerald-200 bg-white"
+                    placeholder="e.g. Led team of 5 developers"
+                  />
+                )}
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
               </div>
             </div>
           </Card>

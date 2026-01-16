@@ -62,6 +62,13 @@ export interface UserProfile {
   challenges?: string[]
   profilePhoto?: string
   targetRole?: string
+<<<<<<< HEAD
+=======
+  // Top-level mapped fields for direct consistency with DB
+  impact_metrics?: string
+  leadership_experience?: string
+  unique_hook?: string
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 }
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -161,6 +168,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         whatsapp_number: newData.whatsappNumber || profile.whatsappNumber,
         whatsapp_subscribed: newData.whatsappSubscribed !== undefined ? newData.whatsappSubscribed : profile.whatsappSubscribed,
         preferred_language: newData.preferredLanguage || profile.preferredLanguage,
+<<<<<<< HEAD
+=======
+        impact_metrics: newData.resumeData?.impactMetric || profile.resumeData?.impactMetric || null,
+        leadership_experience: newData.resumeData?.leadershipAction || newData.resumeData?.leadership || profile.resumeData?.leadershipAction || profile.resumeData?.leadership || null,
+        unique_hook: newData.resumeData?.professionalHook || profile.resumeData?.professionalHook || null,
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
         updated_at: new Date().toISOString()
       }
 

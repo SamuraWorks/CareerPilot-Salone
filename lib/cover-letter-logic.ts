@@ -68,6 +68,12 @@ export function constructCoverLetterPrompt(profile: UserProfile, job: JobData, t
     - Years Experience: ${profile.yearsExperience}
     - Top Skills: ${profile.skills.slice(0, 5).join(', ')}
     - Project Count: ${profile.projectCount}
+<<<<<<< HEAD
+=======
+    - Recent Impact/Results: ${profile.impact_metrics || "N/A"}
+    - Leadership Experience: ${profile.leadership_experience || "N/A"}
+    - Unique Professional Hook: ${profile.unique_hook || "N/A"}
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     
     TARGET JOB:
     - Role: ${job.title}

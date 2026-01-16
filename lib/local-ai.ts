@@ -181,9 +181,26 @@ function generateComprehensiveGuidance(userProfileText: string): string {
 
     let response = `## 🔒 DISTRIBUTED CAREER INTELLIGENCE (OFFLINE SYSTEM)\n\n`;
 
+<<<<<<< HEAD
     response += `**DECISION VERDICT:** Based on distributed market signals, you are a viable candidate for **${topCareer.title}**. However, this path requires immediate proof of competence.\n\n`;
 
     response += `**REALITY CHECK:** ${topCareer.industry} in Sierra Leone is currently scored as **${topCareer.demand} demand**. Avoid the common trap of collecting certificates; employers here prioritize *demonstrated proof*.\n\n`;
+=======
+    response += `**DECISION VERDICT:** Based on distributed market signals, you are a viable candidate for **${topCareer.title}**. `;
+    if (text.includes("impact") || text.includes("%")) {
+        response += `Your ability to deliver measurable results gives you a significant advantage. `;
+    }
+    if (text.includes("leadership") || text.includes("led")) {
+        response += `We've flagged your leadership background as a critical accelerator for this path. `;
+    }
+    response += `However, this path requires immediate proof of competence.\n\n`;
+
+    response += `**REALITY CHECK:** ${topCareer.industry} in Sierra Leone is currently scored as **${topCareer.demand} demand**. `;
+    if (text.includes("hook")) {
+        response += `Your unique hook provides the necessary differentiation to clear the market noise. `;
+    }
+    response += `Avoid the common trap of collecting certificates; employers here prioritize *demonstrated proof*.\n\n`;
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 
     response += `### A. The Smartest Path: ${topCareer.title}\n`;
     response += `**Income Baseline:** ${topCareer.salaryRange || "SLE 3,000 - 6,000"}\n`;
@@ -237,16 +254,35 @@ export interface CareerMatchResult {
 export async function matchCareers(answers: QuizAnswer[]): Promise<CareerMatchResult> {
     const answerText = answers.map(a => a.answer.toLowerCase()).join(' ');
 
+<<<<<<< HEAD
+=======
+    // Extract metadata for personalization
+    const impact = answers.find(a => a.question === 'impact' || a.question === 'impact_metrics')?.answer || '';
+    const leadership = answers.find(a => a.question === 'leadership' || a.question === 'leadership_experience')?.answer || '';
+    const hook = answers.find(a => a.question === 'hook' || a.question === 'unique_hook')?.answer || '';
+
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     const scoredCareers = SIERRA_LEONE_CAREERS.map(career => {
         let score = 0;
         career.keywords.forEach(keyword => { if (answerText.includes(keyword)) score += 15; });
         if (answerText.includes(career.industry.toLowerCase())) score += 10;
+<<<<<<< HEAD
+=======
+
+        // Behavioral boosts
+        if (leadership.length > 10 && (career.industry === 'Business' || career.industry === 'Education')) score += 5;
+        if (impact.includes('%') || impact.toLowerCase().includes('increased') || impact.toLowerCase().includes('reduced')) {
+            if (career.industry === 'Finance' || career.industry === 'Technology') score += 5;
+        }
+
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
         return { career, score };
     }).sort((a, b) => b.score - a.score);
 
     const topCareers = scoredCareers.slice(0, 3);
     const maxScore = topCareers[0]?.score || 1;
 
+<<<<<<< HEAD
     const recommendations: CareerRecommendation[] = topCareers.map(({ career, score }) => ({
         title: career.title,
         matchScore: Math.min(Math.round((score / maxScore) * 100), 98),
@@ -258,6 +294,35 @@ export async function matchCareers(answers: QuizAnswer[]): Promise<CareerMatchRe
     }));
 
     let summary = `Based on your profile, we highy recommend looking into **${recommendations[0]?.title || 'Emerging Roles'}** in Salone.`;
+=======
+    const recommendations: CareerRecommendation[] = topCareers.map(({ career, score }) => {
+        let whyFits = `Matches your interest in ${career.industry}. `;
+        if (leadership && (career.industry === 'Business' || career.industry === 'Education')) {
+            whyFits += `Your leadership experience as a ${leadership.split(' ').slice(0, 3).join(' ')}... suggests high management potential. `;
+        }
+        if (impact && (career.industry === 'Finance' || career.industry === 'Technology')) {
+            whyFits += `Your track record of "${impact}" demonstrates the analytical skills required for this role. `;
+        }
+        if (!leadership && !impact) {
+            whyFits += `Aligns well with your reported background and skills. `;
+        }
+
+        return {
+            title: career.title,
+            matchScore: Math.min(Math.round((score / maxScore) * 100), 98),
+            whyFits: whyFits.trim(),
+            nextSteps: [`Research ${career.localInstitutions?.[0] || 'Local Institutes'}`, `Prepare a ${career.title} CV`],
+            demand: career.demand,
+            salaryRange: career.salaryRange,
+            institution: career.localInstitutions?.[0] || 'Available in Freetown/Njala',
+        };
+    });
+
+    let summary = `Based on your profile and high-value metrics, we recommend **${recommendations[0]?.title || 'Emerging Roles'}**. `;
+    if (hook) {
+        summary += `The fact that "${hook}" gives you a strategic edge in this sector.`;
+    }
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 
     return { summary, recommendations };
 }

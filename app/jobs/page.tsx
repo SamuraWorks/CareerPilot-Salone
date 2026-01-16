@@ -63,8 +63,11 @@ export default function JobsPage() {
   }
 
   const handleApply = (link?: string, title?: string) => {
+<<<<<<< HEAD
     // SYSTEM 4: The "Not Yet" Mechanism
     // If profile is incomplete or target role is missing, trigger Strategic Pause
+=======
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     const isReady = profile.targetRole && profile.status && profile.experienceYears !== ""
 
     if (!isReady) {
@@ -82,6 +85,7 @@ export default function JobsPage() {
 
   return (
     <DashboardLayout>
+<<<<<<< HEAD
       <div className="max-w-6xl mx-auto space-y-12 pb-24 pt-4">
 
         return (
@@ -104,6 +108,26 @@ export default function JobsPage() {
                   <p className="text-lg text-slate-500 max-w-2xl mx-auto text-balance font-medium">
                     Explore real professional openings in Freetown, Bo, and beyond. Your next big career move starts here na 🇸🇱.
                   </p>
+=======
+      <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
+        <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-sans uppercase tracking-[0.3em] text-emerald-600 hover:text-emerald-700 transition-all group mb-6">
+                <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 group-hover:bg-emerald-100 transition-all">
+                  <ArrowLeft className="w-4 h-4" />
+                </div>
+                Back to Control Center
+              </Link>
+
+              <div className="inline-block mb-4 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-full">
+                <span className="text-emerald-700 font-bold text-xs uppercase tracking-widest">Opportunity Network</span>
+              </div>
+              <h1 className="text-5xl font-black mb-4 text-[#0B1F3A] tracking-tight uppercase">Career Opportunities</h1>
+              <p className="text-lg text-slate-500 max-w-2xl mx-auto text-balance font-medium">
+                Explore real professional openings in Freetown, Bo, and beyond. Your next big career move starts here na 🇸🇱.
+              </p>
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 
                   {/* Stats */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto text-left">
@@ -316,11 +340,20 @@ export default function JobsPage() {
                     </div>
                   </div>
                 </DialogContent>
+<<<<<<< HEAD
               </Dialog>
           </div>
         </main>
         <Footer />
       </div>
     </DashboardLayout>
+=======
+            </Dialog>
+          </div>
+        </main>
+        <Footer />
+      </div >
+    </DashboardLayout >
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
   )
 }

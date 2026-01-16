@@ -1,6 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
+<<<<<<< HEAD
+=======
+import { DashboardLayout } from "@/components/dashboard-layout"
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,6 +50,7 @@ export default function UniversitiesPage() {
     })
 
     return (
+<<<<<<< HEAD
         <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
             <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
@@ -247,5 +252,210 @@ export default function UniversitiesPage() {
             </main>
             <Footer />
         </div>
+=======
+        <DashboardLayout>
+            <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
+                <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="text-center mb-12">
+                            <Link href="/dashboard" className="inline-flex items-center gap-3 text-[10px] font-black font-sans uppercase tracking-[0.3em] text-emerald-600 hover:text-emerald-700 transition-all group mb-6">
+                                <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-100 group-hover:bg-emerald-100 transition-all">
+                                    <ArrowLeft className="w-4 h-4" />
+                                </div>
+                                Back to Control Center
+                            </Link>
+
+                            <div className="inline-block mb-4 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-full">
+                                <span className="text-emerald-700 font-bold text-xs uppercase tracking-widest">Verified Academic Centers</span>
+                            </div>
+                            <h1 className="text-5xl font-black mb-4 text-[#0B1F3A] tracking-tight uppercase">Universities Hub</h1>
+                            <p className="text-lg text-slate-500 max-w-2xl mx-auto text-balance font-medium">
+                                Discover the top higher education institutions in the Lion Mountain. Find the right faculty to power your career path.
+                            </p>
+
+                            {/* Stats */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto text-left">
+                                <div className="bg-white border border-slate-100 shadow-sm rounded-3xl p-8 hover:shadow-md transition-all">
+                                    <div className="flex items-center justify-center gap-4 mb-3">
+                                        <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center">
+                                            <GraduationCap className="w-6 h-6 text-emerald-600" />
+                                        </div>
+                                        <span className="text-4xl font-black text-[#0B1F3A]">{universities.length}</span>
+                                    </div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest text-center">Active Institutions</p>
+                                </div>
+                                <div className="bg-white border border-slate-100 shadow-sm rounded-3xl p-8 hover:shadow-md transition-all">
+                                    <div className="flex items-center justify-center gap-4 mb-3">
+                                        <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                            <Zap className="w-6 h-6 text-blue-600" />
+                                        </div>
+                                        <span className="text-4xl font-black text-[#0B1F3A]">100%</span>
+                                    </div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest text-center">Verified Directory</p>
+                                </div>
+                                <div className="bg-white border border-slate-100 shadow-sm rounded-3xl p-8 hover:shadow-md transition-all">
+                                    <div className="flex items-center justify-center gap-4 mb-3">
+                                        <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center">
+                                            <MapPin className="w-6 h-6 text-purple-600" />
+                                        </div>
+                                        <span className="text-4xl font-black text-[#0B1F3A]">ALL</span>
+                                    </div>
+                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest text-center">Provinces Covered</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* --- SMART FILTERS --- */}
+                        <div className="mb-12 space-y-6">
+                            <div className="relative max-w-2xl mx-auto">
+                                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                <Input
+                                    type="search"
+                                    placeholder="Search by institution name, city, or discipline..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-14 h-16 rounded-[2rem] border-slate-200 shadow-lg text-lg focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                                />
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto">
+                                {["All", "Freetown", "Bo", "Makeni", "Kenema", "Port Loko"].map(loc => (
+                                    <button
+                                        key={loc}
+                                        onClick={() => setSearchTerm(loc === "All" ? "" : loc)}
+                                        className={cn(
+                                            "rounded-full px-6 py-2 font-bold text-xs uppercase tracking-widest transition-all",
+                                            (searchTerm === loc || (loc === "All" && searchTerm === ""))
+                                                ? "bg-[#0B1F3A] text-white shadow-lg"
+                                                : "text-slate-500 bg-white border border-slate-100 hover:border-emerald-600 hover:text-emerald-600"
+                                        )}
+                                    >
+                                        {loc}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* --- INSTITUTIONS GRID --- */}
+                        <div className="mt-20">
+                            {loading && (
+                                <div className="flex flex-col items-center justify-center py-32 text-slate-300">
+                                    <Loader2 className="w-16 h-16 animate-spin text-[#1FA774] mb-6" />
+                                    <p className="font-black uppercase tracking-[0.4em] text-[10px] italic">Fetching Academic Data...</p>
+                                </div>
+                            )}
+
+                            {error && (
+                                <div className="max-w-md mx-auto p-20 text-center space-y-6">
+                                    <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto text-red-500">
+                                        <Zap className="w-10 h-10" />
+                                    </div>
+                                    <p className="text-slate-900 font-black font-sans uppercase">{error}</p>
+                                    <Button onClick={() => window.location.reload()} className="rounded-2xl h-14 px-10 bg-[#0B1F3A] text-white font-black uppercase tracking-widest text-[10px]">Try Refresh</Button>
+                                </div>
+                            )}
+
+                            {!loading && !error && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                                    {filteredUniversities.map((uni) => (
+                                        <motion.div
+                                            key={uni.id}
+                                            initial={{ opacity: 0, y: 30 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            whileHover={{ y: -12 }}
+                                            className="group"
+                                        >
+                                            <Card className="rounded-[3.5rem] bg-white border-8 border-slate-50 hover:border-[#1FA774]/10 shadow-sm hover:shadow-2xl transition-all relative overflow-hidden group">
+                                                <div className="absolute inset-0 z-0 opacity-[0.02] grayscale pointer-events-none">
+                                                    <Image src="/images/universities/campus.png" alt="University" fill className="object-cover" />
+                                                </div>
+                                                {/* Campus Header Image */}
+                                                <div className="relative h-48 w-full overflow-hidden">
+                                                    <Image
+                                                        src={uni.image_url || '/images/universities/campus.png'}
+                                                        alt={`${uni.name} Campus`}
+                                                        fill
+                                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
+
+                                                    {/* Logo Overlay */}
+                                                    <div className="absolute bottom-4 left-10 translate-y-1/2 relative w-20 h-20 flex-shrink-0 bg-white shadow-2xl rounded-2xl p-3 border border-slate-100 flex items-center justify-center z-20">
+                                                        {uni.logo_url ? (
+                                                            <Image
+                                                                src={uni.logo_url}
+                                                                alt={`${uni.name} Logo`}
+                                                                fill
+                                                                className="object-contain p-3"
+                                                            />
+                                                        ) : (
+                                                            <GraduationCap className="w-8 h-8 text-slate-200" />
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-col h-full relative z-10 p-10 pt-14">
+                                                    <div className="space-y-4 mb-8">
+                                                        {/* Badge Row */}
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {uni.badges?.map((badge: string, i: number) => (
+                                                                <Badge key={i} variant="outline" className="bg-[#1FA774]/5 border-[#1FA774]/20 text-[#1FA774] font-black text-[8px] uppercase tracking-widest px-3 py-1 rounded-lg">
+                                                                    {badge}
+                                                                </Badge>
+                                                            ))}
+                                                        </div>
+
+                                                        <div>
+                                                            <h3 className="font-black text-2xl leading-none text-[#0B1F3A] group-hover:text-[#1E5EFF] transition-colors font-sans">
+                                                                {uni.name}
+                                                            </h3>
+                                                            <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mt-3 italic">
+                                                                <MapPin className="w-3.5 h-3.5 text-[#1FA774]" />
+                                                                {uni.location}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="mb-10 flex-1">
+                                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-4 border-l-4 border-slate-100 pl-4 italic">Core Faculties</p>
+                                                        <div className="flex flex-wrap gap-2.5">
+                                                            {uni.popular_courses?.slice(0, 4).map((course: string, idx: number) => (
+                                                                <span key={idx} className="bg-slate-50 text-[#0B1F3A] text-[10px] font-black uppercase px-4 py-2 rounded-xl border border-transparent group-hover:border-slate-100 transition-all font-sans">
+                                                                    {course}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    <Button
+                                                        className="w-full gap-3 h-16 rounded-[2rem] bg-slate-900 hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] transition-all border-none shadow-xl active:scale-95 font-sans"
+                                                        onClick={() => window.open(uni.website_url, '_blank')}
+                                                    >
+                                                        Research Profile
+                                                        <ExternalLink className="w-5 h-5" />
+                                                    </Button>
+                                                </div>
+                                            </Card>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {filteredUniversities.length === 0 && !loading && (
+                                <div className="text-center py-32 space-y-6">
+                                    <div className="w-24 h-24 rounded-[2.5rem] bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto mb-8 rotate-12">
+                                        <Search className="w-10 h-10 text-slate-200" />
+                                    </div>
+                                    <h3 className="text-2xl font-black font-sans text-[#0B1F3A] uppercase tracking-tight">No campus found</h3>
+                                    <p className="text-slate-400 font-bold font-sans italic max-w-sm mx-auto">Try broadening your search or switching categories.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        </DashboardLayout>
+>>>>>>> 6431a66 (CareerPilot Salone: Full System Implementation (Squashed))
     )
 }
