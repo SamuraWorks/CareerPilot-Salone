@@ -1,0 +1,6 @@
+Searching for working model...
+FOUND: gemma-3-1b-it
+FOUND: gemma-3-4b-it
+FOUND: gemma-3-12b-it
+FOUND: gemma-3-27b-it
+FOUND: gemma-3n-e4b-it

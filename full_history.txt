@@ -1,0 +1,16 @@
+﻿31f7464 feat: Add profile wizard integration with CV builder and career system
+e78fdac fix: AI Mentor mobile menu overlay issue
+be24474 feat: Transform profile into multi-step wizard with progress tracking
+4d6bd9c feat: Homepage redesign with profile system and mobile optimization
+5038fc4 fix(whatsapp): Make GreenAPI host dynamic based on Instance ID
+50b886c feat: Complete UI Overhaul, Mobile Responsiveness & Webhook Fix
+2a8908b feat: Configure GreenAPI webhook and credentials logic
+5841f69 fix: Update featured careers with valid image assets
+93df4d0 feat: Redesign homepage with AI preview, premium hero, and components
+6f6b08f feat: Update Guidance Page with comprehensive local data and smart matching
+a5bb21b feat: Enforce CareerPilot Salone rules, logic, and Natural persona v6.0.0
+13b3e09 Final Integrated System: AI Persona, Roadmap Connectivity, & High-Res Career Assets
+f9eeb04 AI Persona Integration & Career Roadmap Enhancement System
+654dca1 Bypass: Lib and Public assets
+75dcb40 Bypass: Root config
+3499ac7 Initial commit: CareerPilot Salone - AI-Powered Career Navigator for Sierra Leone
