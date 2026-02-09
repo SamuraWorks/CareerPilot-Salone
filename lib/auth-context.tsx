@@ -36,18 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initIdentity = async () => {
       let currentUserId = null;
 
-      // START: Load cached profile first for instant UI response
-      const cachedProfile = localStorage.getItem('career_pilot_profile')
-      if (cachedProfile) {
-        try {
-          const parsed = JSON.parse(cachedProfile)
-          if (parsed && typeof parsed === 'object') {
-            setProfile(parsed)
-          }
-        } catch (e) {
-          console.error("Failed to parse cached profile")
-        }
-      }
+      // Real-time Supabase session check
 
       // A. Check for real Supabase Session first
       try {
@@ -119,7 +108,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (data) {
         setProfile(data as UserProfile)
-        localStorage.setItem('career_pilot_profile', JSON.stringify(data))
       }
     } catch (err) {
       console.error("Exception fetching profile:", err)
@@ -169,8 +157,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Manually set user state since we don't have a Supabase session for just Secret ID
       setUser({ id: data.user.id })
       setProfile(data.profile)
-      localStorage.setItem('career_pilot_user_id', data.user.id)
-      localStorage.setItem('career_pilot_profile', JSON.stringify(data.profile))
 
       toast.success("Identity verified! Redirecting...")
       router.push(data.profile.is_complete ? '/dashboard' : '/onboarding')
@@ -213,7 +199,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const updatedProfile = { ...profile, ...newData }
       setProfile(updatedProfile)
-      localStorage.setItem('career_pilot_profile', JSON.stringify(updatedProfile))
     } catch (err: any) {
       console.error("Profile update error:", err)
       toast.error("Failed to save some changes")
@@ -244,7 +229,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       await updateProfile(finalProfile)
-      localStorage.setItem('onboardingComplete', 'true') // Helper
 
       // Ensure we set the user state if it was missing
       if (!user) {

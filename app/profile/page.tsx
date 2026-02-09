@@ -37,8 +37,7 @@ export default function ProfilePage() {
         career_goal: profile.career_goal || "",
         location: profile.location || profile.district || "",
         district: profile.district || profile.location || "",
-        education_level: profile.education_level || profile.highest_education || "",
-        highest_education: profile.highest_education || profile.education_level || "",
+        education_level: profile.education_level || "",
         phone_number: profile.phone_number || profile.phone || "",
         phone: profile.phone || profile.phone_number || "",
         email: profile.email || "",
@@ -64,13 +63,12 @@ export default function ProfilePage() {
 
       await updateProfile({
         ...formData,
-        // Ensure both field styles are updated
+        // Ensure standard field names
         district: formData.district || formData.location,
         location: formData.location || formData.district,
-        highest_education: formData.highest_education || formData.education_level,
-        education_level: formData.education_level || formData.highest_education,
-        phone: formData.phone || formData.phone_number,
+        education_level: formData.education_level,
         phone_number: formData.phone_number || formData.phone,
+        phone: formData.phone || formData.phone_number,
         skills: skillsArray,
         interests: interestsArray,
         is_complete: true,
@@ -227,8 +225,8 @@ export default function ProfilePage() {
                     <select
                       id="education"
                       className="flex h-12 w-full rounded-xl border border-slate-100 bg-background px-3 py-2 text-sm font-bold ring-offset-background placeholder:text-muted-foreground focus:ring-2 focus:ring-primary outline-none"
-                      value={formData.highest_education}
-                      onChange={(e) => setFormData({ ...formData, highest_education: e.target.value, education_level: e.target.value })}
+                      value={formData.education_level}
+                      onChange={(e) => setFormData({ ...formData, education_level: e.target.value })}
                     >
                       <option value="">Select Level</option>
                       {EDUCATION_LEVELS.map(l => <option key={l} value={l}>{l}</option>)}

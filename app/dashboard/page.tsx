@@ -98,7 +98,7 @@ export default function DashboardPage() {
     setIsAiLoading(true)
     const payload = {
       district: profile.district || "Freetown",
-      education: overrides?.highest_education || profile.highest_education || "Secondary Education",
+      education: overrides?.education_level || profile.education_level || "Secondary Education",
       interests: [overrides?.sector_interest, ...(overrides?.opportunities_interest || [])].filter(Boolean).join(', ') || profile.interests?.join(', ') || "Technology, Business",
       career_goal: overrides?.career_goals || profile.career_goal || "General Growth",
       direct_request: overrides?.feedback || "",

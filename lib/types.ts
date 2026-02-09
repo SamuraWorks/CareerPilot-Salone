@@ -49,7 +49,6 @@ export interface UserProfile {
     anon_id?: string
     phone?: string
     district?: string
-    highest_education?: string
     profile_picture_url?: string
     profile_completed: boolean
 
@@ -81,7 +80,7 @@ export const DEFAULT_PROFILE: UserProfile = {
     full_name: "",
     phone: "",
     district: "",
-    highest_education: "",
+    education_level: "",
     profile_picture_url: "",
     skills: [],
     interests: [],

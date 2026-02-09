@@ -36,7 +36,7 @@ export default function OnboardingPage() {
     email: profile.email || "",
     phone: profile.phone || "",
     district: profile.district || "",
-    highest_education: profile.highest_education || "",
+    education_level: profile.education_level || "",
     interests: profile.interests?.join(", ") || "",
     career_goal: profile.career_goal || ""
   })
@@ -63,7 +63,7 @@ export default function OnboardingPage() {
   const validateStep = () => {
     if (step === 1) return !!formData.full_name
     if (step === 2) return !!formData.district
-    if (step === 3) return !!formData.highest_education
+    if (step === 3) return !!formData.education_level
     return true
   }
 
@@ -93,13 +93,17 @@ export default function OnboardingPage() {
         ...formData,
         // Map to DB keys
         location: formData.district,
-        education_level: formData.highest_education,
+        education_level: formData.education_level,
         phone_number: formData.phone,
         interests: formData.interests.split(',').map(s => s.trim()).filter(Boolean),
         avatar_url: finalImageUrl,
-        profile_picture_url: finalImageUrl, // Keep for local safety
+        profile_picture_url: finalImageUrl,
         profile_completed: true,
-        is_complete: true // Keep legacy flag sync
+        is_complete: true,
+        points: profile.points || 0,
+        skills: profile.skills || [],
+        whatsapp_opt_in: profile.whatsapp_opt_in || false,
+        id: profile.anon_id || user?.id || ""
       }
 
       // I will use completeOnboarding instead of updateProfile to ensure flags are set
@@ -250,8 +254,8 @@ export default function OnboardingPage() {
                   <div className="space-y-2">
                     <Label className="font-bold">Highest Education *</Label>
                     <Select
-                      value={formData.highest_education}
-                      onValueChange={val => setFormData({ ...formData, highest_education: val })}
+                      value={formData.education_level}
+                      onValueChange={val => setFormData({ ...formData, education_level: val })}
                     >
                       <SelectTrigger className="h-12 rounded-xl">
                         <SelectValue placeholder="Select Level..." />

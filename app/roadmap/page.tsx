@@ -197,36 +197,22 @@ function RoadmapContent() {
     // Sync to cloud profile (Auth Context)
     if (profile && user) {
       const POINTS_PER_TASK = 50
-      const currentPoints = profile.points || 0
-      const pointsDelta = wasCompleted ? -POINTS_PER_TASK : POINTS_PER_TASK
-      const newPoints = Math.max(0, currentPoints + pointsDelta)
+      const wasCompleted = completedTasks.has(taskId) // Check against PREVIOUS state
 
-      const updatedCompletedTasks = {
-        ...(profile.completed_tasks || (profile as any)?.completedTasks || {}),
-        [displayedRoadmap.id]: Array.from(newCompleted)
-      }
-
-      const updatedTimestamps = {
-        ...(profile.task_timestamps || {}),
-        [taskId]: new Date().toISOString()
-      }
-
-      if (wasCompleted) {
-        delete updatedTimestamps[taskId]
-      }
-
-      // Update profile via auth context
-      updateProfile({
-        completed_tasks: updatedCompletedTasks,
-        task_timestamps: updatedTimestamps,
-        points: newPoints,
-        last_updated_at: new Date().toISOString()
-      })
+      // Use the dedicated database helper for robust tracking
+      import('@/lib/db').then(({ completeRoadmapTask }) => {
+        completeRoadmapTask(user.id, displayedRoadmap.id, taskId).then(({ data, error }) => {
+          if (!error && data) {
+            // refresh auth profile state
+            if (updateProfile) updateProfile(data);
+          }
+        });
+      });
 
       // User feedback
       if (!wasCompleted) {
         toast.success(`+${POINTS_PER_TASK} Points! Keep going! 🚀`, {
-          description: `Total: ${newPoints} Career Points`
+          description: `Strategic mission objective secured.`
         })
       }
     }

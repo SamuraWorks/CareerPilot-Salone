@@ -1,16 +1,58 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    // Redirect legacy auth pages to onboarding
-    // REMOVED: Login and Signup are now active pages
-    // if (pathname === '/login' || pathname === '/signup') {
-    //    return NextResponse.redirect(new URL('/onboarding', request.url));
-    // }
+    let supabaseResponse = NextResponse.next({
+        request,
+    });
 
-    return NextResponse.next();
+    const supabase = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll() {
+                    return request.cookies.getAll();
+                },
+                setAll(cookiesToSet) {
+                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
+                    supabaseResponse = NextResponse.next({
+                        request,
+                    });
+                    cookiesToSet.forEach(({ name, value, options }) =>
+                        supabaseResponse.cookies.set(name, value, options)
+                    );
+                },
+            },
+        }
+    );
+
+    // Refresh session if expired
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Protective boundary for Admin routes
+    if (pathname.startsWith('/admin')) {
+        if (!user) {
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
+
+        // Check if user is admin
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', user.id)
+            .single();
+
+        if (!profile?.is_admin) {
+            // Not an admin, redirect to home or dashboard
+            return NextResponse.redirect(new URL('/', request.url));
+        }
+    }
+
+    return supabaseResponse;
 }
 
 export const config = {

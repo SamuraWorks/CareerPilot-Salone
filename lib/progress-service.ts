@@ -23,7 +23,7 @@ export function calculateCareerMatch(profile: UserProfile, career: CareerInfo): 
     }
 
     let eduScore = 0;
-    const profileEdu = profile.highest_education || profile.education_level || "";
+    const profileEdu = profile.education_level || "";
     const careerEdu = career.requiredEducation || [];
 
     if (careerEdu.length > 0) {

@@ -39,8 +39,19 @@ export const getJobs = async () => {
 }
 
 export const getScholarships = async () => {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return SIERRA_LEONE_OPPORTUNITIES.filter(o => o.type === 'scholarship');
+    try {
+        const { data, error } = await supabase
+            .from('scholarships')
+            .select('*')
+            .order('deadline', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    } catch (e) {
+        console.error("Error fetching verified scholarships:", e);
+        // Fallback to mock data if table empty or error
+        return SIERRA_LEONE_OPPORTUNITIES.filter(o => o.type === 'scholarship');
+    }
 }
 
 export const MOCK_UNIVERSITIES = [
@@ -174,7 +185,6 @@ export const getUniversities = async () => {
 import { supabase } from './supabase'
 
 export const getUserProfile = async (userId: string): Promise<{ data: UserProfile | null, error: any }> => {
-    // 1. Try Supabase first
     try {
         const { data, error } = await supabase
             .from('profiles')
@@ -182,41 +192,28 @@ export const getUserProfile = async (userId: string): Promise<{ data: UserProfil
             .eq('id', userId)
             .single();
 
-        if (data) return { data: data as UserProfile, error: null };
+        if (error) throw error;
+        return { data: data as UserProfile, error: null };
     } catch (e) {
-        console.warn("Supabase fetch failed, falling back to local storage");
+        console.error("Error fetching profile from Supabase:", e);
+        return { data: null, error: e };
     }
-
-    // 2. Fallback to Local Storage
-    if (typeof window !== 'undefined') {
-        const saved = localStorage.getItem("userOnboarding");
-        if (saved) {
-            return { data: JSON.parse(saved) as UserProfile, error: null };
-        }
-    }
-    return { data: null, error: "Not found" };
 }
 
 export const updateUserProfile = async (userId: string, profileData: Partial<UserProfile>): Promise<{ data: UserProfile | null, error: any }> => {
-    let updated: UserProfile | null = null;
-
-    // 1. Save to Local Storage for instant UI feedback
-    if (typeof window !== 'undefined') {
-        const current = localStorage.getItem("userOnboarding");
-        updated = current ? { ...JSON.parse(current), ...profileData } : { id: userId, ...profileData } as UserProfile;
-        localStorage.setItem("userOnboarding", JSON.stringify(updated));
-    }
-
-    // 2. Background sync to Supabase
     try {
-        await supabase
+        const { data, error } = await supabase
             .from('profiles')
-            .upsert({ id: userId, ...profileData, updated_at: new Date().toISOString() });
-    } catch (e) {
-        console.error("Supabase sync failed:", e);
-    }
+            .upsert({ id: userId, ...profileData, updated_at: new Date().toISOString() })
+            .select()
+            .single();
 
-    return { data: updated, error: null };
+        if (error) throw error;
+        return { data: data as UserProfile, error: null };
+    } catch (e) {
+        console.error("Supabase update failed:", e);
+        return { data: null, error: e };
+    }
 }
 
 
@@ -234,26 +231,50 @@ export const getLatestCareerTestResult = async (userId: string) => {
 }
 
 export const completeRoadmapTask = async (userId: string, roadmapId: string, taskId: string): Promise<{ data: UserProfile | null, error: any }> => {
-    const { data: profile, error } = await getUserProfile(userId);
-    if (error || !profile) return { data: null, error: error || "Profile not found" };
+    try {
+        // 1. Log completion in user_journey_progress table for audit/persistence
+        const { error: progressError } = await supabase
+            .from('user_journey_progress')
+            .upsert({
+                user_id: userId,
+                roadmap_id: roadmapId,
+                task_id: taskId,
+                completed_at: new Date().toISOString()
+            }, { onConflict: 'user_id,roadmap_id,task_id' });
 
-    const completedTasks = profile.completed_tasks || {};
-    const roadmapTasks = completedTasks[roadmapId] || [];
+        if (progressError) throw progressError;
 
-    if (!roadmapTasks.includes(taskId)) {
-        roadmapTasks.push(taskId);
-        completedTasks[roadmapId] = roadmapTasks;
+        // 2. Update the profile summary for quick UI access
+        const { data: profile } = await getUserProfile(userId);
+        if (!profile) throw new Error("Profile not found");
 
-        // Award points for completion (e.g., 10 points per task)
-        const currentPoints = profile.points || 0;
-        const newPoints = currentPoints + 10;
+        const completedTasks = profile.completed_tasks || {};
+        const roadmapTasks = completedTasks[roadmapId] || [];
 
-        return await updateUserProfile(userId, {
-            completed_tasks: completedTasks,
-            points: newPoints
-        });
+        if (!roadmapTasks.includes(taskId)) {
+            roadmapTasks.push(taskId);
+            completedTasks[roadmapId] = roadmapTasks;
+
+            const currentPoints = profile.points || 0;
+            const newPoints = currentPoints + 10;
+
+            return await updateUserProfile(userId, {
+                completed_tasks: completedTasks,
+                points: newPoints
+            });
+        }
+
+        return { data: profile, error: null };
+    } catch (e) {
+        console.error("Error completing roadmap task:", e);
+        return { data: null, error: e };
     }
+}
 
-    return { data: profile, error: null };
+export const getJourneyProgress = async (userId: string) => {
+    return await supabase
+        .from('user_journey_progress')
+        .select('*')
+        .eq('user_id', userId);
 }
 

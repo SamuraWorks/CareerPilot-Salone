@@ -31,7 +31,7 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
     // Form State
     const [formData, setFormData] = useState({
         sector_interest: "",
-        highest_education: "",
+        education_level: "",
         skills: [] as string[],
         career_goals: "",
         opportunities_interest: [] as string[],
@@ -46,7 +46,7 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
             // Pre-fill some data if available
             setFormData(prev => ({
                 ...prev,
-                highest_education: profile.highest_education || "",
+                education_level: profile.education_level || "",
                 career_goals: profile.career_goal || "",
                 skills: profile.skills || []
             }))
@@ -91,7 +91,7 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
             await updateProfile({
                 research_completed: true,
                 career_goal: formData.career_goals,
-                highest_education: formData.highest_education,
+                education_level: formData.education_level,
                 interests: [formData.sector_interest, ...(profile.interests || [])].filter((v, i, a) => v && a.indexOf(v) === i)
             });
 
@@ -165,8 +165,8 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
                         <div className="space-y-2">
                             <Label>Highest Education</Label>
                             <Select
-                                value={formData.highest_education}
-                                onValueChange={(val) => setFormData({ ...formData, highest_education: val })}
+                                value={formData.education_level}
+                                onValueChange={(val) => setFormData({ ...formData, education_level: val })}
                             >
                                 <SelectTrigger className="bg-white">
                                     <SelectValue placeholder="Current level..." />

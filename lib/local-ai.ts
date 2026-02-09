@@ -21,7 +21,19 @@ export async function generateChatResponse(
     const upperMsg = trimmedMsg.toUpperCase();
     const lowerMsg = trimmedMsg.toLowerCase();
 
-    // 0. Force Comprehensive Guidance if flagged (e.g. at end of onboarding)
+    // 0. SCOPE CHECK (Mandatory Constraints)
+    const scopeKeywords = ['career', 'job', 'education', 'skill', 'cv', 'resume', 'scholarship', 'university', 'college', 'study', 'work', 'internship', 'mentor', 'roadmap', 'profile'];
+    const isOutOfScope = !scopeKeywords.some(k => lowerMsg.includes(k)) &&
+        !['MENU', 'HELP', 'KRIO'].some(k => upperMsg.includes(k)) &&
+        trimmedMsg.length > 0 &&
+        !siteContext.includes("Guidance") &&
+        !isFinalGuidance;
+
+    if (isOutOfScope) {
+        return "CareerPilot Salone focuses strictly on career and education guidance. Please ask a related question.";
+    }
+
+    // 1. Force Comprehensive Guidance if flagged (e.g. at end of onboarding)
     if (isFinalGuidance) {
         return generateComprehensiveGuidance(messages.map(m => m.content).join(' '));
     }
@@ -443,7 +455,10 @@ ${name}`,
 
         dynamic: `${businessHeader}Dear ${company} Recruitment Board,
  
-I am writing to formally express my strategic interest in joining ${company} as the next ${role}. As an impact-driven professional who thrives on operational innovation, I have long admired ${company}’s trajectory as a market-leading entity in Sierra Leone.
+**RE: STRATEGIC APPLICATION FOR THE POSITION OF ${role.toUpperCase()}**
+ 
+I am writing to formally express my strategic interest in joining ${company} as the next ${role}.
+ As an impact-driven professional who thrives on operational innovation, I have long admired ${company}’s trajectory as a market-leading entity in Sierra Leone.
  
 My core competency lies in ${skill}, where I have established a consistent record of delivering high-velocity solutions in high-stakes environments. ${hook} My objective is to provide a platform where my technical mastery of ${otherSkills} can be directly translated into tangible institutional growth for your team.
  
@@ -457,7 +472,10 @@ ${name}`,
 
         academic: `${businessHeader}To the Selection Committee,
 
-I am formally submitting my application for the position of ${role} within ${company}. My academic background and specialized focus on ${skill} have provided me with a rigorous foundation that I believe is essential for the demands of this institutional role.
+**RE: ACADEMIC & PROFESSIONAL CANDIDACY FOR ${role.toUpperCase()}**
+
+I am formally submitting my application for the position of ${role} within ${company}.
+ My academic background and specialized focus on ${skill} have provided me with a rigorous foundation that I believe is essential for the demands of this institutional role.
 
 During my time at [Institution Name], I have cultivated a deep commitment to intellectual excellence and pedagogical progress. ${impact} This experience, coupled with my proficiency in ${otherSkills}, has shaped my scholarly and professional methodology. ${leadership}
 
@@ -471,7 +489,10 @@ ${name}`,
 
         standard: `${businessHeader}Dear ${company} Team,
 
-I am writing to apply for the ${role} position as advertised. My diverse experience and technical proficiency in ${skill} make me a highly suitable candidate for this opportunity within your organization.
+**RE: APPLICATION FOR THE POSITION OF ${role.toUpperCase()}**
+
+I am writing to apply for the ${role} position as advertised.
+ My diverse experience and technical proficiency in ${skill} make me a highly suitable candidate for this opportunity within your organization.
 
 I have spent my career developing a comprehensive understanding of ${otherSkills}, always aiming for the highest standards of professional conduct. ${impact} I am particularly eager to bring my skills to ${company}, an organization that I hold in high regard for its professional standards in Sierra Leone.
 
