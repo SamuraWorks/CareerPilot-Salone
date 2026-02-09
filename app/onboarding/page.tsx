@@ -25,7 +25,7 @@ const EDUCATION_LEVELS = [
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const { profile, updateProfile, completeOnboarding, isLoading } = useAuth()
+  const { user, profile, updateProfile, completeOnboarding, isLoading } = useAuth()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
