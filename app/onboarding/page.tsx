@@ -89,21 +89,24 @@ export default function OnboardingPage() {
       }
 
       // 2. Save Profile
-      const profileData = {
-        ...formData,
-        // Map to DB keys
-        location: formData.district,
+      // 2. Save Profile - Explicitly construct to avoid sending undefined columns
+      const profileData: any = {
+        // Map to DB keys securely
+        full_name: formData.full_name,
+        // email: formData.email, // Auth managed
+        location: formData.district, // Map district to location
+        district: formData.district, // Also save to district col if exists
         education_level: formData.education_level,
         phone_number: formData.phone,
         interests: formData.interests.split(',').map(s => s.trim()).filter(Boolean),
         avatar_url: finalImageUrl,
         profile_picture_url: finalImageUrl,
-        profile_completed: true,
+
+        // System Flags
         is_complete: true,
-        points: profile.points || 0,
-        skills: profile.skills || [],
         whatsapp_opt_in: profile.whatsapp_opt_in || false,
-        id: profile.anon_id || user?.id || ""
+        id: profile.anon_id || user?.id || "",
+        updated_at: new Date().toISOString()
       }
 
       // I will use completeOnboarding instead of updateProfile to ensure flags are set
@@ -114,9 +117,11 @@ export default function OnboardingPage() {
       toast.success("Profile saved! Initializing AI recommendations...")
 
       router.push('/dashboard?init_ai=true')
-    } catch (error) {
+    } catch (error: any) {
       console.error("Save failed:", error)
-      toast.error("Failed to save profile. Please try again.")
+      const msg = error.message || "Failed to save profile."
+      const details = error.details || error.hint || ""
+      toast.error(`Save Error: ${msg} ${details}`)
     } finally {
       setLoading(false)
     }
