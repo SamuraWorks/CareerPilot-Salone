@@ -224,7 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const finalProfile = {
         ...newProfileData,
         is_complete: true,
-        profile_completed: true,
+        // profile_completed: true, // Redundant/Risk of column mismatch
         updated_at: new Date().toISOString()
       }
 

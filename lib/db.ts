@@ -210,8 +210,9 @@ export const updateUserProfile = async (userId: string, profileData: Partial<Use
 
         if (error) throw error;
         return { data: data as UserProfile, error: null };
-    } catch (e) {
+    } catch (e: any) {
         console.error("Supabase update failed:", e);
+        // Return detailed error for debugging
         return { data: null, error: e };
     }
 }

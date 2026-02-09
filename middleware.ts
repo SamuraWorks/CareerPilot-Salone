@@ -1,60 +1,69 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+    let response = NextResponse.next({
+        request: {
+            headers: request.headers,
+        },
+    })
 
-    let supabaseResponse = NextResponse.next({
-        request,
-    });
+    try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-    const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        {
+        if (!supabaseUrl || !supabaseAnonKey) {
+            return response
+        }
+
+        const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
             cookies: {
                 getAll() {
-                    return request.cookies.getAll();
+                    return request.cookies.getAll()
                 },
                 setAll(cookiesToSet) {
-                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
-                    supabaseResponse = NextResponse.next({
-                        request,
-                    });
+                    cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+                    response = NextResponse.next({
+                        request: {
+                            headers: request.headers,
+                        },
+                    })
                     cookiesToSet.forEach(({ name, value, options }) =>
-                        supabaseResponse.cookies.set(name, value, options)
-                    );
+                        response.cookies.set(name, value, options)
+                    )
                 },
             },
+        })
+
+        // Essential: Refresh session
+        // We use safe destructuring to prevent crashes if data is null
+        const { data, error } = await supabase.auth.getUser()
+        const user = data?.user
+
+        // Admin Route Protection
+        if (request.nextUrl.pathname.startsWith('/admin')) {
+            if (!user || error) {
+                const url = request.nextUrl.clone()
+                url.pathname = '/login'
+                return NextResponse.redirect(url)
+            }
         }
-    );
-
-    // Refresh session if expired
-    const { data: { user } } = await supabase.auth.getUser();
-
-    // Protective boundary for Admin routes
-    if (pathname.startsWith('/admin')) {
-        if (!user) {
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
-
-        // Check if user is admin
-        const { data: profile } = await supabase
-            .from('profiles')
-            .select('is_admin')
-            .eq('id', user.id)
-            .single();
-
-        if (!profile?.is_admin) {
-            // Not an admin, redirect to home or dashboard
-            return NextResponse.redirect(new URL('/', request.url));
-        }
+    } catch (e) {
+        console.error('Middleware Critical Error:', e)
     }
 
-    return supabaseResponse;
+    return response
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-};
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - api (API routes handle their own auth)
+         */
+        '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    ],
+}

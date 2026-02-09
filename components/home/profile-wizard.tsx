@@ -118,27 +118,47 @@ export function ProfileWizard() {
         setIsSubmitting(true)
 
         // Map Wizard Data to UserProfile for Context
+        // CRITICAL: Only include fields that exist in the 'profiles' table to prevent UPSERT errors
         const userProfile: any = {
-            ...data,
             full_name: data.full_name,
-            email: data.email,
+            // email: data.email, // Email is managed by Auth, usually not updatable here directly unless we really want to store it in profiles (legacy)
             location: data.location,
-            status: data.stage,
+            // status: data.stage, // 'status' might not be in DB, map to resume_data if needed
+            is_complete: true,
+            // profile_completed: true, // REMOVED: Column does not exist
+
+            // Core Fields
+            education_level: data.education,
+            career_goal: data.career_goal,
+            avatar_url: data.avatar_url || "",
+
+            // JSONB Arrays
             interests: data.interest.split(',').map(s => s.trim()).filter(Boolean),
             skills: [
                 ...data.technical_skills.split(',').map(s => s.trim()).filter(Boolean),
                 ...data.soft_skills.split(',').map(s => s.trim()).filter(Boolean)
             ],
-            education_level: data.education,
-            education_details: {
-                institution: data.school,
-                field: data.field_of_study,
-                grad_year: data.graduation_year
-            },
-            career_goal: data.career_goal,
-            target_industry: data.target_industry,
-            preferred_language: data.languages,
-            avatar_url: data.avatar_url || ""
+
+            // Pack everything else into resume_data JSONB to avoid "Column not found" errors
+            resume_data: {
+                stage: data.stage,
+                school: data.school,
+                field_of_study: data.field_of_study,
+                graduation_year: data.graduation_year,
+                technical_skills: data.technical_skills,
+                soft_skills: data.soft_skills,
+                languages: data.languages,
+                experience: data.experience,
+                internships: data.internships,
+                target_industry: data.target_industry,
+                timeline: data.timeline,
+                work_environment: data.work_environment,
+                availability: data.availability,
+                // Maps for potential recovery
+                impact_metric: data.experience,
+                leadership_action: data.internships,
+                professional_hook: data.technical_skills
+            }
         }
 
         try {
@@ -152,8 +172,10 @@ export function ProfileWizard() {
             console.error("Save failed:", err)
             setIsSubmitting(false)
             // Show the actual error message if possible
-            const message = err.message || "Failed to save profile. Please try again."
-            alert(message)
+            const message = err.message || "Failed to save profile."
+            const details = err.details || ""
+            const hint = err.hint || ""
+            alert(`Save Error: ${message}\n${details}\n${hint}`)
         }
     }
 

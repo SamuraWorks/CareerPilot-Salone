@@ -20,11 +20,22 @@ export async function saveProfileData(profile: WizardProfile, userId?: string) {
             education_level: profile.education || (profile as any).education_level,
             career_goal: profile.career_goal,
             is_complete: true,
-            profile_completed: true,
-            // Store raw metadata for AI/recovery
-            impact_metrics: profile.experience,
-            leadership_experience: profile.internships,
-            unique_hook: profile.technical_skills,
+            // profile_completed: true, // REMOVED: Column does not exist
+
+            // Store raw metadata for AI in resume_data
+            resume_data: {
+                impact_metric: profile.experience,
+                leadership_action: profile.internships,
+                professional_hook: profile.technical_skills,
+                // Preserve wizard fields
+                school: profile.school,
+                field_of_study: profile.field_of_study,
+                graduation_year: profile.graduation_year,
+                technical_skills: profile.technical_skills,
+                soft_skills: profile.soft_skills,
+                languages: profile.languages
+            },
+
             updated_at: new Date().toISOString()
         }
 
