@@ -7,8 +7,9 @@ export async function POST(req: Request) {
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
         if (!supabaseUrl || !supabaseServiceKey) {
-            console.error("Missing Supabase environment variables")
-            return NextResponse.json({ error: "Server configuration error" }, { status: 500 })
+            const missing = !supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : 'SUPABASE_SERVICE_ROLE_KEY';
+            console.error(`Missing environment variable: ${missing}`);
+            return NextResponse.json({ error: `Server configuration error: ${missing} is not defined` }, { status: 500 })
         }
 
         const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
