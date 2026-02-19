@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { UserPlus, Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, LogIn } from "lucide-react"
 import { motion } from "framer-motion"
+import { toast } from "sonner"
 
 export default function SignupPage() {
     const [fullName, setFullName] = useState("")
@@ -32,6 +33,7 @@ export default function SignupPage() {
             if (response.ok) {
                 setGeneratedId(data.secretId)
                 setIsSuccess(true)
+                toast.success("Account created successfully!")
                 // We'll still call context signup to establish the local session
                 await signup(email, password, fullName)
             } else {
@@ -69,10 +71,10 @@ export default function SignupPage() {
                         </p>
 
                         <Button
-                            onClick={() => window.location.href = "/onboarding"}
+                            onClick={() => window.location.href = "/dashboard"}
                             className="w-full h-14 bg-[#0B1F3A] hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl transition-all active:scale-95"
                         >
-                            Complete My Profile
+                            Enter Dashboard
                             <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
                     </div>

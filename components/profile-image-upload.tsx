@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/client"
 import { Camera, Loader2, Upload } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
@@ -10,6 +10,8 @@ import { toast } from "sonner"
 export function ProfileImageUpload() {
     const { profile, updateProfile, user } = useAuth()
     const [uploading, setUploading] = useState(false)
+    const supabase = createClient()
+
 
     const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         try {

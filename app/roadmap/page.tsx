@@ -199,9 +199,9 @@ function RoadmapContent() {
       const POINTS_PER_TASK = 50
       const wasCompleted = completedTasks.has(taskId) // Check against PREVIOUS state
 
-      // Use the dedicated database helper for robust tracking
-      import('@/lib/db').then(({ completeRoadmapTask }) => {
-        completeRoadmapTask(user.id, displayedRoadmap.id, taskId).then(({ data, error }) => {
+      // Use the dedicated server action for robust tracking
+      import('@/lib/actions').then(({ completeRoadmapTaskAction }) => {
+        completeRoadmapTaskAction(user.id, displayedRoadmap.id, taskId).then(({ data, error }) => {
           if (!error && data) {
             // refresh auth profile state
             if (updateProfile) updateProfile(data);

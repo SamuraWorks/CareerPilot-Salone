@@ -1,3 +1,5 @@
+"use server"
+
 import { UserProfile as WizardProfile } from "@/components/home/profile-wizard"
 import { updateUserProfile } from "@/lib/db"
 

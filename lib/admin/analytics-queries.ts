@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase"
+import { SupabaseClient } from "@supabase/supabase-js"
 import { UserProfile } from "@/lib/types"
 
 export interface AnalyticsData {
@@ -12,7 +12,7 @@ export interface AnalyticsData {
     recentActivity: UserProfile[]
 }
 
-export async function getAnalyticsData(): Promise<AnalyticsData> {
+export async function getAnalyticsData(supabase: SupabaseClient): Promise<AnalyticsData> {
     try {
         // Fetch all users
         const { data: users, error } = await supabase
@@ -103,14 +103,14 @@ function calculateUserGrowth(users: UserProfile[]): { date: string; count: numbe
 function calculateDistribution(
     users: UserProfile[],
     primaryField: keyof UserProfile,
-    fallbackField?: keyof UserProfile
-): { district?: string; goal?: string; level?: string; count: number }[] {
+    fallbackField?: string
+): any[] {
     const countMap = new Map<string, number>()
 
     users.forEach(user => {
         let value = user[primaryField] as string
         if (!value && fallbackField) {
-            value = user[fallbackField] as string
+            value = (user as any)[fallbackField] as string
         }
         if (value && typeof value === 'string') {
             countMap.set(value, (countMap.get(value) || 0) + 1)
@@ -130,7 +130,7 @@ function calculateDistribution(
         .sort((a, b) => b.count - a.count)
 }
 
-export async function getFeedbackData() {
+export async function getFeedbackData(supabase: SupabaseClient) {
     try {
         const { data, error } = await supabase
             .from('feedback')

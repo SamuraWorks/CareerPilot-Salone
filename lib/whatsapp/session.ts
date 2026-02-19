@@ -1,4 +1,8 @@
-import { supabase } from '../supabase';
+"use server"
+
+import { createClient } from '../supabase/server'
+
+const getSupabase = () => createClient()
 
 export interface SessionState {
     step: 'START' | 'ONBOARDING_AGE' | 'ONBOARDING_LOCATION' | 'ONBOARDING_EDUCATION' | 'ONBOARDING_SUBJECTS' | 'ONBOARDING_GOAL' | 'ONBOARDING_IMPACT_METRICS' | 'ONBOARDING_LEADERSHIP_EXPERIENCE' | 'ONBOARDING_UNIQUE_HOOK' | 'RIASEC_QUIZ' | 'ACTIVE_MENTOR';
@@ -13,6 +17,7 @@ const memoryStore = new Map<string, SessionState>();
 
 export async function getSession(phoneNumber: string): Promise<SessionState> {
     try {
+        const supabase = await getSupabase();
         const { data, error } = await supabase
             .from('whatsapp_sessions')
             .select('state')
@@ -59,6 +64,7 @@ export async function updateSession(phoneNumber: string, state: SessionState): P
         // However, `nextQuestion` is not defined in this scope.
         // Therefore, I will revert to the original correct syntax for the upsert object,
         // as the provided snippet cannot be integrated syntactically correctly as-is.
+        const supabase = await getSupabase();
         await supabase
             .from('whatsapp_sessions')
             .upsert({
@@ -75,6 +81,7 @@ export async function updateSession(phoneNumber: string, state: SessionState): P
 export async function clearSession(phoneNumber: string): Promise<void> {
     memoryStore.delete(phoneNumber);
     try {
+        const supabase = await getSupabase();
         await supabase
             .from('whatsapp_sessions')
             .delete()
@@ -86,6 +93,7 @@ export async function clearSession(phoneNumber: string): Promise<void> {
 export async function syncToProfile(phoneNumber: string, state: SessionState): Promise<void> {
     try {
         // 1. Find user by phone number
+        const supabase = await getSupabase();
         const { data: profile, error: fetchError } = await supabase
             .from('profiles')
             .select('*')

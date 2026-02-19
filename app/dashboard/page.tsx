@@ -28,11 +28,11 @@ import {
   Loader2
 } from "lucide-react"
 import { SIERRA_LEONE_CAREERS } from "@/lib/career-data"
-import { MOCK_UNIVERSITIES } from "@/lib/db"
+import { MOCK_UNIVERSITIES } from "@/lib/constants/mock-data"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/client"
 import { ProgressOverview } from "@/components/dashboard/progress-overview"
 import { Briefcase } from "lucide-react"
 import { FeedbackDialog } from "@/components/feedback-dialog"
@@ -41,17 +41,14 @@ import { ResearchQuestionnaire } from "@/components/dashboard/research-questionn
 export default function DashboardPage() {
   const { user, profile, isLoading } = useAuth()
   const router = useRouter()
+  const supabase = createClient()
   const [greeting, setGreeting] = useState("Hello")
 
-  // No longer blocking: Redirect to onboarding ONLY if profile not started
   useEffect(() => {
-    if (!isLoading) {
-      // ONLY redirect if they haven't completed onboarding locally
-      if (!profile.profile_completed && !profile.full_name && !profile.anon_id) {
-        router.push("/onboarding")
-      }
+    if (!isLoading && !profile?.is_complete) {
+      router.push("/onboarding")
     }
-  }, [profile.profile_completed, profile.full_name, profile.anon_id, isLoading, router])
+  }, [profile?.is_complete, isLoading, router])
 
   // Time-Aware Greeting
   const [aiStatus, setAiStatus] = useState({ configured: false, status: 'Checking AI...' })
@@ -73,13 +70,12 @@ export default function DashboardPage() {
     const { data, error } = await supabase
       .from('recommendations')
       .select('*')
-      .eq('anon_id', profile.anon_id || user?.id)
+      .eq('user_id', profile.id)
       .single()
 
     if (data) {
       setRecommendations(data)
     } else {
-      // If none found and we have profile data, maybe trigger it
       if (profile.full_name) {
         handleGenerateAi()
       }
@@ -87,10 +83,7 @@ export default function DashboardPage() {
   }
 
   const handleGenerateAi = async (overrides?: any) => {
-    const targetAnonId = profile.anon_id || user?.id;
-
-    if (!targetAnonId) {
-      console.warn("[DASHBOARD] Cannot generate AI: No anon_id or user.id found.");
+    if (!user?.id) {
       toast.error("Please complete your profile first.");
       return;
     }
@@ -100,12 +93,10 @@ export default function DashboardPage() {
       district: profile.district || "Freetown",
       education: overrides?.education_level || profile.education_level || "Secondary Education",
       interests: [overrides?.sector_interest, ...(overrides?.opportunities_interest || [])].filter(Boolean).join(', ') || profile.interests?.join(', ') || "Technology, Business",
-      career_goal: overrides?.career_goals || profile.career_goal || "General Growth",
+      career_goal: overrides?.career_goal || profile.career_goal || "General Growth",
       direct_request: overrides?.feedback || "",
-      anon_id: targetAnonId
+      user_id: user.id
     };
-
-    console.log("[DASHBOARD-DEBUG] AI Refreshing with payload:", payload);
 
     try {
       const res = await fetch('/api/recommendations', {
@@ -118,11 +109,9 @@ export default function DashboardPage() {
         setRecommendations(data)
         toast.success("AI Synthesis Complete!")
       } else {
-        console.error("AI Generation Error (Server):", data)
         toast.error(data.error || "Failed to generate AI recommendations.")
       }
     } catch (err) {
-      console.error("AI Generation Error (Network):", err)
       toast.error("Failed to connect to AI service.")
     } finally {
       setIsAiLoading(false)
@@ -130,17 +119,16 @@ export default function DashboardPage() {
   }
 
   useEffect(() => {
-    if (profile?.full_name) {
+    if (profile?.id && profile?.full_name) {
       fetchRecommendations()
     }
-  }, [profile?.full_name, profile?.anon_id])
+  }, [profile?.id, profile?.full_name])
 
   // Check for auto-trigger
   useEffect(() => {
     const urlParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : "");
     if (urlParams.get('init_ai') === 'true' && profile?.full_name) {
       handleGenerateAi();
-      // Remove param from URL
       router.replace('/dashboard');
     }
   }, [profile?.full_name])

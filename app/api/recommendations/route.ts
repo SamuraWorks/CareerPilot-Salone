@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { generateObject } from 'ai';
 import { google } from '@ai-sdk/google';
 import { openai } from '@ai-sdk/openai';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/server';
 import { AI_RECOMMENDATION_PROMPT } from '@/lib/ai/prompts';
 import { z } from 'zod';
 
@@ -38,11 +38,11 @@ const RecommendationSchema = z.object({
 
 export async function POST(req: Request) {
     try {
-        const { district, education, interests, career_goal, anon_id, direct_request } = await req.json();
+        const { district, education, interests, career_goal, user_id, direct_request } = await req.json();
 
-        if (!anon_id) {
-            console.warn("[AI-API] Missing anon_id in request");
-            return NextResponse.json({ error: "Missing anon_id" }, { status: 400 });
+        if (!user_id) {
+            console.warn("[AI-API] Missing user_id in request");
+            return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
         }
 
         const resolvedInputs = {
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
         // Strategy 1: Gemini (Primary)
         if (API_KEY) {
             try {
-                console.log(`[AI] Attempting Gemini for ${anon_id}...`);
+                console.log(`[AI] Attempting Gemini for ${user_id}...`);
                 const { object } = await generateObject({
                     model: google('gemma-3-27b-it'),
                     schema: RecommendationSchema,
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
         // Strategy 2: OpenAI (Secondary)
         if (!recommendations && OPENAI_KEY) {
             try {
-                console.log(`[AI] Falling back to OpenAI for ${anon_id}...`);
+                console.log(`[AI] Falling back to OpenAI for ${user_id}...`);
                 const { object } = await generateObject({
                     model: openai(process.env.OPENAI_STREAMING_MODEL || 'gpt-4o-mini'),
                     schema: RecommendationSchema,
@@ -97,10 +97,9 @@ export async function POST(req: Request) {
 
         // Strategy 3: Local Static (Last Resort)
         if (!recommendations) {
-            console.log(`[AI] Using Static Fallback for ${anon_id}`);
+            console.log(`[AI] Using Static Fallback for ${user_id}`);
             const { SIERRA_LEONE_CAREERS } = await import("@/lib/career-data");
 
-            // Try to match interests if available
             const userInterests = resolvedInputs.interests.toLowerCase();
             const matchedCareers = SIERRA_LEONE_CAREERS
                 .filter(c => userInterests.includes(c.title.toLowerCase()) ||
@@ -133,31 +132,30 @@ export async function POST(req: Request) {
             providerUsed = "Static";
         }
 
-        console.log(`[AI-SUCCESS] Provider: ${providerUsed} for ${anon_id}`);
+        console.log(`[AI-SUCCESS] Provider: ${providerUsed} for ${user_id}`);
 
         // Save to recommendations table
         try {
+            const supabase = createClient();
             await supabase
                 .from('recommendations')
                 .upsert({
-                    anon_id,
+                    user_id,
                     careers: recommendations.careers,
                     scholarships: recommendations.scholarships,
                     jobs: recommendations.jobs,
                     skills: recommendations.skills_to_learn,
                     roadmap_summary: recommendations.roadmap_summary,
                     generated_at: new Date().toISOString()
-                }, { onConflict: 'anon_id' });
+                }, { onConflict: 'user_id' });
         } catch (dbErr) {
             console.error("[DB] Failed to save recommendations:", dbErr);
-            // Non-blocking for the user
         }
 
         return NextResponse.json(recommendations);
     } catch (error: any) {
         console.error("AI Recommendation API Global Error:", error);
 
-        // Ultimate Fallback: Never fail, return static recommendations
         const { SIERRA_LEONE_CAREERS } = await import("@/lib/career-data");
         const fallbackCareers = SIERRA_LEONE_CAREERS.slice(0, 3).map(c => ({
             title: c.title,

@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useAuth } from "@/lib/auth-context"
-import { supabase } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { Loader2, X, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -27,6 +27,8 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
     const [isVisible, setIsVisible] = useState(forceVisible)
     const [isExpanded, setIsExpanded] = useState(true)
     const [loading, setLoading] = useState(false)
+    const supabase = createClient()
+
 
     // Form State
     const [formData, setFormData] = useState({

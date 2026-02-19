@@ -4,9 +4,30 @@ import { cookies } from 'next/headers'
 export function createClient() {
     const cookieStore = cookies()
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    // Safety check for build time
+    if (!supabaseUrl || !supabaseAnonKey) {
+        // During build, we might not have these variables. 
+        // We return a mock-like client that won't crash the build process
+        // but will log warnings if called.
+        console.warn('Supabase environment variables are missing. Using partial client.')
+        return createServerClient(
+            'https://placeholder.supabase.co',
+            'placeholder',
+            {
+                cookies: {
+                    getAll() { return [] },
+                    setAll() { }
+                }
+            }
+        )
+    }
+
     return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        supabaseUrl,
+        supabaseAnonKey,
         {
             cookies: {
                 getAll() {
