@@ -9,8 +9,14 @@ export default function Home() {
     <div className="min-h-screen bg-[#FAFAFA] text-slate-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
 
       {/* 1. Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto flex flex-col items-center text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-8 border border-emerald-100">
+      <section className="relative pt-32 pb-20 px-6 sm:px-12 lg:px-24 w-full flex flex-col items-center text-center bg-gradient-to-r from-[#177CC9] to-[#2EBA9B] overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20 pointer-events-none">
+          <div className="absolute -top-[20%] -right-[10%] w-[70vw] h-[70vw] rounded-full bg-emerald-400 blur-3xl mix-blend-overlay"></div>
+          <div className="absolute -bottom-[20%] -left-[10%] w-[60vw] h-[60vw] rounded-full bg-blue-500 blur-3xl mix-blend-overlay"></div>
+        </div>
+
+        <div className="relative z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-100 text-xs font-bold uppercase tracking-wider mb-8 border border-white/20 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -19,19 +25,19 @@ export default function Home() {
           <span className="text-lg leading-none">🇸🇱</span>
         </div>
 
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-[#0B1F3A] tracking-tight leading-[1.1] mb-6 max-w-4xl">
+        <h1 className="relative z-10 text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] mb-6 max-w-4xl drop-shadow-sm">
           Not sure what to do after school or university? Start here.
         </h1>
 
-        <p className="text-lg sm:text-xl text-slate-500 mb-10 max-w-2xl font-medium leading-relaxed">
+        <p className="relative z-10 text-lg sm:text-xl text-blue-50 mb-10 max-w-2xl font-medium leading-relaxed drop-shadow-sm">
           A clear, practical guide to finding career direction, scholarships, and jobs in Sierra Leone. No guesswork, just real opportunities.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <Link href="/signup" className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-[#0B1F3A] text-white font-bold text-sm uppercase tracking-wide hover:bg-slate-800 transition-colors shadow-lg shadow-slate-200">
+        <div className="relative z-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <Link href="/signup" className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-white text-[#0B1F3A] font-black text-sm uppercase tracking-wide hover:bg-slate-50 transition-colors shadow-lg shadow-black/10">
             Create Free Account
           </Link>
-          <Link href="#how-it-works" className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-white text-slate-700 font-bold text-sm uppercase tracking-wide border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors">
+          <Link href="#how-it-works" className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-transparent text-white font-bold text-sm uppercase tracking-wide border border-white/30 hover:border-white/60 hover:bg-white/10 transition-colors backdrop-blur-sm">
             See How It Works
           </Link>
         </div>
@@ -146,8 +152,9 @@ export default function Home() {
       </section>
 
       {/* 6. Call to Action */}
-      <section className="py-32 px-6 sm:px-12 lg:px-24 text-center bg-[#0B1F3A]">
-        <div className="max-w-3xl mx-auto">
+      <section className="relative py-32 px-6 sm:px-12 lg:px-24 text-center bg-gradient-to-r from-[#177CC9] to-[#2EBA9B] overflow-hidden">
+        <div className="absolute inset-0 bg-[#0B1F3A]/20 pointer-events-none"></div>
+        <div className="relative z-10 max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-10">
             Your future won't plan itself.
           </h2>
