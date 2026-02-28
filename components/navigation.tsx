@@ -55,8 +55,9 @@ export function Navigation() {
   const { profile } = useProfile()
   const [open, setOpen] = React.useState(false)
 
-  // Hide navigation on admin pages
-  if (pathname?.startsWith('/admin')) return null;
+  // Hide navigation on admin, landing, and auth pages
+  const isAuthRoute = pathname === '/login' || pathname === '/signup';
+  if (pathname?.startsWith('/admin') || pathname === '/' || isAuthRoute) return null;
 
   // Determine page title based on pathname
   const getCurrentPageTitle = () => {
@@ -223,7 +224,7 @@ export function Navigation() {
           </Button>
           */}
 
-          <Link href={profile.is_complete ? "/profile" : "/onboarding"} className="flex items-center gap-3 pl-2 sm:border-l sm:border-slate-100">
+          <Link href={profile?.is_complete ? "/profile" : "/onboarding"} className="flex items-center gap-3 pl-2 sm:border-l sm:border-slate-100">
             <div className="hidden md:flex flex-col items-end">
               <span className="text-[11px] font-black text-[#0B1F3A] uppercase tracking-tighter leading-none">
                 {profile?.full_name || "My Career"}
