@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Bot, MessageCircle, X, Send, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
+import { useProfile } from "@/lib/profile-context"
 import { useRouter, usePathname } from 'next/navigation';
 
 interface Message {
@@ -220,11 +221,12 @@ What would you like to know more about? Feel free to ask me anything about caree
 };
 
 export function ChatWidget() {
-    const { profile, user } = useAuth();
+    const { user } = useAuth()
+  const { profile } = useProfile();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingAuth, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -326,7 +328,7 @@ export function ChatWidget() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || isLoading) return;
+        if (!input.trim() || isLoadingAuth) return;
         const content = input.trim();
         setInput("");
         handleSendMessage(content);
@@ -399,7 +401,7 @@ export function ChatWidget() {
                                         </div>
                                     </div>
                                 ))}
-                                {isLoading && (
+                                {isLoadingAuth && (
                                     <div className="flex justify-start">
                                         <div className="bg-white dark:bg-slate-800 rounded-xl px-4 py-3 rounded-tl-none border border-slate-100/50 shadow-sm">
                                             <div className="flex gap-1">
@@ -439,7 +441,7 @@ export function ChatWidget() {
                                         type="submit"
                                         size="icon"
                                         className="rounded-xl sm:rounded-2xl w-11 h-11 sm:w-12 sm:h-12 shrink-0 bg-[#0B1F3A] hover:bg-slate-800 shadow-lg disabled:opacity-50"
-                                        disabled={!input?.trim() || isLoading}
+                                        disabled={!input?.trim() || isLoadingAuth}
                                     >
                                         <Send className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                                     </Button>

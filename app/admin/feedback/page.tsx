@@ -15,6 +15,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { getFeedbackData } from "@/lib/admin/analytics-queries"
+import { createClient } from "@/lib/supabase/client"
 import { ExportButton } from "@/components/admin/export-button"
 import { prepareFeedbackForExport } from "@/lib/admin/export-utils"
 import { MessageSquare, Search, Mail, User, Calendar } from "lucide-react"
@@ -39,6 +40,8 @@ export default function FeedbackPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState("")
     const [statusFilter, setStatusFilter] = useState<string>("all")
+    const supabase = createClient()
+
 
     useEffect(() => {
         loadFeedback()
@@ -50,7 +53,7 @@ export default function FeedbackPage() {
 
     const loadFeedback = async () => {
         setIsLoading(true)
-        const data = await getFeedbackData()
+        const data = await getFeedbackData(supabase)
         setFeedback(data)
         setFilteredFeedback(data)
         setIsLoading(false)

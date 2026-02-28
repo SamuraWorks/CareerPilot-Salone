@@ -59,8 +59,7 @@ export function constructCoverLetterPrompt(profile: UserProfile, job: JobData, t
     systemInstruction += "\n- Do NOT include explanations, AI labels, or meta-text.";
 
     systemInstruction += "\n\nSTRUCTURE:";
-    systemInstruction += "\n- HEADER: Strict formal business letter format including Sender and Recipient addresses.";
-    systemInstruction += "\n- OPENING: Must be 'Sophistically Catchy'—immediately command attention by positioning the user's primary value against the company's specific mission.";
+    systemInstruction += "\n- HEADER: Strict formal business letter format including Sender and Recipient addresses.\n- SUBJECT: Always include a bolded subject line (e.g. **RE: APPLICATION FOR...**) after the salutation.\n- OPENING: Must be 'Sophistically Catchy'—immediately command attention by positioning the user's primary value against the company's specific mission.";
     systemInstruction += "\n- BODY: Authoritative, evidence-based paragraphs highlighting 2–3 strongest qualifications using sophisticated vocabulary.";
     systemInstruction += "\n- CLOSING: Demonstrate mutual benefit and high-level interest.";
     systemInstruction += "\n- SIGN-OFF: Strict formal sign-off ('Yours sincerely,' or 'Yours faithfully,') followed by the candidate's name.";
@@ -88,10 +87,10 @@ export function constructCoverLetterPrompt(profile: UserProfile, job: JobData, t
     // User Prompt construction
     const prompt = `
     USER PROFILE:
-    - Name: ${profile.fullName || "Candidate"}
+    - Name: ${profile.full_name || "Candidate"}
     - Target Role: ${job.title}
     - Company: ${job.company}
-    - Level: ${profile.yearsExperience > 0 ? 'Professional (' + profile.yearsExperience + ' yrs)' : 'Student/Entry'}
+    - Level: ${(profile.experience_years || 0) > 0 ? 'Professional (' + profile.experience_years + ' yrs)' : 'Student/Entry'}
     - Key Skills: ${profile.skills.join(', ')}
     - Impact Metrics: ${profile.impact_metrics || "N/A"}
     - Leadership: ${profile.leadership_experience || "N/A"}

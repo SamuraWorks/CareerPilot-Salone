@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, GraduationCap, ExternalLink, Bookmark, Calendar, Globe, Loader2, Sparkles, Zap, Lightbulb, ArrowLeft } from "lucide-react"
 import { Footer } from "@/components/footer"
-import { getScholarships } from "@/lib/db"
+import { getScholarshipsMock as getScholarships } from "@/lib/mock-api"
 import { toast } from "sonner"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
@@ -184,16 +184,29 @@ export default function ScholarshipsPage() {
                                                     <div className="space-y-6">
                                                         <p className="text-[10px] font-black uppercase text-slate-300 mb-2 tracking-[0.3em] italic">Eligibility Vectors</p>
                                                         <div className="flex flex-wrap gap-2.5">
-                                                            {scholarship.education_level?.map((level: string) => (
-                                                                <Badge key={level} className="bg-white border-slate-200 text-[#0B1F3A] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
-                                                                    {level}
+                                                            {scholarship.last_verified_at && (
+                                                                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
+                                                                    Verified {new Date(scholarship.last_verified_at).toLocaleDateString()}
                                                                 </Badge>
-                                                            ))}
-                                                            {scholarship.category?.map((cat: string) => (
-                                                                <Badge key={cat} className="bg-[#1E5EFF]/5 border-[#1E5EFF]/10 text-[#1E5EFF] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
-                                                                    {cat}
-                                                                </Badge>
-                                                            ))}
+                                                            )}
+                                                            {scholarship.education_level && (
+                                                                Array.isArray(scholarship.education_level)
+                                                                    ? scholarship.education_level.map((level: string) => (
+                                                                        <Badge key={level} className="bg-white border-slate-200 text-[#0B1F3A] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
+                                                                            {level}
+                                                                        </Badge>
+                                                                    ))
+                                                                    : <Badge className="bg-white border-slate-200 text-[#0B1F3A] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">{scholarship.education_level}</Badge>
+                                                            )}
+                                                            {scholarship.category && (
+                                                                Array.isArray(scholarship.category)
+                                                                    ? scholarship.category.map((cat: string) => (
+                                                                        <Badge key={cat} className="bg-[#1E5EFF]/5 border-[#1E5EFF]/10 text-[#1E5EFF] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">
+                                                                            {cat}
+                                                                        </Badge>
+                                                                    ))
+                                                                    : <Badge className="bg-[#1E5EFF]/5 border-[#1E5EFF]/10 text-[#1E5EFF] font-black uppercase text-[9px] tracking-widest px-4 py-2 rounded-xl">{scholarship.category}</Badge>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>

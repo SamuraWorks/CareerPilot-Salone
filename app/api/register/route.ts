@@ -6,8 +6,16 @@ export async function POST(req: Request) {
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
         const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+        console.log("[DEBUG] API/Register Env Check:", {
+            hasUrl: !!supabaseUrl,
+            hasServiceKey: !!supabaseServiceKey,
+            nodeEnv: process.env.NODE_ENV
+        });
+
         if (!supabaseUrl || !supabaseServiceKey) {
-            return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+            const missing = !supabaseUrl ? 'NEXT_PUBLIC_SUPABASE_URL' : 'SUPABASE_SERVICE_ROLE_KEY';
+            console.error(`Missing environment variable: ${missing} `);
+            return NextResponse.json({ error: `Server configuration error: ${missing} is not defined` }, { status: 500 });
         }
 
         const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
@@ -18,7 +26,7 @@ export async function POST(req: Request) {
         }
 
         // Use a default password if none provide (for landing page fast-signup)
-        const finalPassword = password || `CP-${Math.random().toString(36).slice(-8)}`;
+        const finalPassword = password || `CP - ${Math.random().toString(36).slice(-8)} `;
 
         // 1. Generate Unique Secret ID (CP-XXXXXX)
         let secretId = ""
@@ -42,8 +50,8 @@ export async function POST(req: Request) {
 
         if (authError) return NextResponse.json({ error: authError.message }, { status: 400 })
 
-        // 3. Create Profile Entry
-        const { error: profileError } = await supabaseAdmin.from('profiles').insert({
+        // 3. Create or Update Profile Entry (handles case where DB trigger already created it)
+        const { error: profileError } = await supabaseAdmin.from('profiles').upsert({
             id: authUser.user.id,
             full_name: fullName,
             email: email,
@@ -53,8 +61,18 @@ export async function POST(req: Request) {
         })
 
         if (profileError) {
+            console.error("[AUTH] Profile creation error details:", {
+                code: profileError.code,
+                message: profileError.message,
+                details: profileError.details,
+                hint: profileError.hint
+            });
             await supabaseAdmin.auth.admin.deleteUser(authUser.user.id)
-            return NextResponse.json({ error: "Profile creation failed" }, { status: 500 })
+            return NextResponse.json({
+                error: "Profile creation failed",
+                details: profileError.message,
+                db_code: profileError.code
+            }, { status: 500 })
         }
 
         // 4. Send Email (Optional)
@@ -63,8 +81,8 @@ export async function POST(req: Request) {
             await sendEmail({
                 to: email,
                 subject: "Welcome to CareerPilot Salone - Your Secret Login ID",
-                text: `Hello ${fullName}, Your Secret Login ID is: ${secretId}`,
-                html: `<p>Hello <strong>${fullName}</strong>,</p><p>Your Secret Login ID is: <strong>${secretId}</strong></p>`
+                text: `Hello ${fullName}, Your Secret Login ID is: ${secretId} `,
+                html: `< p > Hello < strong > ${fullName} </strong>,</p > <p>Your Secret Login ID is: <strong>${secretId} </strong></p > `
             })
         } catch (e) { console.error("Email failed, but registration continues.") }
 

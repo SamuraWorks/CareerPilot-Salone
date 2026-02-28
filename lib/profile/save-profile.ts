@@ -1,20 +1,57 @@
-import { UserProfile } from "@/components/home/profile-wizard"
+"use server"
 
-export async function saveProfileData(profile: UserProfile) {
+import { UserProfile as WizardProfile } from "@/components/home/profile-wizard"
+import { updateUserProfile } from "@/lib/db"
+
+export async function saveProfileData(profile: WizardProfile, userId?: string) {
     try {
-        if (typeof window === 'undefined') return { success: false, message: "Client-only operation" };
+        if (!userId) {
+            if (typeof window !== 'undefined') {
+                const anonId = localStorage.getItem('career_pilot_anon_id');
+                userId = anonId || undefined;
+            }
+        }
 
-        // 1. Save to localStorage
-        const profileWithFlag = { ...profile, is_complete: true }
-        localStorage.setItem('career_pilot_profile', JSON.stringify(profileWithFlag))
+        if (!userId) throw new Error("No User ID available for saving profile");
 
-        // 2. Generate CV data structure
+        // 1. Map wizard profile to database profile
+        const dbProfile = {
+            full_name: profile.full_name,
+            location: profile.location,
+            avatar_url: profile.avatar_url,
+            education_level: profile.education || (profile as any).education_level,
+            career_goal: profile.career_goal,
+            is_complete: true,
+            // profile_completed: true, // REMOVED: Column does not exist
+
+            // Store raw metadata for AI in resume_data
+            resume_data: {
+                impact_metric: profile.experience,
+                leadership_action: profile.internships,
+                professional_hook: profile.technical_skills,
+                // Preserve wizard fields
+                school: profile.school,
+                field_of_study: profile.field_of_study,
+                graduation_year: profile.graduation_year,
+                technical_skills: profile.technical_skills,
+                soft_skills: profile.soft_skills,
+                languages: profile.languages
+            },
+
+            updated_at: new Date().toISOString()
+        }
+
+        // 2. Save to Supabase
+        const { data, error } = await updateUserProfile(userId, dbProfile);
+        if (error) throw error;
+
+        // 3. Generate CV data structure (legacy/internal use)
         const cvData = {
             personalInfo: {
                 fullName: profile.full_name,
                 location: profile.location,
                 profileImg: profile.avatar_url,
-                email: "", // To be filled by user in CV builder
+                email: "",
                 phone: ""
             },
             education: [{
@@ -38,35 +75,20 @@ export async function saveProfileData(profile: UserProfile) {
             targetIndustry: profile.target_industry
         }
 
-        // Save CV data for pre-population
-        localStorage.setItem('career_pilot_cv_data', JSON.stringify(cvData))
-
-        // 3. Generate career recommendations metadata
-        const careerMetadata = {
-            stage: profile.stage,
-            interest: profile.interest,
-            education: profile.education,
-            targetIndustry: profile.target_industry,
-            careerGoal: profile.career_goal,
-            location: profile.location,
-            availability: profile.availability
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('career_pilot_cv_data', JSON.stringify(cvData));
+            localStorage.setItem('career_pilot_profile_complete', 'true');
         }
-
-        // Save for AI career matching
-        localStorage.setItem('career_pilot_metadata', JSON.stringify(careerMetadata))
-
-        // 4. Mark profile as complete
-        localStorage.setItem('career_pilot_profile_complete', 'true')
 
         return {
             success: true,
-            message: "Profile saved successfully!"
+            message: "Profile saved successfully to secure cloud!"
         }
     } catch (error) {
         console.error("Error saving profile:", error)
         return {
             success: false,
-            message: "Failed to save profile"
+            message: "Failed to save profile to cloud. Please try again."
         }
     }
 }

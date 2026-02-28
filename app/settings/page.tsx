@@ -3,6 +3,7 @@
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import { ResearchQuestionnaire } from "@/components/dashboard/research-questionnaire"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,9 +20,10 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 
 export default function SettingsPage() {
-    const { profile, logout, isLoading } = useAuth()
+    const { logout, isLoadingAuth } = useAuth()
+  const { profile } = useProfile()
 
-    if (isLoading) {
+    if (isLoadingAuth) {
         return (
             <DashboardLayout>
                 <div className="flex h-[60vh] items-center justify-center">

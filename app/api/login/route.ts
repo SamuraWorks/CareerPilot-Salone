@@ -1,60 +1,63 @@
-import { createClient } from "@supabase/supabase-js"
-import { NextResponse } from "next/server"
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     try {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+        const { email, password } = await req.json();
+
+        if (!email || !password) {
+            return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+        }
+
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
         if (!supabaseUrl || !supabaseServiceKey) {
-            return NextResponse.json({ error: "Server configuration error" }, { status: 500 })
+            console.error("[CRITICAL] Missing Supabase config for login");
+            return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
         }
 
-        const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
-        const { secretId, email, password } = await req.json()
+        const supabaseAnon = createClient(supabaseUrl, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
-        // Handle Secret ID Login
-        if (secretId) {
-            const { data: profile, error: profileError } = await supabaseAdmin
-                .from('profiles')
-                .select('*')
-                .eq('secret_id', secretId.toUpperCase())
-                .single()
+        const { data: authData, error: authError } = await supabaseAnon.auth.signInWithPassword({
+            email,
+            password
+        });
 
-            if (profileError || !profile) {
-                return NextResponse.json({ error: "Invalid Secret ID" }, { status: 404 })
-            }
+        if (authError || !authData.user) {
+            return NextResponse.json({ error: "Invalid login credentials." }, { status: 401 });
+        }
 
-            return NextResponse.json({
-                success: true,
-                user: { id: profile.id, email: profile.email },
-                profile: profile
+        // Update login stats in background
+        const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+        // Let background task handle DB update so it doesn't block response
+        // Using a direct update since we have the service key
+        supabaseAdmin.from('profiles')
+            .select('total_logins')
+            .eq('id', authData.user.id)
+            .single()
+            .then(({ data }) => {
+                if (data) {
+                    supabaseAdmin.from('profiles')
+                        .update({
+                            last_login: new Date().toISOString(),
+                            total_logins: (data.total_logins || 0) + 1
+                        })
+                        .eq('id', authData.user.id)
+                        .then();
+                }
             })
-        }
+            .catch(err => console.error("[STATS ERROR] Fail to update login stats", err));
 
-        // Handle standard Email/Password Login (we just proxy the validation if needed, 
-        // but usually client handles this via supabase.auth.signInWithPassword.
-        // However, if we want a unified server route:
-        if (email && password) {
-            const { data, error } = await supabaseAdmin.auth.signInWithPassword({ email, password })
-            if (error) return NextResponse.json({ error: error.message }, { status: 401 })
-
-            const { data: profile } = await supabaseAdmin
-                .from('profiles')
-                .select('*')
-                .eq('id', data.user.id)
-                .single()
-
-            return NextResponse.json({
-                success: true,
-                user: data.user,
-                profile: profile
-            })
-        }
-
-        return NextResponse.json({ error: "Missing login credentials" }, { status: 400 })
+        return NextResponse.json({
+            success: true,
+            session: authData.session,
+            user: authData.user
+        });
 
     } catch (error: any) {
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+        console.error("[FATAL ERROR] Exception in login endpoint:", error);
+        return NextResponse.json({ error: "An unexpected error occurred during login." }, { status: 500 });
     }
 }

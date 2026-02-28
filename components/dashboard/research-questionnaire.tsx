@@ -9,7 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useAuth } from "@/lib/auth-context"
-import { supabase } from "@/lib/supabase"
+import { useProfile } from "@/lib/profile-context"
+import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { Loader2, X, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -19,19 +20,23 @@ const OPPORTUNITIES = ["Scholarships", "Internships", "Full-time Jobs", "Mentors
 
 interface ResearchQuestionnaireProps {
     forceVisible?: boolean;
+    isOnboardingMode?: boolean;
     onSaveSuccess?: (data: any) => void;
 }
 
-export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: ResearchQuestionnaireProps) {
-    const { user, profile, updateProfile, refreshProfile } = useAuth()
-    const [isVisible, setIsVisible] = useState(forceVisible)
+export function ResearchQuestionnaire({ forceVisible = false, isOnboardingMode = false, onSaveSuccess }: ResearchQuestionnaireProps) {
+    const { user } = useAuth()
+  const { profile, updateProfile, refreshProfile, completeOnboarding } = useProfile()
+    const [isVisible, setIsVisible] = useState(forceVisible || isOnboardingMode)
     const [isExpanded, setIsExpanded] = useState(true)
     const [loading, setLoading] = useState(false)
+    const supabase = createClient()
+
 
     // Form State
     const [formData, setFormData] = useState({
         sector_interest: "",
-        highest_education: "",
+        education_level: "",
         skills: [] as string[],
         career_goals: "",
         opportunities_interest: [] as string[],
@@ -40,13 +45,15 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
     })
 
     useEffect(() => {
+        if (isOnboardingMode) return; // Managed by parent component
+
         // Only show if research NOT completed and profile is relatively ready
         if (profile?.id && !profile.research_completed && !localStorage.getItem("research_skipped")) {
             setIsVisible(true)
             // Pre-fill some data if available
             setFormData(prev => ({
                 ...prev,
-                highest_education: profile.highest_education || "",
+                education_level: profile.education_level || "",
                 career_goals: profile.career_goal || "",
                 skills: profile.skills || []
             }))
@@ -88,12 +95,22 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
 
             // 3. Update Profile Data using standard helper
             // This marks it as completed and SYNCS the data they just provided to their profile
-            await updateProfile({
-                research_completed: true,
-                career_goal: formData.career_goals,
-                highest_education: formData.highest_education,
-                interests: [formData.sector_interest, ...(profile.interests || [])].filter((v, i, a) => v && a.indexOf(v) === i)
-            });
+            if (isOnboardingMode) {
+                await completeOnboarding({
+                    research_completed: true,
+                    is_complete: true,
+                    career_goal: formData.career_goals,
+                    education_level: formData.education_level,
+                    interests: [formData.sector_interest, ...(profile.interests || [])].filter((v, i, a) => v && a.indexOf(v) === i)
+                });
+            } else {
+                await updateProfile({
+                    research_completed: true,
+                    career_goal: formData.career_goals,
+                    education_level: formData.education_level,
+                    interests: [formData.sector_interest, ...(profile.interests || [])].filter((v, i, a) => v && a.indexOf(v) === i)
+                });
+            }
 
             toast.success("Thank you for your feedback!")
             setIsVisible(false)
@@ -128,18 +145,20 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
 
     return (
         <Card className="border-l-4 border-l-emerald-500 shadow-md animate-in fade-in slide-in-from-top-4 mb-8 bg-slate-50/50">
-            <CardHeader className="pb-2 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+            <CardHeader className={`pb-2 ${isOnboardingMode ? '' : 'cursor-pointer'}`} onClick={() => !isOnboardingMode && setIsExpanded(!isExpanded)}>
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                        <CardTitle className="text-lg font-bold text-[#0B1F3A]">Help Us Improve Career Pilot 🇸🇱</CardTitle>
+                        <CardTitle className={`text-lg font-bold text-[#0B1F3A] ${isOnboardingMode ? 'text-2xl mb-2' : ''}`}>Help Us Improve Career Pilot 🇸🇱</CardTitle>
                         <CardDescription>Share your interests to get better recommendations. Takes 30 seconds.</CardDescription>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); handleSkip(); }}>
-                            <X className="w-4 h-4 text-slate-400" />
-                        </Button>
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                    </div>
+                    {!isOnboardingMode && (
+                        <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); handleSkip(); }}>
+                                <X className="w-4 h-4 text-slate-400" />
+                            </Button>
+                            {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                        </div>
+                    )}
                 </div>
             </CardHeader>
 
@@ -165,8 +184,8 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
                         <div className="space-y-2">
                             <Label>Highest Education</Label>
                             <Select
-                                value={formData.highest_education}
-                                onValueChange={(val) => setFormData({ ...formData, highest_education: val })}
+                                value={formData.education_level}
+                                onValueChange={(val) => setFormData({ ...formData, education_level: val })}
                             >
                                 <SelectTrigger className="bg-white">
                                     <SelectValue placeholder="Current level..." />
@@ -231,12 +250,14 @@ export function ResearchQuestionnaire({ forceVisible = false, onSaveSuccess }: R
                         </div>
 
                         <div className="flex gap-2">
-                            <Button variant="ghost" onClick={handleSkip} disabled={loading}>
-                                Skip for now
-                            </Button>
+                            {!isOnboardingMode && (
+                                <Button variant="ghost" onClick={handleSkip} disabled={loading}>
+                                    Skip for now
+                                </Button>
+                            )}
                             <Button onClick={handleSave} disabled={loading} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                                 {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                                Save Feedback
+                                {isOnboardingMode ? 'Complete Setup' : 'Save Feedback'}
                             </Button>
                         </div>
                     </div>

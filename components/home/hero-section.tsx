@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, Sparkles, Target } from "lucide-react"
 import { motion } from "framer-motion"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 
 export function HeroSection() {
-    const { user, profile } = useAuth()
+    const { user } = useAuth()
+  const { profile } = useProfile()
     return (
         <section className="relative min-h-[75vh] flex flex-col items-center justify-center py-16 overflow-hidden bg-gradient-to-br from-blue-600 to-emerald-400">
             {/* Background Effects */}

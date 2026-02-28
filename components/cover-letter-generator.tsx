@@ -12,12 +12,14 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Sparkles, Copy, Check, Lock, Briefcase, Building2 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import { toast } from "sonner"
 import { UserProfile } from "@/lib/cv-logic-engine"
 import { CoverLetterTone } from "@/lib/cover-letter-logic"
 
 export function CoverLetterGenerator() {
-    const { profile, user } = useAuth()
+    const { user } = useAuth()
+  const { profile } = useProfile()
     const [job, setJob] = useState({
         title: "",
         company: "",
@@ -27,7 +29,7 @@ export function CoverLetterGenerator() {
     })
     const [generatedLetter, setGeneratedLetter] = useState("")
     const [detectedTone, setDetectedTone] = useState<CoverLetterTone | null>(null)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoadingAuth, setIsLoading] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
 
     const isLocked = !job.title || !job.company
@@ -38,17 +40,17 @@ export function CoverLetterGenerator() {
         setIsLoading(true)
         setGeneratedLetter("")
 
-        // Construct minimal profile for API
+        // Construct standardized profile for API
         const userProfile: UserProfile = {
             status: profile?.status || 'employed',
-            yearsExperience: 2, // Default fallback
-            targetRole: job.title,
-            skills: profile?.hardSkills || [],
-            projectCount: 0,
-            fullName: profile?.fullName,
-            impact_metrics: profile?.impact_metrics || profile?.resumeData?.impactMetric,
-            leadership_experience: profile?.leadership_experience || profile?.resumeData?.leadershipAction || profile?.resumeData?.leadership,
-            unique_hook: profile?.unique_hook || profile?.resumeData?.professionalHook
+            experience_years: profile?.experience_years || 2,
+            career_goal: job.title,
+            skills: profile?.skills || [],
+            project_count: 0,
+            full_name: profile?.full_name,
+            impact_metrics: profile?.impact_metrics || profile?.resume_data?.impact_metric,
+            leadership_experience: profile?.leadership_experience || profile?.resume_data?.leadership_action || profile?.resume_data?.leadership,
+            unique_hook: profile?.unique_hook || profile?.resume_data?.professional_hook
         }
 
         try {
@@ -204,10 +206,10 @@ export function CoverLetterGenerator() {
 
                 <Button
                     className={`w-full h-14 rounded-xl font-bold uppercase tracking-wide text-xs transition-all ${isLocked ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/30'}`}
-                    disabled={isLocked || isLoading}
+                    disabled={isLocked || isLoadingAuth}
                     onClick={handleGenerate}
                 >
-                    {isLoading ? (
+                    {isLoadingAuth ? (
                         <>
                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                             Synthesizing...

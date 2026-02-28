@@ -5,20 +5,20 @@ export type ExperienceLevel = 'student' | 'entry' | 'mid' | 'senior' | 'executiv
 export type JobType = 'corporate' | 'creative' | 'technical' | 'academic' | 'startup' | 'ngo'
 
 export interface UserProfile {
-    status: string // 'student' | 'employed' | 'looking'
-    yearsExperience: number
-    targetRole: string
+    status?: 'student' | 'employed' | 'job_seeker' | ''
+    experience_years?: number
+    career_goal?: string
     skills: string[]
-    projectCount: number
-    fullName?: string
+    project_count?: number
+    full_name?: string
     impact_metrics?: string
     leadership_experience?: string
     unique_hook?: string
-    resumeData?: {
-        impactMetric?: string
-        leadershipAction?: string
+    resume_data?: {
+        impact_metric?: string
+        leadership_action?: string
         leadership?: string
-        professionalHook?: string
+        professional_hook?: string
     }
 }
 
@@ -110,10 +110,10 @@ export function applyRealismFilter(skills: string[], projects: any[], experience
  * Determines the best CV strategy based on the 4-point decision tree in System Design.
  */
 export function calculateLayoutStrategy(profile: UserProfile): LayoutStrategy {
-    const { yearsExperience, targetRole, skills, projectCount, status } = profile
+    const { experience_years = 0, career_goal = "", skills, project_count = 0, status } = profile
 
     // Normalize inputs
-    const roleLower = targetRole.toLowerCase()
+    const roleLower = career_goal.toLowerCase()
 
     // Sector Detection
     const isTech = roleLower.includes('developer') || roleLower.includes('software') || roleLower.includes('engineer') || roleLower.includes('data') || roleLower.includes('it')
@@ -125,7 +125,7 @@ export function calculateLayoutStrategy(profile: UserProfile): LayoutStrategy {
     // 1. Base Strategy Selection (Seniority First)
 
     // Scholar Route (Student / 0 exp)
-    if (yearsExperience < 1 && status === 'student') {
+    if (experience_years < 1 && status === 'student') {
         // Enforce Academic theme for most scholars unless clearly Creative/Tech
         // This ensures it looks different from the "Modern Professional"
         let theme: 'academic' | 'creative' | 'modern' | 'minimalist' = 'academic'
@@ -158,7 +158,7 @@ export function calculateLayoutStrategy(profile: UserProfile): LayoutStrategy {
     }
 
     // Executive Route (3+ years exp)
-    if (yearsExperience >= 3) {
+    if (experience_years >= 3) {
         const theme = isCreative ? 'creative' : (isAcademic || isNGO ? 'academic' : 'minimalist')
         return {
             id: 'experience-heavy',

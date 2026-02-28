@@ -11,10 +11,11 @@ import { AlertCircle, CheckCircle2, Lock, ArrowRight, Target, Trophy } from "luc
 import { calculateReadiness, ReadinessReport } from "@/lib/readiness-engine"
 import { UserProfile } from "@/lib/cv-logic-engine"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import Link from "next/link"
 
 export function ReadinessMeter() {
-    const { profile } = useAuth()
+    const { profile } = useProfile()
     const [report, setReport] = useState<ReadinessReport | null>(null)
     const [targetRole, setTargetRole] = useState("")
 

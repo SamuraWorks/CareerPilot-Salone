@@ -4,9 +4,11 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { User, MapPin, GraduationCap, Target, CheckCircle2, Briefcase, Award, Globe, Calendar, Mail, Phone, Lightbulb } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 
 export function ProfileSection() {
-    const { profile, updateProfile, loading } = useAuth()
+    const { loading } = useAuth()
+  const { profile, updateProfile } = useProfile()
     const [saved, setSaved] = useState(false)
     const [isSyncing, setIsSyncing] = useState(false)
 

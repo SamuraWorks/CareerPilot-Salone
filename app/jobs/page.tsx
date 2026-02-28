@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, MapPin, Briefcase, Clock, ExternalLink, BookOpen, Bookmark, Loader2, ArrowLeft, Sparkles, Zap } from "lucide-react"
-import { getJobs } from "@/lib/db"
+import { getJobs } from "@/lib/mock-api"
 import { toast } from "sonner"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import { Footer } from "@/components/footer"
 
 export default function JobsPage() {
@@ -25,7 +26,7 @@ export default function JobsPage() {
   const [loading, setLoading] = useState(true)
   const [showStrategicPause, setShowStrategicPause] = useState(false)
   const [pendingJob, setPendingJob] = useState<string | null>(null)
-  const { profile } = useAuth()
+  const { profile } = useProfile()
 
   useEffect(() => {
     const fetchJobs = async () => {

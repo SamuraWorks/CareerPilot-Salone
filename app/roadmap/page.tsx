@@ -44,6 +44,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import { RoadmapHistory } from "@/components/roadmap-history"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
@@ -126,9 +127,10 @@ function RoadmapContent() {
   const searchParams = useSearchParams()
   const targetId = searchParams.get('target')
   const router = useRouter()
-  const { user, profile, updateProfile } = useAuth()
+  const { user } = useAuth()
+  const { profile, updateProfile } = useProfile()
   const [query, setQuery] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingAuth, setIsLoading] = useState(false)
   const [displayedRoadmap, setDisplayedRoadmap] = useState<DetailedRoadmapData | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [savedRoadmaps, setSavedRoadmaps] = useState<any[]>([])
@@ -197,36 +199,22 @@ function RoadmapContent() {
     // Sync to cloud profile (Auth Context)
     if (profile && user) {
       const POINTS_PER_TASK = 50
-      const currentPoints = profile.points || 0
-      const pointsDelta = wasCompleted ? -POINTS_PER_TASK : POINTS_PER_TASK
-      const newPoints = Math.max(0, currentPoints + pointsDelta)
+      const wasCompleted = completedTasks.has(taskId) // Check against PREVIOUS state
 
-      const updatedCompletedTasks = {
-        ...(profile.completed_tasks || (profile as any)?.completedTasks || {}),
-        [displayedRoadmap.id]: Array.from(newCompleted)
-      }
-
-      const updatedTimestamps = {
-        ...(profile.task_timestamps || {}),
-        [taskId]: new Date().toISOString()
-      }
-
-      if (wasCompleted) {
-        delete updatedTimestamps[taskId]
-      }
-
-      // Update profile via auth context
-      updateProfile({
-        completed_tasks: updatedCompletedTasks,
-        task_timestamps: updatedTimestamps,
-        points: newPoints,
-        last_updated_at: new Date().toISOString()
-      })
+      // Use the dedicated server action for robust tracking
+      import('@/lib/actions').then(({ completeRoadmapTaskAction }) => {
+        completeRoadmapTaskAction(user.id, displayedRoadmap.id, taskId).then(({ data, error }) => {
+          if (!error && data) {
+            // refresh auth profile state
+            if (updateProfile) updateProfile(data);
+          }
+        });
+      });
 
       // User feedback
       if (!wasCompleted) {
         toast.success(`+${POINTS_PER_TASK} Points! Keep going! 🚀`, {
-          description: `Total: ${newPoints} Career Points`
+          description: `Strategic mission objective secured.`
         })
       }
     }
@@ -252,7 +240,7 @@ function RoadmapContent() {
   // Handle incoming 'target' or active roadmap resumption
   useEffect(() => {
     const activeId = targetId || profile?.activeRoadmapId;
-    if (activeId && !displayedRoadmap && !isLoading) {
+    if (activeId && !displayedRoadmap && !isLoadingAuth) {
       // First, check if it's already in history
       const inHistory = savedRoadmaps.find(r => r.career_id === activeId || r.content?.id === activeId);
       if (inHistory) {
@@ -490,11 +478,11 @@ function RoadmapContent() {
                   <Button
                     size="lg"
                     onClick={handleGenerate}
-                    disabled={isLoading || !query}
+                    disabled={isLoadingAuth || !query}
                     className="h-16 px-10 bg-[#0B1F3A] hover:bg-[#1E5EFF] text-white font-black uppercase tracking-widest text-[11px] rounded-2xl transition-all shadow-xl active:scale-95"
                   >
-                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Zap className="w-5 h-5 mr-2" />}
-                    {isLoading ? "Simulating..." : "Generate Path"}
+                    {isLoadingAuth ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Zap className="w-5 h-5 mr-2" />}
+                    {isLoadingAuth ? "Simulating..." : "Generate Path"}
                   </Button>
                 </div>
               </div>
@@ -920,7 +908,7 @@ function RoadmapContent() {
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
               <RoadmapHistory
                 roadmaps={savedRoadmaps}
-                isLoading={false}
+                isLoadingAuth={false}
                 onLoad={handleLoadHistory}
                 onDelete={handleDeleteHistory}
               />

@@ -7,14 +7,15 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Briefcase, GraduationCap, Zap, Users, MapPin, ArrowRight, Loader2, Search, Sparkles } from "lucide-react"
 import { Footer } from "@/components/footer"
-import { getJobs, getScholarships } from "@/lib/db"
+import { getJobs, getScholarshipsMock as getScholarships } from "@/lib/mock-api"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 
 export default function OpportunitiesPage() {
-    const { profile, updateProfile } = useAuth()
+    const { profile, updateProfile } = useProfile()
     const [activeTab, setActiveTab] = useState<'jobs' | 'internships' | 'scholarships' | 'training'>('jobs')
     const [loading, setLoading] = useState(true)
     const [data, setData] = useState<{ jobs: any[], scholarships: any[], internships: any[], training: any[] }>({

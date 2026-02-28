@@ -44,6 +44,7 @@ import { calculateLayoutStrategy, UserProfile } from "@/lib/cv-logic-engine"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import Link from "next/link"
 import { Suspense } from "react"
 import {
@@ -115,7 +116,7 @@ export default function CVBuilderPage() {
 
 function CVBuilderContent() {
 
-  const { profile } = useAuth()
+  const { profile } = useProfile()
   const searchParams = useSearchParams()
   const careerFromUrl = searchParams.get('career')
 
@@ -344,7 +345,7 @@ function CVBuilderContent() {
   }
 
   const EnhanceButton = ({ text, type, onResult }: { text: string, type: string, onResult: (res: string) => void }) => {
-    const { complete, isLoading } = useCompletion({
+    const { complete, isLoadingAuth } = useCompletion({
       api: "/api/cv-enhance",
       onFinish: (_prompt, completion) => onResult(completion)
     });
@@ -354,12 +355,12 @@ function CVBuilderContent() {
         type="button"
         variant="ghost"
         size="sm"
-        disabled={isLoading || !text}
+        disabled={isLoadingAuth || !text}
         onClick={() => complete("", { body: { text, type, career: personalInfo.title } })}
         className="h-8 gap-2 text-primary font-bold uppercase tracking-wide text-xs hover:bg-primary/5"
       >
-        {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-        {isLoading ? "Enhancing..." : "AI Revise"}
+        {isLoadingAuth ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+        {isLoadingAuth ? "Enhancing..." : "AI Revise"}
       </Button>
     );
   };

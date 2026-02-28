@@ -4,8 +4,9 @@ export const dynamic = 'force-dynamic'
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { getAnalyticsData, AnalyticsData } from "@/lib/admin/analytics-queries"
-import { User, UserCheck, UserX, TrendingUp, GraduationCap, Target, MapPin } from "lucide-react"
+import { User, UserCheck, UserX, TrendingUp, GraduationCap, Target, MapPin, Database } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { createClient } from "@/lib/supabase/client"
 import {
     BarChart,
     Bar,
@@ -28,13 +29,14 @@ export default function AnalyticsPage() {
     const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
+    const supabase = createClient()
     useEffect(() => {
         loadAnalytics()
     }, [])
 
     const loadAnalytics = async () => {
         setIsLoading(true)
-        const data = await getAnalyticsData()
+        const data = await getAnalyticsData(supabase)
         setAnalytics(data)
         setIsLoading(false)
     }
@@ -120,6 +122,11 @@ export default function AnalyticsPage() {
                             <CardTitle className="flex items-center gap-2">
                                 <TrendingUp className="h-5 w-5 text-blue-500" />
                                 User Growth (Last 30 Days)
+                                {false && (
+                                    <Badge variant="destructive" className="ml-auto font-mono text-[10px]">
+                                        MOCK MODE: Env Vars Missing
+                                    </Badge>
+                                )}
                             </CardTitle>
                             <CardDescription>Daily registration trends</CardDescription>
                         </CardHeader>

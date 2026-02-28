@@ -12,6 +12,7 @@ import Image from "next/image"
 import { MOCK_MENTORS } from "@/lib/mentors"
 import { SIERRA_LEONE_CAREERS, PREVIEW_ROADMAP, INSTITUTIONS, type CareerInfo } from "@/lib/career-data"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -23,7 +24,7 @@ export default function CareerDetailPage({ params }: { params: { id: string } })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isStarting, setIsStarting] = useState(false)
-  const { profile, updateProfile } = useAuth()
+  const { profile, updateProfile } = useProfile()
   const router = useRouter()
 
   useEffect(() => {

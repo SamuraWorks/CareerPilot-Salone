@@ -25,6 +25,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth-context"
+import { useProfile } from "@/lib/profile-context"
 import {
   Sheet,
   SheetContent,
@@ -50,7 +51,8 @@ const NAV_ITEMS = [
 
 export function Navigation() {
   const pathname = usePathname()
-  const { user, profile, logout } = useAuth()
+  const { user, logout } = useAuth()
+  const { profile } = useProfile()
   const [open, setOpen] = React.useState(false)
 
   // Hide navigation on admin pages

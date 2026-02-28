@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/lib/auth-context"
+import { ProfileProvider } from "@/lib/profile-context"
 import { AuthGuard } from "@/components/auth-guard"
 
 import { Navigation } from "@/components/navigation"
@@ -78,10 +79,12 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable}`}>
       <body className={`font-sans antialiased bg-white text-slate-900`}>
         <AuthProvider>
-          <AuthGuard>
-            <Navigation />
-            {children}
-          </AuthGuard>
+          <ProfileProvider>
+            <AuthGuard>
+              <Navigation />
+              {children}
+            </AuthGuard>
+          </ProfileProvider>
           <Toaster richColors position="top-right" />
           <Analytics />
         </AuthProvider>
