@@ -17,13 +17,11 @@ export default function SignupPage() {
     const [password, setPassword] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
     const [generatedId, setGeneratedId] = useState("")
-    const { signup, isLoading } = useAuth()
+    const { login, isLoadingAuth } = useAuth()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            // Updated context to return data or just handle internally
-            // Since we want to show the ID here, we might need a way to get it from context or the fetch
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,13 +32,21 @@ export default function SignupPage() {
                 setGeneratedId(data.secretId)
                 setIsSuccess(true)
                 toast.success("Account created successfully!")
-                // We'll still call context signup to establish the local session
-                await signup(email, password, fullName)
             } else {
                 toast.error(data.error || "Signup failed")
             }
         } catch (err) {
             toast.error("An error occurred during signup.")
+        }
+    }
+
+    const handleEnterDashboard = async () => {
+        try {
+            await login(email, password)
+            // AuthGuard will handle the redirect once user is set
+        } catch (err) {
+            // If login fails for some reason, redirect to login page as fallback
+            window.location.href = "/login"
         }
     }
 
@@ -71,7 +77,7 @@ export default function SignupPage() {
                         </p>
 
                         <Button
-                            onClick={() => window.location.href = "/dashboard"}
+                            onClick={handleEnterDashboard}
                             className="w-full h-14 bg-[#0B1F3A] hover:bg-slate-800 text-white font-black uppercase tracking-widest rounded-2xl shadow-xl transition-all active:scale-95"
                         >
                             Enter Dashboard
@@ -162,9 +168,9 @@ export default function SignupPage() {
                         <Button
                             type="submit"
                             className="w-full h-14 rounded-2xl bg-[#0B1F3A] hover:bg-slate-800 text-white font-black uppercase tracking-widest shadow-lg shadow-blue-900/10 group transition-all"
-                            disabled={isLoading}
+                            disabled={isLoadingAuth}
                         >
-                            {isLoading ? (
+                            {isLoadingAuth ? (
                                 <div className="flex items-center gap-2">
                                     <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                     <span>Processing...</span>

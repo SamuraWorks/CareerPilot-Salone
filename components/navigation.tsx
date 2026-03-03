@@ -51,7 +51,7 @@ const NAV_ITEMS = [
 
 export function Navigation() {
   const pathname = usePathname()
-  const { user, logout } = useAuth()
+  const { user, logout, isAuthenticated } = useAuth()
   const { profile } = useProfile()
   const [open, setOpen] = React.useState(false)
 
@@ -160,40 +160,59 @@ export function Navigation() {
                 </div>
               </div>
 
-              <div className="p-4 border-t border-slate-100 bg-slate-50/50 shrink-0 space-y-4">
-                <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm mb-2">
-                  <div className="h-12 w-12 rounded-xl bg-[#0B1F3A] p-0.5 shrink-0">
-                    <div className="w-full h-full rounded-[10px] bg-white flex items-center justify-center overflow-hidden relative">
-                      {profile?.avatar_url ? (
-                        <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
-                      ) : (
-                        <span className="text-sm font-black text-[#0B1F3A]">
-                          {(profile?.full_name || "G").charAt(0)}
-                        </span>
-                      )}
+              <div className="p-4 border-t border-slate-100 bg-slate-50/50 shrink-0">
+                {isAuthenticated ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-200 shadow-sm mb-2">
+                      <div className="h-12 w-12 rounded-xl bg-[#0B1F3A] p-0.5 shrink-0">
+                        <div className="w-full h-full rounded-[10px] bg-white flex items-center justify-center overflow-hidden relative">
+                          {profile?.avatar_url ? (
+                            <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
+                          ) : (
+                            <span className="text-sm font-black text-[#0B1F3A]">
+                              {(profile?.full_name || "G").charAt(0)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs font-black text-[#0B1F3A] uppercase tracking-tight">{profile?.full_name || "Guest Scholar"}</div>
+                        <div className="text-[10px] font-bold text-[#1FA774] uppercase tracking-widest">{profile?.location || "Sierra Leone"}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <Link
+                        href="/profile"
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-[#1FA774] rounded-xl transition-all group bg-white border border-slate-200 shadow-sm"
+                      >
+                        <User className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                        <span className="font-bold text-xs uppercase tracking-widest">Edit Profile</span>
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          setOpen(false)
+                          logout()
+                        }}
+                        className="flex items-center gap-3 w-full px-4 py-3 text-slate-400 hover:text-red-500 rounded-xl transition-all group"
+                      >
+                        <LogOut className="w-5 h-5 transition-transform" />
+                        <span className="font-bold text-xs uppercase tracking-widest">Sign Out</span>
+                      </button>
                     </div>
                   </div>
-                  <div>
-                    <div className="text-xs font-black text-[#0B1F3A] uppercase tracking-tight">{profile?.full_name || "Guest Scholar"}</div>
-                    <div className="text-[10px] font-bold text-[#1FA774] uppercase tracking-widest">{profile?.location || "Sierra Leone"}</div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between px-4 py-2 bg-slate-50 rounded-xl border border-slate-100">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Public ID</span>
-                    <span className="text-xs font-black text-[#0B1F3A] font-mono">{profile?.id || "GUEST"}</span>
-                  </div>
-
+                ) : (
                   <Link
-                    href="/profile"
+                    href="/login"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-[#1FA774] rounded-xl transition-all group bg-white border border-slate-200 shadow-sm"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-4 bg-[#0B1F3A] hover:bg-slate-800 text-white rounded-2xl font-black uppercase tracking-[0.1em] text-[11px] shadow-lg shadow-blue-900/10 active:scale-[0.98] transition-all"
                   >
-                    <User className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="font-bold text-xs uppercase tracking-widest">Edit Profile</span>
+                    <span>Sign In / Register</span>
+                    <ChevronRight className="w-4 h-4" />
                   </Link>
-                </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
@@ -224,27 +243,29 @@ export function Navigation() {
           </Button>
           */}
 
-          <Link href={profile?.is_complete ? "/profile" : "/onboarding"} className="flex items-center gap-3 pl-2 sm:border-l sm:border-slate-100">
-            <div className="hidden md:flex flex-col items-end">
-              <span className="text-[11px] font-black text-[#0B1F3A] uppercase tracking-tighter leading-none">
-                {profile?.full_name || "My Career"}
-              </span>
-              <span className="text-[9px] font-bold text-[#1FA774] uppercase tracking-widest mt-1">
-                {profile?.is_complete ? "Scholar" : "Start Here"}
-              </span>
-            </div>
-            <div className="h-10 w-10 rounded-xl bg-[#0B1F3A] p-0.5 shadow-sm active:scale-95 transition-all">
-              <div className="w-full h-full rounded-[10px] bg-white flex items-center justify-center overflow-hidden relative">
-                {profile?.avatar_url ? (
-                  <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
-                ) : (
-                  <span className="text-sm font-black text-[#0B1F3A]">
-                    {(profile?.full_name || "M").charAt(0)}
-                  </span>
-                )}
+          {isAuthenticated && (
+            <Link href={profile?.is_complete ? "/profile" : "/onboarding"} className="flex items-center gap-3 pl-2 sm:border-l sm:border-slate-100">
+              <div className="hidden md:flex flex-col items-end">
+                <span className="text-[11px] font-black text-[#0B1F3A] uppercase tracking-tighter leading-none">
+                  {profile?.full_name || "My Career"}
+                </span>
+                <span className="text-[9px] font-bold text-[#1FA774] uppercase tracking-widest mt-1">
+                  {profile?.is_complete ? "Scholar" : "Start Here"}
+                </span>
               </div>
-            </div>
-          </Link>
+              <div className="h-10 w-10 rounded-xl bg-[#0B1F3A] p-0.5 shadow-sm active:scale-95 transition-all">
+                <div className="w-full h-full rounded-[10px] bg-white flex items-center justify-center overflow-hidden relative">
+                  {profile?.avatar_url ? (
+                    <Image src={profile.avatar_url} alt="User Avatar" fill className="object-cover" />
+                  ) : (
+                    <span className="text-sm font-black text-[#0B1F3A]">
+                      {(profile?.full_name || "M").charAt(0)}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

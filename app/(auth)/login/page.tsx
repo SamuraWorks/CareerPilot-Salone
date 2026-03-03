@@ -60,6 +60,7 @@ export default function LoginPage() {
 
         if (!validateForm()) return
 
+        setLoading(true)
         try {
             if (loginMethod === "email") {
                 await login(email, password)
