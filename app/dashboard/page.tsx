@@ -26,8 +26,14 @@ import {
   GraduationCap,
   MessageCircle,
   ChevronRight,
-  Loader2
+  Loader2,
+  MapPin,
+  Briefcase
 } from "lucide-react"
+
+import { SIERRA_LEONE_OPPORTUNITIES } from "@/lib/sierra-leone-opportunities"
+import { FeedbackDialog } from "@/components/feedback-dialog"
+import { LegalSourceTracker } from "@/components/legal-source-tracker"
 import { SIERRA_LEONE_CAREERS } from "@/lib/career-data"
 import { MOCK_UNIVERSITIES } from "@/lib/constants/mock-data"
 import { toast } from "sonner"
@@ -36,8 +42,6 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { ProgressOverview } from "@/components/dashboard/progress-overview"
 import { BadgeCollection } from "@/components/dashboard/badge-collection"
-import { Briefcase } from "lucide-react"
-import { FeedbackDialog } from "@/components/feedback-dialog"
 import { ResearchQuestionnaire } from "@/components/dashboard/research-questionnaire"
 import { logActivity } from "@/lib/tracker"
 import { PersonalizedRecommendations } from "@/components/dashboard/personalized-recommendations"
@@ -272,79 +276,75 @@ export default function DashboardPage() {
           <PersonalizedRecommendations />
         </div>
 
-        {/* Quick Tools Header */}
-        <div className="flex items-center justify-between px-2 pt-4">
-          <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tight">Career Toolkit</h2>
-          <Link href="/resources" className="text-sm font-bold text-primary hover:underline">Full Library</Link>
-        </div>
-
-        {/* Quick Actions Grid */}
-        <Card className="border-none shadow-lg bg-white overflow-hidden">
-          {/* ... existing card content ... */}
-          <CardContent className="p-6">
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              <Link href="/profile" className="block h-full group">
-                <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-primary group-hover:bg-blue-50/50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-colors">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-[#0B1F3A]">Edit Profile</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Update Details</p>
-                  </div>
-                </div>
-              </Link>
-
-              <Link href="/cv-builder" className="block h-full group">
-                <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-purple-500 group-hover:bg-purple-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-purple-600 shadow-sm group-hover:bg-purple-500 group-hover:text-white transition-colors">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-[#0B1F3A]">CV Builder</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">AI Generation</p>
-                  </div>
-                </div>
-              </Link>
-
-              <Link href="/roadmap" className="block h-full group">
-                <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-emerald-500 group-hover:bg-emerald-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                    <TrendingUp className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-[#0B1F3A]">My Roadmap</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Step-by-step</p>
-                  </div>
-                </div>
-              </Link>
-
-              <Link href="/whatsapp" className="block h-full group">
-                <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-green-500 group-hover:bg-green-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-green-600 shadow-sm group-hover:bg-green-500 group-hover:text-white transition-colors">
-                    <MessageCircle className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-[#0B1F3A]">WhatsApp AI</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Chat with Bot</p>
-                  </div>
-                </div>
-              </Link>
-
-              <FeedbackDialog>
-                <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-slate-500 group-hover:bg-slate-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30 hover:border-slate-400">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-600 shadow-sm group-hover:bg-slate-700 group-hover:text-white transition-colors">
-                    <MessageCircle className="w-5 h-5" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="font-bold text-sm text-[#0B1F3A]">Feedback</h3>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Contact Us</p>
-                  </div>
-                </div>
-              </FeedbackDialog>
+        {/* Career Toolkit and Legal Pulse */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center justify-between px-2">
+              <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tight">Career Toolkit</h2>
+              <Link href="/resources" className="text-sm font-bold text-primary hover:underline">Full Library</Link>
             </div>
-          </CardContent>
-        </Card>
+            <Card className="border-none shadow-lg bg-white overflow-hidden">
+              <CardContent className="p-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                  <Link href="/profile" className="block h-full group">
+                    <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-primary group-hover:bg-blue-50/50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-colors">
+                        <User className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-[#0B1F3A]">Profile</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Persona Sync</p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link href="/cv-builder" className="block h-full group">
+                    <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-purple-500 group-hover:bg-purple-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-purple-600 shadow-sm group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-[#0B1F3A]">CV Builder</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">AI Generation</p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link href="/roadmap" className="block h-full group">
+                    <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-emerald-500 group-hover:bg-emerald-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <TrendingUp className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-[#0B1F3A]">My Roadmap</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Step-by-step</p>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link href="/whatsapp" className="block h-full group">
+                    <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-green-500 group-hover:bg-green-50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
+                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-green-600 shadow-sm group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <MessageCircle className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-[#0B1F3A]">WhatsApp AI</h3>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Bot Chat</p>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center justify-between px-2">
+              <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tight opacity-0">Verification</h2>
+            </div>
+            <LegalSourceTracker />
+          </div>
+        </div>
 
         {/* Top Universities Section */}
         <div className="space-y-4 pt-4">

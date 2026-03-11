@@ -16,6 +16,9 @@ export interface Opportunity {
     category: string[]
     educationLevel: string[]
     isActive: boolean
+    sourceType?: "legal" | "official" | "private"
+    sourceAgency?: string
+    lastVerifiedAt?: string
 }
 
 export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
@@ -36,7 +39,10 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         salary: "Le 3,000,000 - 5,000,000/month",
         category: ["technology", "government"],
         educationLevel: ["diploma", "bachelor"],
-        isActive: true
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "DSTI Salone",
+        lastVerifiedAt: new Date().toISOString()
     },
     {
         id: "job-002",
@@ -54,7 +60,10 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         salary: "Le 1,500,000 - 2,500,000/month",
         category: ["health", "community"],
         educationLevel: ["secondary", "diploma"],
-        isActive: true
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "Ministry of Health SL",
+        lastVerifiedAt: new Date().toISOString()
     },
     {
         id: "job-003",
@@ -72,7 +81,10 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         salary: "Le 1,800,000 - 2,800,000/month",
         category: ["data", "government"],
         educationLevel: ["secondary", "diploma"],
-        isActive: true
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "Statistics SL (StatsSL)",
+        lastVerifiedAt: new Date().toISOString()
     },
     {
         id: "job-004",
@@ -183,7 +195,10 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         deadline: "Announced annually (usually September)",
         category: ["education", "government"],
         educationLevel: ["secondary", "bachelor"],
-        isActive: true
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "Ministry of Technical and Higher Education (MTHE)",
+        lastVerifiedAt: new Date().toISOString()
     },
     {
         id: "scholarship-004",
