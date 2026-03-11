@@ -15,6 +15,9 @@ export interface UserProfile {
     skills: string[] // Unified from subjects/hardSkills
     interests: string[]
     career_goal?: string
+    rank?: string
+    badges?: string[] // e.g. ['Pioneer', 'CV-Master']
+    data_saver_enabled?: boolean
     preferred_language?: string
 
     // CV / Professional Data

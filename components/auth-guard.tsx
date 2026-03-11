@@ -6,7 +6,7 @@ import { useProfile } from "@/lib/profile-context"
 import { useRouter, usePathname } from "next/navigation"
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-    const { user, isLoadingAuth } = useAuth()
+    const { user, logout, isLoadingAuth } = useAuth()
     const { profile, isProfileLoading } = useProfile()
     const router = useRouter()
     const pathname = usePathname()
@@ -40,9 +40,13 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
         // 3. User exists, but no profile was found in DB
         if (user && !profile) {
-            // In a perfect system the trigger creates it. If missing, maybe show error or let them sit on login
             console.error("Critical: User authenticated but profile row is missing!")
-            if (pathname !== '/login') router.replace('/login')
+            // Force logout to clear the invalid session and break potential loops
+            const forceLogout = async () => {
+                await logout()
+                router.replace('/login')
+            }
+            forceLogout()
             return;
         }
 

@@ -4,122 +4,74 @@ import { Facebook, Twitter, Linkedin, Mail } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="bg-muted border-t border-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-white rounded-xl overflow-hidden flex items-center justify-center border border-slate-200 shadow-sm relative group">
-                <Image src="/images/core/logo.png" alt="CareerPilot Salone" width={40} height={40} className="object-cover scale-125 group-hover:scale-110 transition-transform" />
+    <footer className="relative bg-gradient-to-br from-[#0B1F3A] to-[#1E5EFF] text-white pt-20 pb-10 overflow-hidden font-sans">
+      {/* Decorative patterns */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -mr-32 -mt-32" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -ml-32 -mb-32" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 mb-16">
+          {/* Brand/Identity */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white rounded-2xl overflow-hidden flex items-center justify-center shadow-2xl">
+                <Image src="/images/core/logo.png" alt="CareerPilot Salone" width={48} height={48} className="object-contain" />
               </div>
               <div>
-                <span className="font-black text-lg text-[#0B1F3A] leading-none block">CareerPilot</span>
-                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block">Salone</span>
+                <span className="font-black text-2xl tracking-tight block leading-none">CareerPilot</span>
+                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.3em] block mt-1">Salone</span>
               </div>
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed mb-6">
+            <p className="text-blue-100/70 text-sm font-medium leading-relaxed max-w-xs">
               The AI-powered career engine empowering Sierra Leone's youth with data-driven guidance, roadmaps, and mentorship.
             </p>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wide">System Online v6.0</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/10 rounded-xl backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">System Online v6.0</span>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/careers" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Browse Careers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cv-builder"
-                  className="text-muted-foreground hover:text-foreground text-sm transition-colors"
-                >
-                  CV Builder
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/whatsapp" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  WhatsApp Support
-                </Link>
-              </li>
+          <div className="space-y-6">
+            <h4 className="text-xs font-black uppercase tracking-widest text-[#2EBA9B] border-b border-white/10 pb-2">Quick Links</h4>
+            <ul className="space-y-4 text-sm font-bold text-blue-100/60">
+              <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
+              <li><Link href="/cv-builder" className="hover:text-white transition-colors">CV Builder</Link></li>
             </ul>
           </div>
 
           {/* Resources */}
-          <div>
-            <h3 className="font-semibold mb-4">
-              <Link href="/resources" className="hover:text-primary transition-colors">Resources</Link>
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/help" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground text-sm transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
+          <div className="space-y-6">
+            <h4 className="text-xs font-black uppercase tracking-widest text-blue-200 border-b border-white/10 pb-2">Resources</h4>
+            <ul className="space-y-4 text-sm font-bold text-blue-100/60">
+              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold mb-4">Connect With Us</h3>
-            <div className="flex gap-4 mb-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:careerpilotsalone@gmail.com"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Mail className="w-5 h-5" />
-              </a>
+          {/* Connect */}
+          <div className="space-y-6">
+            <h4 className="text-xs font-black uppercase tracking-widest text-blue-200 border-b border-white/10 pb-2">Connect With Us</h4>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 text-blue-100/60">
+                <a href="#" className="hover:text-white transition-colors"><Facebook className="w-5 h-5" /></a>
+                <a href="#" className="hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
+                <a href="#" className="hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
+              </div>
+              <p className="text-xs font-bold text-blue-100/60 leading-relaxed">
+                Email: <br />
+                <span className="text-white">careerpilotsalone@gmail.com</span>
+              </p>
             </div>
-            <p className="text-muted-foreground text-sm">Email: careerpilotsalone@gmail.com</p>
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground text-sm">
-          <p>&copy; 2025 CareerPilot Salone. All rights reserved.</p>
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-[10px] font-black uppercase tracking-widest text-blue-100/30">
+            © 2025 CareerPilot Salone. All rights reserved.
+          </p>
+          <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-blue-100/30">
+            <span>Powered by Alpha Intelligence</span>
+          </div>
         </div>
       </div>
     </footer>

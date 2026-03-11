@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { toPng } from "html-to-image"
 import jsPDF from "jspdf"
+import { createClient } from "@/lib/supabase/client"
 
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
@@ -45,6 +46,7 @@ import { DashboardLayout } from "@/components/dashboard-layout"
 import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
 import { useProfile } from "@/lib/profile-context"
+import { logActivity } from "@/lib/tracker"
 import Link from "next/link"
 import { Suspense } from "react"
 import {
@@ -163,21 +165,59 @@ function CVBuilderContent() {
   const [isGeneratingDraft, setIsGeneratingDraft] = useState(false)
   const [draftResult, setDraftResult] = useState<string>("")
   const [isDraftOpen, setIsDraftOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [activeDocId, setActiveDocId] = useState<string | null>(null)
+
+  const { user } = useAuth()
+  const supabase = createClient()
+
+  // Hydrate from Database on Mount
+  useEffect(() => {
+    if (!user?.id) return
+
+    const loadRecentCV = async () => {
+      const { data, error } = await supabase
+        .from('user_documents')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('type', 'cv')
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (data && data.data) {
+        const saved = data.data as any
+        if (saved.personalInfo) setPersonalInfo(saved.personalInfo)
+        if (saved.education) setEducation(saved.education)
+        if (saved.experience) setExperience(saved.experience)
+        if (saved.projects) setProjects(saved.projects)
+        if (saved.certifications) setCertifications(saved.certifications)
+        if (saved.skills) setSkills(saved.skills)
+        if (saved.languages) setLanguages(saved.languages)
+        if (saved.references) setReferences(saved.references)
+        if (saved.profilePhoto) setProfilePhoto(saved.profilePhoto)
+        setActiveDocId(data.id)
+      }
+    }
+
+    loadRecentCV()
+  }, [user?.id])
 
   useEffect(() => {
     if (careerFromUrl) setPersonalInfo(prev => ({ ...prev, title: careerFromUrl }))
   }, [careerFromUrl])
 
-  // Hydrate Info
   useEffect(() => {
-    const fullName = profile.full_name || profile.fullName
+    if (activeDocId) return // Don't overwrite if we loaded a saved doc
+
+    const fullName = profile?.full_name
     if (fullName) {
       setPersonalInfo(prev => ({
         ...prev,
         fullName: fullName,
         location: profile.location || prev.location,
-        title: profile.career_goal || profile.careerGoal || prev.title,
-        summary: prev.summary || profile.resume_data?.professional_hook || (profile as any).resumeData?.professionalHook || `Aspiring ${profile.career_goal || profile.careerGoal} with specific expertise in ${(profile.skills || (profile as any).hardSkills || []).slice(0, 3).join(", ")}. Committed to professional growth in Sierra Leone's digital economy.`
+        title: profile.career_goal || prev.title,
+        summary: prev.summary || profile.resume_data?.professional_hook || `Aspiring ${profile.career_goal} with specific expertise in ${(profile.skills || []).slice(0, 3).join(", ")}. Committed to professional growth in Sierra Leone's digital economy.`
       }))
 
       const userSkills = profile.skills || (profile as any).hardSkills
@@ -217,7 +257,48 @@ function CVBuilderContent() {
         }
       }
     }
-  }, [profile])
+  }, [profile, activeDocId])
+
+  // --- PERSISTENCE: AUTO-SAVE ---
+  useEffect(() => {
+    if (!user?.id || !personalInfo.fullName) return
+
+    const timer = setTimeout(async () => {
+      setIsSaving(true)
+      const cvData = {
+        personalInfo,
+        education,
+        experience,
+        projects,
+        certifications,
+        skills,
+        languages,
+        references,
+        profilePhoto
+      }
+
+      try {
+        if (activeDocId) {
+          await supabase.from('user_documents').update({
+            data: cvData,
+            title: `CV - ${personalInfo.title || 'Untitled'}`
+          }).eq('id', activeDocId)
+        } else {
+          const { data } = await supabase.from('user_documents').insert({
+            user_id: user.id,
+            type: 'cv',
+            title: `CV - ${personalInfo.title || 'Untitled'}`,
+            data: cvData
+          }).select().single()
+          if (data) setActiveDocId(data.id)
+        }
+      } catch (e) { console.error("Auto-save failed", e) }
+      finally { setIsSaving(false) }
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [personalInfo, education, experience, projects, certifications, skills, languages, references, profilePhoto])
+
 
 
   // --- Logic Engine Integration ---
@@ -233,10 +314,10 @@ function CVBuilderContent() {
 
     const userProfile: UserProfile = {
       status: profile?.status || (yearsExp > 0 ? 'employed' : 'student'),
-      yearsExperience: yearsExp,
-      targetRole: personalInfo.title || 'Professional',
+      experience_years: yearsExp,
+      career_goal: personalInfo.title || 'Professional',
       skills: skills.split(',').filter(s => s.trim()),
-      projectCount: projects.length
+      project_count: projects.length
     }
 
     return calculateLayoutStrategy(userProfile)
@@ -290,6 +371,15 @@ function CVBuilderContent() {
 
       pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight)
       pdf.save(`CV_${personalInfo.fullName.replace(/\s+/g, '_')}_Verified.pdf`)
+
+      // LOG ACTIVITY: CV Exported
+      if (user?.id) {
+        await logActivity(user.id, 'cv_generated', {
+          title: personalInfo.title,
+          template: currentStrategy.name
+        })
+      }
+
       toast.success("CV Downloaded successfully!")
     } catch (err) {
       toast.error("PDF generation failed. Try again.")
@@ -345,7 +435,7 @@ function CVBuilderContent() {
   }
 
   const EnhanceButton = ({ text, type, onResult }: { text: string, type: string, onResult: (res: string) => void }) => {
-    const { complete, isLoadingAuth } = useCompletion({
+    const { complete, isLoading } = useCompletion({
       api: "/api/cv-enhance",
       onFinish: (_prompt, completion) => onResult(completion)
     });
@@ -355,12 +445,12 @@ function CVBuilderContent() {
         type="button"
         variant="ghost"
         size="sm"
-        disabled={isLoadingAuth || !text}
+        disabled={isLoading || !text}
         onClick={() => complete("", { body: { text, type, career: personalInfo.title } })}
         className="h-8 gap-2 text-primary font-bold uppercase tracking-wide text-xs hover:bg-primary/5"
       >
-        {isLoadingAuth ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-        {isLoadingAuth ? "Enhancing..." : "AI Revise"}
+        {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+        {isLoading ? "Enhancing..." : "AI Revise"}
       </Button>
     );
   };

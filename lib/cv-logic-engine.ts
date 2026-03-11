@@ -375,6 +375,60 @@ export function calculateLayoutStrategy(profile: UserProfile): LayoutStrategy {
         }
     }
 
+    // Agribusiness & Mining Professional
+    const isAgriMining = roleLower.includes('agric') || roleLower.includes('farm') || roleLower.includes('mine') ||
+        roleLower.includes('geologist') || roleLower.includes('exploration') || roleLower.includes('environment')
+
+    if (isAgriMining) {
+        return {
+            id: 'industrial-professional',
+            name: 'Industrial & Agri Strategy',
+            reasoning: 'Agribusiness and Mining roles require proof of field experience, safety certifications, and technical equipment proficiency. We prioritize field assignments and certifications.',
+            sectionOrder: [
+                SECTION_IDS.SUMMARY,
+                SECTION_IDS.EXPERIENCE,
+                SECTION_IDS.CERTIFICATIONS,
+                SECTION_IDS.SKILLS,
+                SECTION_IDS.EDUCATION
+            ],
+            sidebarSections: [
+                SECTION_IDS.CONTACT,
+                SECTION_IDS.LANGUAGES,
+                SECTION_IDS.REFERENCES
+            ],
+            emphasis: 'experience',
+            density: 'standard',
+            theme: 'minimalist',
+            showSidebar: true
+        }
+    }
+
+    // High Impact NGO / Development
+    if (isNGO && experience_years >= 2) {
+        return {
+            id: 'impact-development',
+            name: 'Impact & NGO Specialist',
+            reasoning: 'In the development sector, results and community impact are everything. We lead with a high-impact summary and highlight your role in large-scale programs.',
+            sectionOrder: [
+                SECTION_IDS.SUMMARY,
+                SECTION_IDS.EXPERIENCE,
+                SECTION_IDS.PROJECTS,
+                SECTION_IDS.EDUCATION,
+                SECTION_IDS.REFERENCES
+            ],
+            sidebarSections: [
+                SECTION_IDS.CONTACT,
+                SECTION_IDS.SKILLS,
+                SECTION_IDS.LANGUAGES,
+                SECTION_IDS.CERTIFICATIONS
+            ],
+            emphasis: 'projects',
+            density: 'verbose',
+            theme: 'modern',
+            showSidebar: true
+        }
+    }
+
     // Fallback / General Professional
     return {
         id: 'general-modern',

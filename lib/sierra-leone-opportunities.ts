@@ -3,7 +3,7 @@
 
 export interface Opportunity {
     id: string
-    type: "job" | "scholarship" | "training" | "internship"
+    type: "job" | "scholarship" | "training" | "internship" | "hackathon"
     title: string
     organization: string
     location: string
@@ -349,6 +349,45 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         duration: "6 months",
         category: ["media", "communication"],
         educationLevel: ["diploma", "bachelor"],
+        isActive: true
+    },
+
+    // HACKATHONS
+    {
+        id: "hack-001",
+        type: "hackathon",
+        title: "Sierra Leone Tech Challenge 2026",
+        organization: "DSTI & UNDP",
+        location: "Freetown / Hybrid",
+        description: "Solve local problems with digital solutions. Prizes include up to $5,000 and incubation support.",
+        requirements: [
+            "Teams of 2-4 members",
+            "Functional prototype at final stage",
+            "Focus on health, education, or agriculture",
+            "Sierra Leonean youth (18-35)"
+        ],
+        deadline: "2026-04-20",
+        link: "https://dsti.gov.sl/tech-challenge-2026",
+        category: ["technology", "innovation"],
+        educationLevel: ["self-taught", "diploma", "bachelor"],
+        isActive: true
+    },
+    {
+        id: "hack-002",
+        type: "hackathon",
+        title: "Africa Digital Awards Hack",
+        organization: "Africa Digital Forum",
+        location: "Pan-Africa (Remote)",
+        description: "A 48-hour buildathon for the next generation of African FinTech solutions.",
+        requirements: [
+            "Proficiency in at least one programming language",
+            "Interest in FinTech and Financial Inclusion",
+            "Open to all African countries"
+        ],
+        deadline: "2026-06-15",
+        link: "https://africadigitalawards.com/hackathon",
+        category: ["technology", "fintech"],
+        educationLevel: ["diploma", "bachelor", "self-taught"],
         isActive: true
     }
 ]

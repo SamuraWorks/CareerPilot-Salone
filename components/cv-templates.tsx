@@ -368,6 +368,112 @@ const CreativeShell = ({ data, strategy, children }: any) => {
     )
 }
 
+const DiplomatShell = ({ data, strategy, children }: any) => {
+    // Formal, high-end, serif-styled (simulated)
+    return (
+        <div className="p-12 bg-white h-full relative border-[20px] border-[#F8F9FA]">
+            <div className="flex justify-between items-end border-b-2 border-[#1A365D] pb-10 mb-10">
+                <div className="space-y-4">
+                    <h1 className="text-5xl font-black text-[#1A365D] tracking-tight leading-none uppercase">{data.personalInfo.fullName || "Your Name"}</h1>
+                    <div className="p-1 px-4 bg-[#1A365D] text-white text-xs font-black uppercase tracking-[0.3em] inline-block">
+                        {data.personalInfo.title || "Senior Strategist"}
+                    </div>
+                </div>
+                {data.profilePhoto && (
+                    <div className="w-32 h-32 rounded-lg border-2 border-[#1A365D] overflow-hidden grayscale contrast-125">
+                        <img src={data.profilePhoto} className="w-full h-full object-cover" />
+                    </div>
+                )}
+            </div>
+
+            <div className="grid grid-cols-12 gap-12">
+                <div className="col-span-8 space-y-10">
+                    {children}
+                </div>
+                <div className="col-span-4 space-y-10 border-l-2 border-[#F1F5F9] pl-10">
+                    <div className="space-y-6">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A365D] border-b border-[#CBD5E1] pb-2">Credentials</h3>
+                        <div className="space-y-4">
+                            <ContactSection data={data.personalInfo} vertical />
+                        </div>
+                    </div>
+                    {strategy.sidebarSections.filter((s: string) => s !== 'contact' && s !== 'references').map((sect: string) => (
+                        <div key={sect}>{renderSidebarSection(sect, data)}</div>
+                    ))}
+                    {/* References always at bottom for diplomat */}
+                    {renderSidebarSection('references', data)}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const GoldPremiumShell = ({ data, strategy, children }: any) => {
+    // Ivory and Gold accents
+    return (
+        <div className="p-16 bg-[#FDFCFB] h-full relative overflow-hidden">
+            {/* Elegant corner patterns */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A059]/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C5A059]/5 rounded-full -ml-32 -mb-32 blur-3xl" />
+
+            <header className="relative z-10 text-center space-y-6 mb-16">
+                <div className="inline-block px-4 py-1 border border-[#C5A059] text-[#C5A059] text-[9px] font-black uppercase tracking-[0.5em] mb-4">
+                    Confidential Dossier
+                </div>
+                <h1 className="text-6xl font-black text-slate-900 tracking-tighter uppercase leading-none">{data.personalInfo.fullName}</h1>
+                <p className="text-xl font-medium italic text-slate-500 font-serif">{data.personalInfo.title}</p>
+                <div className="flex justify-center gap-8 py-4 border-y border-slate-100 mt-6">
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#C5A059]">
+                        <Mail className="w-3 h-3" /> {data.personalInfo.email}
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#C5A059]">
+                        <Phone className="w-3 h-3" /> {data.personalInfo.phone}
+                    </div>
+                </div>
+            </header>
+
+            <div className="relative z-10 grid grid-cols-1 gap-16">
+                {children}
+            </div>
+
+            <footer className="mt-20 pt-10 border-t border-[#C5A059]/20 text-center">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.3em]">Built via CareerPilot Africa Premium Engine</p>
+            </footer>
+        </div>
+    )
+}
+
+const ModernIndustrialShell = ({ data, strategy, children }: any) => {
+    // High contrast, grid-like, bold
+    return (
+        <div className="flex h-full bg-[#FAFAFA] font-sans">
+            <div className="w-16 bg-[#0F172A] flex flex-col items-center py-10 gap-8">
+                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center font-black text-[#0F172A] rotate-45">
+                    CP
+                </div>
+                <div className="h-full w-px bg-white/10" />
+            </div>
+
+            <div className="flex-1 p-12 space-y-12">
+                <header className="flex justify-between items-start border-b-8 border-[#0F172A] pb-8">
+                    <div className="space-y-2">
+                        <h1 className="text-5xl font-black text-[#0F172A] tracking-tighter uppercase">{data.personalInfo.fullName}</h1>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm font-black uppercase tracking-widest px-3 py-1 bg-amber-400 text-[#0F172A]">
+                                {data.personalInfo.title}
+                            </span>
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{data.personalInfo.location || 'Freetown'}</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    {children}
+                </div>
+            </div>
+        </div>
+    )
+}
 
 // --- Main Export ---
 
@@ -377,7 +483,9 @@ export function DynamicCVTemplate({ data, strategy, templateRef }: DynamicCVTemp
     let Shell = ModernShell
     if (strategy.theme === 'minimalist') Shell = MinimalistShell
     if (strategy.theme === 'creative') Shell = CreativeShell
-    if (strategy.theme === 'academic') Shell = MinimalistShell // Reuse minimalist for academic for now
+    if (strategy.theme === 'academic' || strategy.id === 'impact-development' || strategy.id === 'legal-professional') Shell = DiplomatShell
+    if (strategy.id === 'experience-heavy') Shell = GoldPremiumShell
+    if (strategy.id === 'industrial-professional' || strategy.id === 'engineering-professional') Shell = ModernIndustrialShell
 
     return (
         <div

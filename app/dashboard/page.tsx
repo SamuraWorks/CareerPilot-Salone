@@ -35,9 +35,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { ProgressOverview } from "@/components/dashboard/progress-overview"
+import { BadgeCollection } from "@/components/dashboard/badge-collection"
 import { Briefcase } from "lucide-react"
 import { FeedbackDialog } from "@/components/feedback-dialog"
 import { ResearchQuestionnaire } from "@/components/dashboard/research-questionnaire"
+import { logActivity } from "@/lib/tracker"
+import { PersonalizedRecommendations } from "@/components/dashboard/personalized-recommendations"
 
 export default function DashboardPage() {
   const { user, isLoadingAuth } = useAuth()
@@ -62,7 +65,12 @@ export default function DashboardPage() {
     else setGreeting("Good Evening")
 
     fetch('/api/ai-status').then(res => res.json()).then(data => setAiStatus(data))
-  }, [])
+
+    // Real-time Dashboard Tracking
+    if (user?.id) {
+      logActivity(user.id, 'page_view', { page: 'dashboard' })
+    }
+  }, [user?.id])
 
   // --- AI RECOMMENDATIONS STATE ---
   const [recommendations, setRecommendations] = useState<any>(null)
@@ -186,6 +194,14 @@ export default function DashboardPage() {
                   {aiStatus.configured ? <Sparkles className="w-3 h-3 mr-1" /> : <Zap className="w-3 h-3 mr-1" />}
                   {aiStatus.status}
                 </Badge>
+                <div className="flex items-center gap-2 ml-2">
+                  <div className="bg-emerald-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-emerald-500/20 animate-pulse">
+                    SCORE: {profile?.points || 0}
+                  </div>
+                  <div className="bg-white/10 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">
+                    RANK: {profile?.rank || 'ROOKIE'}
+                  </div>
+                </div>
               </div>
 
               {activeRoadmapId ? (
@@ -241,134 +257,19 @@ export default function DashboardPage() {
 
         {/* Real Progress Overview */}
         <ProgressOverview profile={profile} />
+        <BadgeCollection />
 
-        {/* AI Recommendations Section */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between px-2">
-            <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tight flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-500" /> AI Strategic Recommendations
+          <div className="flex items-center justify-between px-2 pt-8">
+            <h2 className="text-2xl font-black text-[#0B1F3A] uppercase tracking-tighter flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-primary animate-pulse" /> Your Professional Roadmap
             </h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleGenerateAi}
-              disabled={isAiLoading}
-              className="text-xs font-bold text-slate-400 uppercase tracking-widest hover:bg-emerald-50 hover:text-emerald-600"
-            >
-              {isAiLoading ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : <Zap className="w-3 h-3 mr-2" />}
-              Refresh AI
-            </Button>
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+              AI Optimized for {profile?.career_goal || "Development"}
+            </div>
           </div>
 
-          {!recommendations && !isAiLoading && (
-            <Card className="p-8 text-center bg-slate-50 border-dashed border-2 border-slate-200 rounded-[2rem]">
-              <p className="text-slate-500 font-medium mb-4">Complete your profile to unlock personalized AI career recommendations.</p>
-              <Link href="/onboarding">
-                <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold px-8 rounded-xl shadow-lg">
-                  Complete Profile
-                </Button>
-              </Link>
-            </Card>
-          )}
-
-          {isAiLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[1, 2, 3].map(i => (
-                <Card key={i} className="h-48 animate-pulse bg-slate-100 border-none rounded-3xl" />
-              ))}
-            </div>
-          )}
-
-          {recommendations && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              {/* Careers */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {recommendations.careers?.map((career: any, i: number) => (
-                  <Card key={i} className="group overflow-hidden hover:shadow-2xl transition-all border-none bg-white shadow-lg rounded-3xl p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <span className={`px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${career.demand === 'High' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
-                        {career.demand} Demand
-                      </span>
-                      <TrendingUp className="w-4 h-4 text-slate-300" />
-                    </div>
-                    <h3 className="text-lg font-black text-slate-900 mb-2">{career.title}</h3>
-                    <p className="text-xs text-slate-500 font-medium mb-4 line-clamp-2">{career.reason}</p>
-                    <div className="pt-4 border-t border-slate-50 flex justify-between items-center">
-                      <span className="text-xs font-bold text-emerald-600">{career.salary}</span>
-                      <Button variant="ghost" size="sm" className="h-8 px-2 text-primary font-bold text-xs" asChild>
-                        <Link href={`/careers?q=${career.title}`}>Explore <ArrowRight className="w-3 h-3 ml-1" /></Link>
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Scholarships & Jobs */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Scholarships */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-2">Funding Opportunities</h3>
-                  <div className="space-y-3">
-                    {recommendations.scholarships?.map((s: any, i: number) => (
-                      <Card key={i} className="p-4 bg-white border-none shadow-sm rounded-2xl flex items-center gap-4 hover:shadow-md transition-all">
-                        <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
-                          <Award className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-slate-900 text-sm truncate">{s.name}</h4>
-                          <p className="text-[10px] text-slate-500 font-medium">{s.provider} • {s.deadline}</p>
-                        </div>
-                        <Button variant="outline" size="sm" className="rounded-lg text-[10px] font-bold h-8" asChild>
-                          <Link href={s.link || "#"} target="_blank">View</Link>
-                        </Button>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Jobs */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] px-2">Recent Match Openings</h3>
-                  <div className="space-y-3">
-                    {recommendations.jobs?.map((j: any, i: number) => (
-                      <Card key={i} className="p-4 bg-white border-none shadow-sm rounded-2xl flex items-center gap-4 hover:shadow-md transition-all">
-                        <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-                          <Briefcase className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-slate-900 text-sm truncate">{j.title}</h4>
-                          <p className="text-[10px] text-slate-500 font-medium">{j.company} • {j.location}</p>
-                        </div>
-                        <Button variant="outline" size="sm" className="rounded-lg text-[10px] font-bold h-8" asChild>
-                          <Link href="/jobs">Apply</Link>
-                        </Button>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Roadmap Summary Banner */}
-              <Card className="p-6 bg-gradient-to-r from-emerald-600 to-teal-700 border-none rounded-[2rem] text-white overflow-hidden relative group">
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-32 h-32" />
-                </div>
-                <div className="relative z-10 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                      Your Custom AI Strategy
-                    </span>
-                  </div>
-                  <p className="text-lg font-medium leading-relaxed max-w-2xl">
-                    "{recommendations.roadmap_summary}"
-                  </p>
-                  <Button className="bg-white text-emerald-600 hover:bg-slate-50 font-black rounded-xl" asChild>
-                    <Link href="/roadmap">View Full Detailed Roadmap <ArrowRight className="w-4 h-4 ml-2" /></Link>
-                  </Button>
-                </div>
-              </Card>
-            </div>
-          )}
+          <PersonalizedRecommendations />
         </div>
 
         {/* Quick Tools Header */}

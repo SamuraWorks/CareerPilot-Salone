@@ -12,6 +12,8 @@ interface AuthContextType {
   loginWithId: (secretId: string) => Promise<void>
   signup: (email: string, password: string, fullName: string) => Promise<any>
   logout: () => Promise<void>
+  resetPassword: (email: string) => Promise<void>
+  updatePassword: (password: string) => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -117,10 +119,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await supabase.auth.signOut()
       setUser(null)
-      // Wait to redirect until context propagates
+      router.push('/login')
     } catch (err) {
       console.error("Logout error:", err)
+      window.location.href = "/login"
     }
+  }
+
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    if (error) throw error
+    toast.success("Password reset link sent to your email")
+  }
+
+  const updatePassword = async (password: string) => {
+    const { error } = await supabase.auth.updateUser({ password })
+    if (error) throw error
+    toast.success("Password updated successfully")
   }
 
   return (
@@ -131,6 +148,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signup,
       logout,
       loginWithId,
+      resetPassword,
+      updatePassword,
       isAuthenticated: !!user
     }}>
       {children}

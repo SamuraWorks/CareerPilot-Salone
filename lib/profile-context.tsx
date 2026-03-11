@@ -68,15 +68,38 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         if (!user || !profile) return
 
         try {
+            // Filter out fields that don't exist in the database to prevent 400 errors
+            const dbFields = [
+                'full_name', 'phone_number', 'district', 'location',
+                'education_level', 'highest_education', 'career_goal',
+                'interests', 'skills', 'career_matches', 'resume_data',
+                'is_complete', 'profile_completed', 'is_onboarded',
+                'research_completed', 'is_admin', 'role', 'points',
+                'secret_id', 'anon_id', 'whatsapp_opt_in', 'avatar_url',
+                'active_roadmap_id', 'badges', 'data_saver_enabled'
+            ]
+
+            const filteredData: Record<string, any> = {
+                updated_at: new Date().toISOString()
+            }
+
+            Object.entries(newData).forEach(([key, value]) => {
+                if (dbFields.includes(key)) {
+                    filteredData[key] = value
+                }
+            })
+
             const { error } = await supabase
                 .from('profiles')
-                .update({
-                    ...newData,
-                    updated_at: new Date().toISOString()
-                })
+                .update(filteredData)
                 .eq('id', user.id)
 
             if (error) throw error
+
+            // Offline Cache: Save to localStorage if roadmap changed
+            if (newData.active_roadmap_id) {
+                localStorage.setItem(`roadmap_${user.id}`, newData.active_roadmap_id)
+            }
 
             setProfile(prev => prev ? { ...prev, ...newData } : null)
             toast.success("Profile updated")
@@ -91,13 +114,31 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         if (!user) return ""
 
         try {
+            const dbFields = [
+                'full_name', 'phone_number', 'district', 'location',
+                'education_level', 'highest_education', 'career_goal',
+                'interests', 'skills', 'career_matches', 'resume_data',
+                'profile_completed', 'is_onboarded',
+                'research_completed', 'is_admin', 'role', 'points',
+                'secret_id', 'anon_id', 'whatsapp_opt_in', 'avatar_url',
+                'active_roadmap_id'
+            ]
+
+            const filteredData: Record<string, any> = {
+                id: user.id,
+                is_complete: true,
+                updated_at: new Date().toISOString()
+            }
+
+            Object.entries(newProfileData).forEach(([key, value]) => {
+                if (dbFields.includes(key)) {
+                    filteredData[key] = value
+                }
+            })
+
             const { error } = await supabase
                 .from('profiles')
-                .update({
-                    ...newProfileData,
-                    is_complete: true,
-                    updated_at: new Date().toISOString()
-                })
+                .update(filteredData)
                 .eq('id', user.id)
 
             if (error) throw error

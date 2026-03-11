@@ -14,12 +14,14 @@ import { Loader2, Sparkles, Copy, Check, Lock, Briefcase, Building2 } from "luci
 import { useAuth } from "@/lib/auth-context"
 import { useProfile } from "@/lib/profile-context"
 import { toast } from "sonner"
+import { createClient } from "@/lib/supabase/client"
+import { logActivity } from "@/lib/tracker"
 import { UserProfile } from "@/lib/cv-logic-engine"
 import { CoverLetterTone } from "@/lib/cover-letter-logic"
 
 export function CoverLetterGenerator() {
     const { user } = useAuth()
-  const { profile } = useProfile()
+    const { profile } = useProfile()
     const [job, setJob] = useState({
         title: "",
         company: "",
@@ -29,10 +31,67 @@ export function CoverLetterGenerator() {
     })
     const [generatedLetter, setGeneratedLetter] = useState("")
     const [detectedTone, setDetectedTone] = useState<CoverLetterTone | null>(null)
-    const [isLoadingAuth, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
     const [isCopied, setIsCopied] = useState(false)
+    const [activeDocId, setActiveDocId] = useState<string | null>(null)
+
+    const supabase = createClient()
 
     const isLocked = !job.title || !job.company
+    const isReady = !isLocked && generatedLetter
+
+    // Hydrate latest letter if it exists
+    useEffect(() => {
+        if (!user?.id) return
+        const loadRecentLetter = async () => {
+            const { data } = await supabase
+                .from('user_documents')
+                .select('*')
+                .eq('user_id', user.id)
+                .eq('type', 'cover_letter')
+                .order('updated_at', { ascending: false })
+                .limit(1)
+                .single()
+
+            if (data && data.data) {
+                const saved = data.data as any
+                if (saved.job) setJob(saved.job)
+                if (saved.letter) setGeneratedLetter(saved.letter)
+                setActiveDocId(data.id)
+            }
+        }
+        loadRecentLetter()
+    }, [user?.id])
+
+    // Auto-save logic
+    useEffect(() => {
+        if (!user?.id || !generatedLetter) return
+
+        const timer = setTimeout(async () => {
+            setIsSaving(true)
+            const docData = { job, letter: generatedLetter }
+            try {
+                if (activeDocId) {
+                    await supabase.from('user_documents').update({
+                        data: docData,
+                        title: `Letter - ${job.company}`
+                    }).eq('id', activeDocId)
+                } else {
+                    const { data } = await supabase.from('user_documents').insert({
+                        user_id: user.id,
+                        type: 'cover_letter',
+                        title: `Letter - ${job.company}`,
+                        data: docData
+                    }).select().single()
+                    if (data) setActiveDocId(data.id)
+                }
+            } catch (e) { console.error("Letter save failed", e) }
+            finally { setIsSaving(false) }
+        }, 2000)
+
+        return () => clearTimeout(timer)
+    }, [job, generatedLetter])
 
     const handleGenerate = async () => {
         if (isLocked) return
@@ -43,14 +102,16 @@ export function CoverLetterGenerator() {
         // Construct standardized profile for API
         const userProfile: UserProfile = {
             status: profile?.status || 'employed',
-            experience_years: profile?.experience_years || 2,
+            experience_years: (profile as any)?.experience_years || 2,
             career_goal: job.title,
             skills: profile?.skills || [],
             project_count: 0,
             full_name: profile?.full_name,
-            impact_metrics: profile?.impact_metrics || profile?.resume_data?.impact_metric,
-            leadership_experience: profile?.leadership_experience || profile?.resume_data?.leadership_action || profile?.resume_data?.leadership,
-            unique_hook: profile?.unique_hook || profile?.resume_data?.professional_hook
+            resume_data: {
+                impact_metric: profile?.resume_data?.impact_metric,
+                leadership_action: profile?.resume_data?.leadership_action || profile?.resume_data?.leadership,
+                professional_hook: profile?.resume_data?.professional_hook
+            }
         }
 
         try {
@@ -64,6 +125,15 @@ export function CoverLetterGenerator() {
             const data = await response.json()
             setGeneratedLetter(data.text)
             setDetectedTone(data.tone)
+
+            // LOG ACTIVITY: Cover Letter Generated
+            if (user?.id) {
+                await logActivity(user.id, 'cv_generated', {
+                    activity: 'cover_letter_forged',
+                    company: job.company
+                })
+            }
+
             toast.success("Letters forged. Adaptation complete.")
         } catch (error) {
             toast.error("Process failed. Try again.")
@@ -90,7 +160,7 @@ export function CoverLetterGenerator() {
             doc.setFont("helvetica", "bold")
             doc.setFontSize(22)
             doc.setTextColor(15, 23, 42) // Slate 900
-            doc.text(profile?.fullName || "Candidate", 20, 30)
+            doc.text(profile?.full_name || "Candidate", 20, 30)
 
             doc.setFontSize(10)
             doc.setTextColor(100, 116, 139) // Slate 500
@@ -206,10 +276,10 @@ export function CoverLetterGenerator() {
 
                 <Button
                     className={`w-full h-14 rounded-xl font-bold uppercase tracking-wide text-xs transition-all ${isLocked ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/30'}`}
-                    disabled={isLocked || isLoadingAuth}
+                    disabled={isLocked || isLoading}
                     onClick={handleGenerate}
                 >
-                    {isLoadingAuth ? (
+                    {isLoading ? (
                         <>
                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                             Synthesizing...
@@ -234,7 +304,10 @@ export function CoverLetterGenerator() {
                 <Card className="p-8 border-none rounded-[2rem] bg-white shadow-xl shadow-emerald-500/5 space-y-6 relative border-t-4 border-emerald-400">
                     <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-800">Generated Asset</h3>
+                            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-800 flex items-center gap-2">
+                                Generated Asset
+                                {isSaving && <span className="text-[9px] font-black text-emerald-600 animate-pulse bg-emerald-50 px-2 py-0.5 rounded-full">SAVING...</span>}
+                            </h3>
                             {detectedTone && (
                                 <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200 uppercase text-[10px] tracking-wider">
                                     Detected Tone: {detectedTone}
