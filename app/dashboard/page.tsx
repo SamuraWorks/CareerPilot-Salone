@@ -34,6 +34,7 @@ import {
 import { SIERRA_LEONE_OPPORTUNITIES } from "@/lib/sierra-leone-opportunities"
 import { FeedbackDialog } from "@/components/feedback-dialog"
 import { LegalSourceTracker } from "@/components/legal-source-tracker"
+import { LegalUpdatesFeed } from "@/components/legal-updates-feed"
 import { SIERRA_LEONE_CAREERS } from "@/lib/career-data"
 import { MOCK_UNIVERSITIES } from "@/lib/constants/mock-data"
 import { toast } from "sonner"
@@ -338,11 +339,9 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between px-2">
-              <h2 className="text-xl font-black text-[#0B1F3A] uppercase tracking-tight opacity-0">Verification</h2>
-            </div>
+          <div className="space-y-6">
             <LegalSourceTracker />
+            <LegalUpdatesFeed />
           </div>
         </div>
 

@@ -138,6 +138,45 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         educationLevel: ["secondary", "diploma"],
         isActive: true
     },
+    {
+        id: "job-007",
+        type: "job",
+        title: "Medical Laboratory Scientist",
+        organization: "Ministry of Health and Sanitation",
+        location: "Connaught Hospital, Freetown",
+        description: "Official recruitment for health professionals to support diagnostic services at national referral centers.",
+        requirements: [
+            "Bachelor's in Medical Laboratory Science",
+            "Valid license from Professional Regulatory Body",
+            "Willingness to work in government facilities"
+        ],
+        salary: "Grade 8-10 Civil Service Scale",
+        category: ["health", "government"],
+        educationLevel: ["bachelor"],
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "PSC / MOHS",
+        lastVerifiedAt: new Date().toISOString()
+    },
+    {
+        id: "job-008",
+        type: "job",
+        title: "Public Service Internship Programme",
+        organization: "Public Service Commission (PSC)",
+        location: "Nationwide",
+        description: "Annual internship for graduates to gain experience within government ministries.",
+        requirements: [
+            "Recent university graduate",
+            "Below 29 years of age",
+            "Sierra Leonean citizenship"
+        ],
+        category: ["internship", "government"],
+        educationLevel: ["bachelor", "master"],
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "Public Service Commission",
+        lastVerifiedAt: new Date().toISOString()
+    },
 
     // SCHOLARSHIPS
     {
@@ -198,6 +237,48 @@ export const SIERRA_LEONE_OPPORTUNITIES: Opportunity[] = [
         isActive: true,
         sourceType: "legal",
         sourceAgency: "Ministry of Technical and Higher Education (MTHE)",
+        lastVerifiedAt: new Date().toISOString()
+    },
+    {
+        id: "scholarship-007",
+        type: "scholarship",
+        title: "Sierra Leone Government Grant-in-Aid (GIA)",
+        organization: "Ministry of Technical & Higher Education",
+        location: "All Public Universities",
+        description: "Tuition fee support for students in public higher education institutions. Applications typically open in August.",
+        requirements: [
+            "First year student in a public university",
+            "Strong WASSCE or previous college performance",
+            "Needs assessment by MTHE"
+        ],
+        deadline: "August 30, 2026",
+        link: "https://mthe.gov.sl/gia",
+        category: ["education", "government"],
+        educationLevel: ["bachelor", "diploma"],
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "MTHE Scholarship Division",
+        lastVerifiedAt: new Date().toISOString()
+    },
+    {
+        id: "scholarship-008",
+        type: "scholarship",
+        title: "Russian Government / SL Bilateral Award",
+        organization: "Ministry of Technical & Higher Education",
+        location: "Russian Federation",
+        description: "Bilateral scholarship agreement between the Russian Republic and Sierra Leone for diverse undergraduate and graduate majors.",
+        requirements: [
+            "WASSCE score of B3 or better in relevant subjects",
+            "Valid Passport",
+            "Medical certificate"
+        ],
+        deadline: "February 28, 2026",
+        link: "https://mthe.gov.sl/bilateral",
+        category: ["education", "international"],
+        educationLevel: ["bachelor", "master"],
+        isActive: true,
+        sourceType: "legal",
+        sourceAgency: "MTHE / Russian Embassy",
         lastVerifiedAt: new Date().toISOString()
     },
     {
