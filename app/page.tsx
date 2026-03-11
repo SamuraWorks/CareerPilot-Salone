@@ -30,7 +30,7 @@ export default function Home() {
 
       <main className="flex-1">
         {/* HERO SECTION */}
-        <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-32 overflow-hidden">
+        <section className="relative pt-24 pb-12 md:pt-32 md:pb-16 lg:pt-40 lg:pb-32 overflow-hidden">
           {/* Subtle Background Pattern */}
           <div className="absolute top-0 left-0 right-0 h-[600px] -z-10 opacity-30 pointer-events-none">
             <svg viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -44,11 +44,10 @@ export default function Home() {
             </svg>
           </div>
 
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="space-y-6 animate-in fade-in slide-in-from-left duration-700">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#0B1F3A] leading-[1.1] tracking-tight">
-                Build a clear career path <br className="hidden md:block" />
-                in Sierra Leone.
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#0B1F3A] leading-[1.1] tracking-tight">
+                Build a clear career path in Sierra Leone.
               </h1>
               <p className="text-lg text-slate-600 font-medium leading-relaxed max-w-xl">
                 Career Pilot helps students and young professionals discover scholarships, internships, jobs, and training opportunities based on their goals.
@@ -63,8 +62,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Dashboard Mockup - RECREATED EXACTLY AS IN IMAGE */}
-            <div className="relative animate-in fade-in slide-in-from-right duration-1000">
+            {/* Dashboard Mockup - hidden on mobile to keep hero clean */}
+            <div className="hidden lg:block relative animate-in fade-in slide-in-from-right duration-1000">
               <div className="relative bg-white rounded-2xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.12)] border border-slate-100 overflow-hidden flex flex-col aspect-[1.4/1]">
                 {/* Mock Browser Header */}
                 <div className="bg-[#0B1F3A] p-3 flex items-center justify-between">
@@ -158,20 +157,20 @@ export default function Home() {
         </section>
 
         {/* STATS & IMPACT SECTION */}
-        <section className="py-12 bg-white relative">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+        <section className="py-10 md:py-12 bg-white relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
               {[
                 { label: "Talents Guided", value: "12,400+", icon: <Users className="w-5 h-5" /> },
                 { label: "Opportunities", value: "3,800+", icon: <Briefcase className="w-5 h-5" /> },
                 { label: "Scholarships", value: "1,200+", icon: <GraduationCap className="w-5 h-5" /> },
                 { label: "Career Matches", value: "95%", icon: <Target className="w-5 h-5" /> }
               ].map((stat, i) => (
-                <div key={i} className="flex flex-col items-center md:items-start space-y-2">
+                <div key={i} className="flex flex-col items-center space-y-2">
                   <div className="p-2 rounded-lg bg-[#2EBA9B]/10 text-[#2EBA9B]">
                     {stat.icon}
                   </div>
-                  <div className="text-3xl font-black text-[#0B1F3A]">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-black text-[#0B1F3A]">{stat.value}</div>
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">{stat.label}</div>
                 </div>
               ))}
@@ -180,8 +179,8 @@ export default function Home() {
         </section>
 
         {/* PROBLEM SECTION */}
-        <section className="py-20 lg:py-32 bg-slate-50/50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <section className="py-14 md:py-20 lg:py-32 bg-slate-50/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             <div className="text-center mb-16 space-y-4">
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#0B1F3A] tracking-tight max-w-3xl mx-auto leading-tight">
                 Stop guessing. Start building your future with objective data.
@@ -215,7 +214,7 @@ export default function Home() {
                   wave: "bg-orange-100/30"
                 }
               ].map((item, i) => (
-                <div key={i} className="group relative bg-white border border-slate-100 rounded-3xl p-10 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
+                <div key={i} className="group relative bg-white border border-slate-100 rounded-3xl p-6 md:p-10 overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1">
                   <div className="relative z-10 space-y-6">
                     <div className={`w-14 h-14 rounded-2xl ${item.color} flex items-center justify-center text-3xl shadow-sm`}>
                       {item.icon}
@@ -232,8 +231,8 @@ export default function Home() {
         </section>
 
         {/* HOW IT WORKS SECTION (REFINED WITH AI FOCUS) */}
-        <section id="how-it-works" className="py-20 lg:py-32 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <section id="how-it-works" className="py-14 md:py-20 lg:py-32 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
             <div className="flex items-center gap-6 mb-16">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent to-[#0B1F3A]/20" />
               <h2 className="text-2xl font-black text-[#0B1F3A] whitespace-nowrap tracking-tight uppercase px-4 flex items-center gap-3">
@@ -289,13 +288,13 @@ export default function Home() {
         </section>
 
         {/* WHY CAREERPILOT (THE MOAT) */}
-        <section className="py-20 lg:py-32 bg-[#0B1F3A] text-white overflow-hidden relative">
+        <section className="py-14 md:py-20 lg:py-32 bg-[#0B1F3A] text-white overflow-hidden relative">
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#2EBA9B]/10 rounded-full blur-[120px] -mr-48 -mt-48" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -ml-48 -mb-48" />
 
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
               <div className="space-y-8">
                 <div className="space-y-4">
                   <h2 className="text-3xl md:text-5xl font-black leading-tight tracking-tight">
@@ -389,11 +388,11 @@ export default function Home() {
         </section>
 
         {/* FEATURES GRID */}
-        <section className="py-20 lg:py-32">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2 className="text-2xl md:text-3xl font-black text-[#0B1F3A] text-center mb-16 tracking-tight">Everything you need to succeed.</h2>
+        <section className="py-14 md:py-20 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+            <h2 className="text-2xl md:text-3xl font-black text-[#0B1F3A] text-center mb-10 md:mb-16 tracking-tight">Everything you need to succeed.</h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-6">
               {[
                 { icon: "🎓", title: "Career Guidance", desc: "Understand realistic career paths locally and globally." },
                 { icon: "📜", title: "Scholarships", desc: "Access the most comprehensive database of vetted funding." },
@@ -401,7 +400,7 @@ export default function Home() {
                 { icon: "💼", title: "Job Opportunities", desc: "Verified entry-level roles across all major sectors." },
                 { icon: "📦", title: "Training Programs", desc: "Short courses and workshops to bridge your skill gaps." }
               ].map((feature, i) => (
-                <div key={i} className="bg-white border border-slate-100 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 text-center space-y-4 group">
+                <div key={i} className="bg-white border border-slate-100 rounded-2xl p-5 md:p-8 hover:shadow-xl transition-all duration-300 text-center space-y-3 md:space-y-4 group">
                   <div className="text-4xl transition-transform group-hover:scale-110 duration-300">{feature.icon}</div>
                   <div>
                     <h3 className="text-sm font-black text-[#0B1F3A] leading-tight mb-2 uppercase tracking-wide">{feature.title}</h3>
@@ -414,7 +413,7 @@ export default function Home() {
         </section>
 
         {/* CALL TO ACTION */}
-        <section className="py-24 relative overflow-hidden text-center pb-32">
+        <section className="py-16 md:py-24 relative overflow-hidden text-center pb-20 md:pb-32">
           {/* Wave Background */}
           <div className="absolute top-0 left-0 right-0 h-[400px] -z-10 opacity-30">
             <svg viewBox="0 0 1440 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full rotate-180">

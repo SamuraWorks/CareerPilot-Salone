@@ -161,9 +161,9 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8 pb-24 md:pb-8">
         {/* Welcome / Main Action */}
-        <div className="relative overflow-hidden rounded-[2rem] shadow-xl min-h-[300px] md:min-h-[280px] group border-b-4 border-emerald-500/20">
+        <div className="relative overflow-hidden rounded-[2rem] shadow-xl min-h-[260px] md:min-h-[280px] group border-b-4 border-emerald-500/20">
           <div className="absolute inset-0 z-0">
             <Image
               src={activeCareer?.image || "/images/sections/dashboard_banner.png"}
@@ -186,16 +186,16 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="relative z-20 h-full flex flex-col md:flex-row items-center justify-between px-8 pb-8 pt-24 md:px-10 md:pb-10 md:pt-24 gap-6">
+          <div className="relative z-20 h-full flex flex-col md:flex-row items-start md:items-center justify-between px-5 pb-6 pt-20 md:px-10 md:pb-10 md:pt-24 gap-4 md:gap-6">
             <div className="flex-1 max-w-2xl">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl md:text-4xl font-black text-white drop-shadow-md">{greeting}, {displayName}!</h1>
+              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                <h1 className="text-2xl md:text-4xl font-black text-white drop-shadow-md">{greeting}, {displayName}!</h1>
                 <Badge variant="outline" className={`border-none font-bold uppercase tracking-tighter text-[10px] py-0 px-2 h-5 ${aiStatus.configured ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/10 text-white/60'}`}>
                   {aiStatus.configured ? <Sparkles className="w-3 h-3 mr-1" /> : <Zap className="w-3 h-3 mr-1" />}
                   {aiStatus.status}
                 </Badge>
-                <div className="flex items-center gap-2 ml-2">
-                  <div className="bg-emerald-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-emerald-500/20 animate-pulse">
+                <div className="flex items-center gap-2">
+                  <div className="bg-emerald-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-emerald-500/20">
                     SCORE: {profile?.points || 0}
                   </div>
                   <div className="bg-white/10 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">
@@ -243,7 +243,7 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-2xl">
+            <div className="hidden md:flex w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 items-center justify-center overflow-hidden flex-shrink-0 shadow-2xl">
               {profile.avatar_url ? (
                 <div className="relative w-full h-full">
                   <Image src={profile.avatar_url} alt="Profile" fill className="object-cover" />
@@ -282,7 +282,7 @@ export default function DashboardPage() {
         <Card className="border-none shadow-lg bg-white overflow-hidden">
           {/* ... existing card content ... */}
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               <Link href="/profile" className="block h-full group">
                 <div className="flex items-center gap-4 p-4 border rounded-2xl group-hover:border-primary group-hover:bg-blue-50/50 transition-all cursor-pointer h-full border-slate-100 bg-slate-50/30">
                   <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-colors">
