@@ -2438,12 +2438,27 @@ export const CAREER_ROADMAPS: RoadmapTemplate[] = [
 // Helper to get roadmap by slug/id (mapped from career title input)
 export function getRoadmap(careerTitle: string): RoadmapTemplate | undefined {
     const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const target = normalize(careerTitle);
+    const normalizedQuery = normalize(careerTitle);
 
-    return CAREER_ROADMAPS.find(r =>
-        normalize(r.title) === target ||
-        r.keywords.some(k => normalize(k) === target)
+    // 1. Direct Title Match
+    let match = CAREER_ROADMAPS.find(r => normalize(r.title) === normalizedQuery);
+    if (match) return match;
+
+    // 2. Keyword Match (Exact)
+    match = CAREER_ROADMAPS.find(r => r.keywords.some(k => normalize(k) === normalizedQuery));
+    if (match) return match;
+
+    // 3. Normalized Career ID Match
+    match = CAREER_ROADMAPS.find(r => r.id === normalizedQuery);
+    if (match) return match;
+
+    // 4. Partial Title Match
+    match = CAREER_ROADMAPS.find(r => 
+        normalizedQuery.includes(normalize(r.title)) || 
+        normalize(r.title).includes(normalizedQuery)
     );
+    
+    return match;
 }
 
 // Fallback search

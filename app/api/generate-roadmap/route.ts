@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getRoadmap, searchRoadmaps, RoadmapTemplate } from '@/lib/roadmap-database';
 import { SIERRA_LEONE_CAREERS } from '@/lib/career-data';
 import { MOCK_MENTORS } from '@/lib/mentors';
-import { MOCK_UNIVERSITIES } from '@/lib/db';
+import { MOCK_UNIVERSITIES } from '@/lib/constants/mock-data';
 
 // Initialize Google AI (Optional: reserved for enhancements if needed later)
 const google = createGoogleGenerativeAI({
@@ -313,8 +313,9 @@ function mapDatabaseToResponse(db: RoadmapTemplate): DetailedRoadmapResponse {
                 what_you_must_do: db.skillRoadmap.month3.activities.map((task, i) => ({ id: `p3_t${i}`, task }))
             }
         ],
-        universities: db.studyPathways.map(path => {
-            const uni = MOCK_UNIVERSITIES.find(u => u.name.includes(path.institution) || path.institution.includes(u.name));
+        universities: (db.studyPathways || []).map(path => {
+            const unis = MOCK_UNIVERSITIES || [];
+            const uni = unis.find(u => u.name.includes(path.institution) || path.institution.includes(u.name));
             return {
                 name: path.institution,
                 focus: path.program,
@@ -472,7 +473,8 @@ function mapAIResponseToFormat(aiData: any, careerTitle: string): DetailedRoadma
             }))
         })),
         universities: (aiData.recommended_university_ids || []).map((id: string) => {
-            const uni = MOCK_UNIVERSITIES.find(u => u.id === id);
+            const unis = MOCK_UNIVERSITIES || [];
+            const uni = unis.find(u => u.id === id);
             return uni ? {
                 name: uni.name,
                 focus: uni.popular_courses.join(", "),
@@ -481,7 +483,8 @@ function mapAIResponseToFormat(aiData: any, careerTitle: string): DetailedRoadma
             } : null;
         }).filter(Boolean),
         mentors: (() => {
-            const mentor = MOCK_MENTORS.find(m => m.id === aiData.recommended_mentor_id);
+            const mentorsList = MOCK_MENTORS || [];
+            const mentor = mentorsList.find(m => m.id === aiData.recommended_mentor_id);
             return mentor ? [{
                 name: mentor.name,
                 role: mentor.role,
@@ -510,12 +513,12 @@ GROUNDING DATA (Source of Truth):
 
     const mentorsContext = `
 GROUNDING MENTORS (Choose the best fit ID):
-${MOCK_MENTORS.map(m => `- ID: ${m.id} | Name: ${m.name} | Role: ${m.role} | Expertise: ${m.support_types.join(", ")}`).join("\n")}
+${(MOCK_MENTORS || []).map(m => `- ID: ${m.id} | Name: ${m.name} | Role: ${m.role} | Expertise: ${m.support_types.join(", ")}`).join("\n")}
 `;
 
     const universitiesContext = `
 GROUNDING UNIVERSITIES (Choose best fit IDs):
-${MOCK_UNIVERSITIES.map(u => `- ID: ${u.id} | Name: ${u.name} | Focus: ${u.popular_courses.join(", ")} | Location: ${u.location}`).join("\n")}
+${(MOCK_UNIVERSITIES || []).map(u => `- ID: ${u.id} | Name: ${u.name} | Focus: ${u.popular_courses.join(", ")} | Location: ${u.location}`).join("\n")}
 `;
 
     return `You are the AI career guidance assistant for CareerPilot Salone. 🇸🇱

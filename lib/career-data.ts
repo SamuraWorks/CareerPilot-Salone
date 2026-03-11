@@ -941,6 +941,36 @@ export const SIERRA_LEONE_CAREERS: CareerInfo[] = [
         growthPotential: "Strong - Media and communication landscape evolving rapidly in SL",
         keywords: ["media", "comm", "mass", "broadcasting", "radio", "tv", "communication"],
         image: "/images/sections/careers/account-manager.png"
+    },
+    {
+        id: "petroleum-engineer",
+        title: "Petroleum Engineer",
+        industry: "Engineering",
+        description: "Design and implement methods for extracting oil and gas from beneath the earth's surface.",
+        salaryRange: "SLE 6,000 - 18,000 (approx. $265 - $800)/month",
+        salaryUSD: "SLE 6,000 - 18,000 (approx. $265 - $800)/month",
+        demand: "Medium",
+        requiredEducation: ["BSc Petroleum Engineering", "Mechanical Engineering", "Chemical Engineering"],
+        requiredSkills: ["Drilling technology", "Reservoir analysis", "Geophysics", "Safety compliance", "CAD"],
+        localInstitutions: ["Fourah Bay College (Geology/Engineering)", "Overseas training"],
+        growthPotential: "Emerging - High potential with offshore exploration in SL",
+        keywords: ["oil", "gas", "petroleum", "engineer", "drilling", "energy"],
+        image: "/images/sections/careers/mining-engineer.png"
+    },
+    {
+        id: "banker-financial-advisor",
+        title: "Banker/Financial Advisor",
+        industry: "Finance",
+        description: "Provide financial guidance, manage banking operations, and assist customers with investment and saving strategies.",
+        salaryRange: "SLE 3,500 - 10,000 (approx. $155 - $445)/month",
+        salaryUSD: "SLE 3,500 - 10,000 (approx. $155 - $445)/month",
+        demand: "High",
+        requiredEducation: ["BSc Applied Accounting", "Business Administration", "Economics", "Banking and Finance"],
+        requiredSkills: ["Financial planning", "Customer service", "Risk evaluation", "Mathematical proficiency", "Sales"],
+        localInstitutions: ["IPAM", "Fourah Bay College", "University of Makeni", "United Methodist University"],
+        growthPotential: "Strong - Expanding banking network and digital finance in SL",
+        keywords: ["bank", "banker", "finance", "advisor", "money", "loan", "investment"],
+        image: "/images/sections/careers/auditor.png"
     }
 ];
 
