@@ -246,15 +246,31 @@ export default function ProfilePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 space-y-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="goal" className="text-xs font-black uppercase tracking-widest text-slate-400">Career Goal / Dream Profession</Label>
-                  <Input
-                    id="goal"
-                    value={formData.career_goal}
-                    onChange={(e) => setFormData({ ...formData, career_goal: e.target.value })}
-                    className="h-14 rounded-xl border-slate-100 text-lg font-bold"
-                    placeholder="e.g. Software Engineer, Agribusiness Manager"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="goal" className="text-xs font-black uppercase tracking-widest text-slate-400">Career Goal / Dream Profession</Label>
+                    <Input
+                      id="goal"
+                      value={formData.career_goal}
+                      onChange={(e) => setFormData({ ...formData, career_goal: e.target.value })}
+                      className="h-12 rounded-xl border-slate-100 font-bold"
+                      placeholder="e.g. Software Engineer, Agribusiness Manager"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="status" className="text-xs font-black uppercase tracking-widest text-slate-400">Current Status</Label>
+                    <select
+                      id="status"
+                      className="flex h-12 w-full rounded-xl border border-slate-100 bg-background px-3 py-2 text-sm font-bold ring-offset-background focus:ring-2 focus:ring-primary outline-none"
+                      value={formData.status || ""}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                    >
+                      <option value="">Select Status</option>
+                      <option value="student">Student</option>
+                      <option value="job_seeker">Job Seeker</option>
+                      <option value="employed">Employed</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div className="grid gap-6">

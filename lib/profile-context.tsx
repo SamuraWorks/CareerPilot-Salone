@@ -70,13 +70,13 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
         try {
             // Filter out fields that don't exist in the database to prevent 400 errors
             const dbFields = [
-                'full_name', 'phone_number', 'district', 'location',
+                'full_name', 'email', 'phone_number', 'phone', 'district', 'location',
                 'education_level', 'highest_education', 'career_goal',
                 'interests', 'skills', 'career_matches', 'resume_data',
                 'is_complete', 'profile_completed', 'is_onboarded',
-                'research_completed', 'is_admin', 'role', 'points',
+                'research_completed', 'is_admin', 'role', 'points', 'status',
                 'secret_id', 'anon_id', 'whatsapp_opt_in', 'avatar_url',
-                'active_roadmap_id', 'badges', 'data_saver_enabled'
+                'active_roadmap_id', 'badges', 'data_saver_enabled', 'last_updated_at'
             ]
 
             const filteredData: Record<string, any> = {
@@ -115,13 +115,13 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
         try {
             const dbFields = [
-                'full_name', 'phone_number', 'district', 'location',
+                'full_name', 'email', 'phone_number', 'phone', 'district', 'location',
                 'education_level', 'highest_education', 'career_goal',
                 'interests', 'skills', 'career_matches', 'resume_data',
-                'profile_completed', 'is_onboarded',
+                'profile_completed', 'is_onboarded', 'status',
                 'research_completed', 'is_admin', 'role', 'points',
                 'secret_id', 'anon_id', 'whatsapp_opt_in', 'avatar_url',
-                'active_roadmap_id'
+                'active_roadmap_id', 'badges', 'data_saver_enabled'
             ]
 
             const filteredData: Record<string, any> = {
