@@ -161,7 +161,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 md:space-y-8 pb-24 md:pb-8">
+      <div className="space-y-6 md:space-y-8">
         {/* Welcome / Main Action */}
         <div className="relative overflow-hidden rounded-[2rem] shadow-xl min-h-[260px] md:min-h-[280px] group border-b-4 border-emerald-500/20">
           <div className="absolute inset-0 z-0">

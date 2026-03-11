@@ -1,7 +1,6 @@
 "use client"
 
 import { ChatWidget } from "./chat-widget"
-import { BottomNav } from "./bottom-nav"
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,8 +13,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </div>
       </main>
       <ChatWidget />
-      <BottomNav />
     </div>
   )
 }
+
 
